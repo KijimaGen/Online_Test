@@ -125,7 +125,7 @@ public class SteamLobby : MonoBehaviour
         response.Pending = true;
 
         //最大
-        if (NetworkManager.Singleton.ConnectedClients.Count >= 2)
+        if (NetworkManager.Singleton.ConnectedClients.Count >= 4)
         {
             response.Approved = false;
             response.Pending = false;
@@ -136,7 +136,7 @@ public class SteamLobby : MonoBehaviour
         response.Approved = true;//接続を許可
 
         //PlayerObjectを生成するかどうか
-        response.CreatePlayerObject = false;
+        response.CreatePlayerObject = true;
         //生成するPlayerObjectのPrefabハッシュ値。nullの場合NetworkManagerに登録したプレハブが使用される
         response.PlayerPrefabHash = null;
 
