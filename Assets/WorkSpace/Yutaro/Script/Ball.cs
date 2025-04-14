@@ -45,8 +45,8 @@ public class Ball : MonoBehaviour
         {
             if(hit.collider.gameObject.tag == "Player")
             {
-                rb.AddForce(_Target.transform.forward * 100);
-                Debug.Log(hit.collider.GetComponent<Rigidbody>().velocity.normalized);
+                rb.AddForce(direction * -2 , ForceMode.Impulse);
+                //Debug.Log(hit.collider.GetComponent<Rigidbody>().velocity.normalized);
             }
         }
         
