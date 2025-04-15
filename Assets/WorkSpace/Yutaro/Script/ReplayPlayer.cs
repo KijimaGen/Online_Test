@@ -11,7 +11,10 @@ public class ReplayPlayer : MonoBehaviour
     void Update()
     {
         if (recordDatas == null || recordDatas.Count == 0)
+        {
+            gameObject.SetActive(false);
             return;
+        }
 
         timer += Time.deltaTime;
 
@@ -20,7 +23,18 @@ public class ReplayPlayer : MonoBehaviour
             transform.position = recordDatas[currentIndex].position;
             transform.rotation = recordDatas[currentIndex].rotation;
             currentIndex++;
+            
         }
-        
+
+        if (currentIndex >= recordDatas.Count)
+        {
+            timer = 0f;
+            currentIndex = 0;
+            gameObject.SetActive(false);
+            transform.localPosition = new Vector3(0,0,0);
+            // ©‚±‚±‚Éu–ß‚·vˆ—‚ğ‘‚­I
+        }
+
+
     }
 }
