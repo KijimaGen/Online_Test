@@ -18,7 +18,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject playerPrefab;
     List<Player> playerList = new List<Player>();
 
-
     // Start is called before the first frame update
     void Start()
     {
