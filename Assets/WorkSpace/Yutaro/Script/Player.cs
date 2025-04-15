@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
     bool independentTeam;
     void Start()
     {
-
+        gameObject.tag = "Player";
     }
 
     private void Update()
@@ -19,6 +19,14 @@ public class Player : MonoBehaviour
         {
             Debug.Log("リプレイ開始");
             ReplayManager.instance.StartReplay();
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.name == "RedSetTeam")
+        {
+            gameObject.tag = "RedTeam";
         }
     }
 }

@@ -23,18 +23,32 @@ public class ReplayPlayer : MonoBehaviour
             transform.position = recordDatas[currentIndex].position;
             transform.rotation = recordDatas[currentIndex].rotation;
             currentIndex++;
-            
         }
 
         if (currentIndex >= recordDatas.Count)
         {
-            timer = 0f;
-            currentIndex = 0;
+            ReplayManager.instance.EndReplay();
             gameObject.SetActive(false);
-            transform.localPosition = new Vector3(0,0,0);
-            // ←ここに「戻す」処理を書く！
         }
 
-
     }
+
+    // リセット用メソッド
+    public void ResetReplay()
+    {
+        //timer = 0f;
+        currentIndex = 0;
+        gameObject.SetActive(true);
+    }
+
+    // 初期化用メソッド
+    public void Initialize(List<RecordData> newDatas)
+    {
+        // 過去のデータをクリアして、新しいデータをセット
+        recordDatas.Clear();  // 以前のデータを消去
+        recordDatas.AddRange(newDatas); // 新しいデータを追加
+
+        ResetReplay();  // タイマーとインデックスをリセット
+    }
+
 }
