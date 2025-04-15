@@ -15,7 +15,8 @@ public class GameManager : MonoBehaviour
     //ゲームステートの変数
     gameState state;
 
-    
+    [SerializeField] private GameObject playerPrefab;
+    List<Player> playerList = new List<Player>();
 
 
     // Start is called before the first frame update
@@ -30,17 +31,34 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        AddPlayer();
+
         //ゲームステートのスイッチ文
         switch (state)
         {
             case gameState.standBy:
+
                 break;
             case gameState.start:
+
                 break;
             case gameState.repaly:
                 break;
             case gameState.result:
                 break;
+        }
+    }
+
+    void AddPlayer()
+    {
+        Player2();
+    }
+
+    void Player2()
+    {
+        if (Input.GetKeyDown("joystick 1 button 5") && Input.GetKeyDown("joystick 1 button 6") && playerList.Count == 1)
+        {
+            Instantiate(playerPrefab , new Vector3(0,0,0) , Quaternion.identity);
         }
     }
 }
