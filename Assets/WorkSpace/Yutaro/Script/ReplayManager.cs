@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ReplayManager : MonoBehaviour
@@ -11,16 +12,15 @@ public class ReplayManager : MonoBehaviour
     public List<RecordPlayer> recordPlayerList = new List<RecordPlayer>();
     public List<ReplayPlayer> replayPlayerList = new List<ReplayPlayer>();
 
-    public bool isPlay = false;
     
     void Start()
     {
-        //ReplayManager
         instance = this;
 
         //Invoke 関数を呼び出すときに時間を作れる
         //Invoke("StartReplay", 6f); // 5秒後にリプレイ開始
     }
+
 
     public void StartReplay()
     {
@@ -48,5 +48,4 @@ public class ReplayManager : MonoBehaviour
             recordPlayerList[i].enabled = true;
         }
     }
-
 }

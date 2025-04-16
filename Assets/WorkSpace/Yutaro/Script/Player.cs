@@ -4,9 +4,12 @@ public class Player : MonoBehaviour
     bool redTeam;
     bool whiteTeam;
     bool independentTeam;
+
+    
+
     void Start()
     {
-        gameObject.tag = "Player";
+        
     }
 
     private void Update()
@@ -27,6 +30,10 @@ public class Player : MonoBehaviour
         if(collision.gameObject.name == "RedSetTeam")
         {
             gameObject.tag = "RedTeam";
+        }
+        if (collision.gameObject.name == "WhiteSetTeam")
+        {
+            gameObject.tag = "WhiteTeam";
         }
     }
 }
