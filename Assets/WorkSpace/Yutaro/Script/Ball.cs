@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static UnityEngine.GraphicsBuffer;
 
 public class Ball : MonoBehaviour
@@ -13,17 +14,20 @@ public class Ball : MonoBehaviour
 
     RaycastHit[] hits;
 
-    // Start is called before the first frame update
-    void Start()
-    {
+   
+    void Start(){
         rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update(){
         GameObject target = GameObject.Find("Player");
         Shoot(target);
+
+        if (transform.position.y < -10) {
+            transform.position = new Vector3(1, 10, 0);
+            rb.velocity = Vector3.zero;
+        }
     }
 
     
