@@ -26,7 +26,12 @@ public class Shuttle : MonoBehaviour
                 Shoot(target[i]);
             }
         }
-            
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            GetComponent<ReplayRecorder>().StartReplay();
+        }
+
     }
 
 
@@ -49,7 +54,8 @@ public class Shuttle : MonoBehaviour
             if (hit.collider.gameObject.tag == "Player")
             {
                 rb.AddForce(direction * -2, ForceMode.Impulse);
-                //Debug.Log(hit.collider.GetComponent<Rigidbody>().velocity.normalized);
+                Quaternion targetRotation = Quaternion.LookRotation(rb.velocity.normalized);
+                rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, Time.fixedDeltaTime * 5f));
             }
         }
 

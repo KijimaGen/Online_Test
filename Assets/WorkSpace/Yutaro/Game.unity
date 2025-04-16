@@ -742,9 +742,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 1862709501510763740, guid: 080a6eaba5fc85b46b5de5ae5543db7b, type: 3}
-  playerGhostPrefab: {fileID: 3796515248754318610, guid: 87234f07185938248946ce42cdd70468, type: 3}
   shuttlePrefab: {fileID: 6623901861672829275, guid: 71c6b8a4d4d46604f969423cacd5aadd, type: 3}
-  shuttleGhostPrefab: {fileID: 2723760620663008176, guid: 461f5041495be9549ace2d2956801996, type: 3}
   roundStart: 0
 --- !u!1 &1656865473
 GameObject:

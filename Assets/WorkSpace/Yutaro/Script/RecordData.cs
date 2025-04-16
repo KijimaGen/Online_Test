@@ -10,3 +10,10 @@ public struct RecordData
     public Quaternion rotation;
 
 }
+
+public struct ReplayFrame
+{
+    public Vector3 position;
+    public Quaternion rotation;
+    public float time;
+}

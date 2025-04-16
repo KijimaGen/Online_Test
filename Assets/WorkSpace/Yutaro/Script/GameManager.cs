@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using static UnityEditor.PlayerSettings;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,20 +18,18 @@ public class GameManager : MonoBehaviour
     gameState state;
 
     [SerializeField] private GameObject playerPrefab;
-    [SerializeField] private GameObject playerGhostPrefab;
     List<Player> playerList = new List<Player>();
 
     bool[] addPlayer = { false,false,false,false };
 
 
     [SerializeField] private GameObject shuttlePrefab;
-    [SerializeField] private GameObject shuttleGhostPrefab;
 
 
     public bool roundStart = false;
 
     public static GameManager instance;
-
+    float startCount = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -47,8 +46,9 @@ public class GameManager : MonoBehaviour
     {
         if(Input.GetKeyUp(KeyCode.P))
         {
+            ShuttleInstantiate(new Vector3(-5,8,0));
             //ShuttleInstantiate();
-            state = gameState.start;
+            //state = gameState.start;
         }
 
         //ゲームステートのスイッチ文
@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
 
     void Player1()
     {
-        if (Input.GetKeyDown("joystick 1 button 4") && !addPlayer[0])
+        if (Input.GetKeyDown(KeyCode.T) && !addPlayer[0])
         {
             Debug.Log("プレイヤー1が追加されました" + playerList.Count);
             PlayerInstantiate();
@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour
     }
     void Player3()
     {
-        if (Input.GetKeyDown("joystick 3 button 4") && !addPlayer[2])
+        if (Input.GetKeyDown("joystick 1 button 4") && !addPlayer[2])
         {
             Debug.Log("プレイヤー3が追加されました" + playerList.Count);
             PlayerInstantiate();
@@ -118,21 +118,11 @@ public class GameManager : MonoBehaviour
     {
         GameObject player = Instantiate(playerPrefab, new Vector3(0, 5, -14), playerPrefab.transform.rotation);
         playerList.Add(player.GetComponent<Player>());
-        GameObject ghost = Instantiate(playerGhostPrefab);
-        ghost.transform.localPosition = Vector3.zero;
-
-        ReplayManager.instance.recordPlayerList.Add(player.GetComponent<RecordPlayer>());
-        ReplayManager.instance.replayPlayerList.Add(ghost.GetComponent<ReplayPlayer>());
     }
 
-    private void ShuttleInstantiate()
+    private void ShuttleInstantiate(Vector3 pos)
     {
-        GameObject shuttle = Instantiate(shuttlePrefab, new Vector3(-3f, 7, 0), Quaternion.identity);
-        GameObject ghost = Instantiate(shuttleGhostPrefab);
-        ghost.transform.localPosition = Vector3.zero;
-
-        ReplayManager.instance.recordPlayerList.Add(shuttle.GetComponent<RecordPlayer>());
-        ReplayManager.instance.replayPlayerList.Add(ghost.GetComponent<ReplayPlayer>());
+        GameObject shuttle = Instantiate(shuttlePrefab, pos, Quaternion.identity);
     }
 
     private void RoundStart()
@@ -143,19 +133,25 @@ public class GameManager : MonoBehaviour
             {
                 if (playerList[i].gameObject.tag == "RedTeam")
                 {
-                    playerList[i].transform.position = new Vector3(-5, 0, 0);
+                    playerList[i].transform.position = new Vector3(-5, 2, 2.5f);
                 }
             }
 
             Camera.main.transform.DOMove(new Vector3(0, 14, -9), 2);
 
-
             roundStart = true;
+        }
+
+        if(roundStart)
+        {
+            startCount += Time.deltaTime;
+
         }
     }
 
-    private void Initialize()
+    private void RoundInitialize()
     {
-
+        roundStart = false;
+        startCount = 0;
     }
 }

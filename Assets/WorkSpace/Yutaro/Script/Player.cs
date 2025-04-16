@@ -15,15 +15,14 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        float moveX = Input.GetAxisRaw("Horizontal");
-        float moveZ = Input.GetAxisRaw("Vertical");
+        //float moveX = Input.GetAxisRaw("Horizontal");
+        //float moveZ = Input.GetAxisRaw("Vertical");
 
-        transform.position += new Vector3(moveX, 0, moveZ).normalized * 0.01f;
+        //transform.position += new Vector3(moveX, 0, moveZ).normalized * 0.01f;
 
-        if(Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R))
         {
-            Debug.Log("リプレイ開始");
-            ReplayManager.instance.StartReplay();
+            GetComponent<ReplayRecorder>().StartReplay();
         }
     }
 
@@ -40,4 +39,6 @@ public class Player : MonoBehaviour
             gameObject.GetComponent<Renderer>().material.color = Color.white;
         }
     }
+
+
 }

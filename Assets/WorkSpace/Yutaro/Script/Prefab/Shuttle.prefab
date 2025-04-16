@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 2335385946529881605}
   - component: {fileID: 2384330343836602032}
   - component: {fileID: 4951362795079865055}
-  - component: {fileID: 2156656883042964545}
   - component: {fileID: 2987554351282780120}
   - component: {fileID: 2484173869311871402}
   - component: {fileID: 8999210564562381339}
+  - component: {fileID: 6533466778374139218}
   m_Layer: 0
   m_Name: Shuttle
   m_TagString: Untagged
@@ -87,19 +87,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2156656883042964545
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6623901861672829275}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae6b040443793f243a808fbd17ca98a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  recordDatas: []
 --- !u!114 &2987554351282780120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,3 +147,16 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6533466778374139218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6623901861672829275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cc66e710c6f8784a8b333e8273f1dd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recordDuration: 10
