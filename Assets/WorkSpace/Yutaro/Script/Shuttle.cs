@@ -1,9 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.GraphicsBuffer;
 
 public class Ball : MonoBehaviour
 {
@@ -14,23 +9,21 @@ public class Ball : MonoBehaviour
 
     RaycastHit[] hits;
 
-   
-    void Start(){
+    // Start is called before the first frame update
+    void Start()
+    {
         rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
-    void Update(){
-        GameObject target = GameObject.Find("Player");
-        Shoot(target);
-
-        if (transform.position.y < -10) {
-            transform.position = new Vector3(1, 10, 0);
-            rb.velocity = Vector3.zero;
-        }
+    void Update()
+    {
+        GameObject target = GameObject.Find("Player1");
+        if (target != null)
+            Shoot(target);
     }
 
-    
+
 
     private void Shoot(GameObject _Target)
     {
@@ -47,13 +40,13 @@ public class Ball : MonoBehaviour
         // ヒットしたオブジェクトの名前を表示
         foreach (RaycastHit hit in hits)
         {
-            if(hit.collider.gameObject.tag == "Player")
+            if (hit.collider.gameObject.tag == "Player")
             {
-                rb.AddForce(direction * -2 , ForceMode.Impulse);
+                rb.AddForce(direction * -2, ForceMode.Impulse);
                 //Debug.Log(hit.collider.GetComponent<Rigidbody>().velocity.normalized);
             }
         }
-        
+
     }
 
 }

@@ -1,12 +1,15 @@
-using Unity.Netcode;
 using UnityEngine;
-public class Player : NetworkBehaviour
+public class Player : MonoBehaviour
 {
+    bool redTeam;
+    bool whiteTeam;
+    bool independentTeam;
 
+    
 
     void Start()
     {
-
+        
     }
 
     private void Update()
@@ -15,5 +18,22 @@ public class Player : NetworkBehaviour
         float moveZ = Input.GetAxisRaw("Vertical");
 
         transform.position += new Vector3(moveX, 0, moveZ).normalized * 0.01f;
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            Debug.Log("リプレイ開始");
+            ReplayManager.instance.StartReplay();
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.name == "RedSetTeam")
+        {
+            gameObject.tag = "RedTeam";
+        }
+        if (collision.gameObject.name == "WhiteSetTeam")
+        {
+            gameObject.tag = "WhiteTeam";
+        }
     }
 }
