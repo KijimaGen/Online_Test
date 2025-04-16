@@ -41,10 +41,12 @@ public class ReplayManager : MonoBehaviour
     {
         for (int i = 0; i < replayPlayerList.Count; i++)
         {
-            recordPlayerList[i].recordDatas.Clear();
+            replayPlayerList[i].ResetReplay();  // 初期化処理を呼び出し
             replayPlayerList[i].recordDatas.Clear();
-            replayPlayerList[i].ResetReplay();  // 初期化メソッドを呼び出す
             replayPlayerList[i].enabled = false;
+            replayPlayerList[i].gameObject.SetActive(false);  // ここで個別に消す
+
+            recordPlayerList[i].recordDatas.Clear();
             recordPlayerList[i].enabled = true;
         }
     }

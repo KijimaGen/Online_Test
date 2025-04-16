@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 public class Player : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class Player : MonoBehaviour
         float moveZ = Input.GetAxisRaw("Vertical");
 
         transform.position += new Vector3(moveX, 0, moveZ).normalized * 0.01f;
+
         if(Input.GetKeyDown(KeyCode.R))
         {
             Debug.Log("リプレイ開始");
@@ -30,10 +32,12 @@ public class Player : MonoBehaviour
         if(collision.gameObject.name == "RedSetTeam")
         {
             gameObject.tag = "RedTeam";
+            gameObject.GetComponent<Renderer>().material.color = Color.red;
         }
         if (collision.gameObject.name == "WhiteSetTeam")
         {
             gameObject.tag = "WhiteTeam";
+            gameObject.GetComponent<Renderer>().material.color = Color.white;
         }
     }
 }

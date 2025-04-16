@@ -30,7 +30,6 @@ public class ReplayPlayer : MonoBehaviour
             ReplayManager.instance.EndReplay();
             gameObject.SetActive(false);
         }
-
     }
 
     // リセット用メソッド

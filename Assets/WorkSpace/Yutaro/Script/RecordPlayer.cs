@@ -8,7 +8,7 @@ public class RecordPlayer : MonoBehaviour
     private float recordDuration = 10f; // 保持する秒数（ここを調整）
     private float timer = 0f;
 
-    float recordInterval = 0.01f;
+    float recordInterval = 0.03f;
     float recordTimer = 0f;
 
 

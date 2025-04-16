@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Ball : MonoBehaviour
+public class Shuttle : MonoBehaviour
 {
     bool fallIN;
     bool fallOUT;
@@ -18,9 +18,15 @@ public class Ball : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GameObject target = GameObject.Find("Player1");
+        GameObject[] target = GameObject.FindGameObjectsWithTag("Player");
         if (target != null)
-            Shoot(target);
+        {
+            for (int i = 0; i < target.Length; i++)
+            {
+                Shoot(target[i]);
+            }
+        }
+            
     }
 
 

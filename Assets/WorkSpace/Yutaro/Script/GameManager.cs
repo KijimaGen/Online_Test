@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,24 +17,39 @@ public class GameManager : MonoBehaviour
     gameState state;
 
     [SerializeField] private GameObject playerPrefab;
-    [SerializeField] private GameObject ghostPrefab;
+    [SerializeField] private GameObject playerGhostPrefab;
     List<Player> playerList = new List<Player>();
 
     bool[] addPlayer = { false,false,false,false };
 
+
+    [SerializeField] private GameObject shuttlePrefab;
+    [SerializeField] private GameObject shuttleGhostPrefab;
+
+
+    public bool roundStart = false;
+
+    public static GameManager instance;
+
     // Start is called before the first frame update
     void Start()
     {
+        instance = this;
+
         //最初のゲームステートは待機状態
         state = gameState.standBy;
-        //playerList.Add(GameObject.Find("Player1").GetComponent<Player>());
+        Camera.main.transform.position = new Vector3 (0,14,-17);
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetKeyUp(KeyCode.P))
+        {
+            //ShuttleInstantiate();
+            state = gameState.start;
+        }
 
         //ゲームステートのスイッチ文
         switch (state)
@@ -42,14 +58,10 @@ public class GameManager : MonoBehaviour
                 AddPlayer();
                 break;
             case gameState.start:
-                for (int i = 0; i < playerList.Count; i++)
-                {
-                    if(playerList[i].gameObject.tag == "RedTeam")
-                    {
-                        playerList[i].transform.position = new Vector3(-5 , 0 ,0);
-                    }
-                }
-                    break;
+                RoundStart();
+                
+
+                break;
             case gameState.repaly:
                 break;
             case gameState.result:
@@ -104,11 +116,46 @@ public class GameManager : MonoBehaviour
 
     private void PlayerInstantiate()
     {
-        GameObject player = Instantiate(playerPrefab, new Vector3(0, 0, -14), playerPrefab.transform.rotation);
-        GameObject ghost = Instantiate(ghostPrefab);
+        GameObject player = Instantiate(playerPrefab, new Vector3(0, 5, -14), playerPrefab.transform.rotation);
+        playerList.Add(player.GetComponent<Player>());
+        GameObject ghost = Instantiate(playerGhostPrefab);
         ghost.transform.localPosition = Vector3.zero;
 
         ReplayManager.instance.recordPlayerList.Add(player.GetComponent<RecordPlayer>());
         ReplayManager.instance.replayPlayerList.Add(ghost.GetComponent<ReplayPlayer>());
+    }
+
+    private void ShuttleInstantiate()
+    {
+        GameObject shuttle = Instantiate(shuttlePrefab, new Vector3(-3f, 7, 0), Quaternion.identity);
+        GameObject ghost = Instantiate(shuttleGhostPrefab);
+        ghost.transform.localPosition = Vector3.zero;
+
+        ReplayManager.instance.recordPlayerList.Add(shuttle.GetComponent<RecordPlayer>());
+        ReplayManager.instance.replayPlayerList.Add(ghost.GetComponent<ReplayPlayer>());
+    }
+
+    private void RoundStart()
+    {
+        if (!roundStart)
+        {
+            for (int i = 0; i < playerList.Count; i++)
+            {
+                if (playerList[i].gameObject.tag == "RedTeam")
+                {
+                    playerList[i].transform.position = new Vector3(-5, 0, 0);
+                }
+            }
+
+            Camera.main.transform.DOMove(new Vector3(0, 14, -9), 2);
+
+
+            roundStart = true;
+        }
+    }
+
+    private void Initialize()
+    {
+
     }
 }
