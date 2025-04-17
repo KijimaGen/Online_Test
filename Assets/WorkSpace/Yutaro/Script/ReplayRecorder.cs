@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ReplayRecorder : MonoBehaviour
 {
-    public float recordDuration = 5f;
+    private float recordDuration = 5f;
     private List<ReplayFrame> frames = new List<ReplayFrame>();
     private float startTime;
     private bool isReplaying = false;

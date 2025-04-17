@@ -1,16 +1,17 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     bool redTeam;
     bool whiteTeam;
     bool independentTeam;
 
-    
+    [SerializeField] private Image chargeSlider;
 
     void Start()
     {
-        
+        chargeSlider.fillAmount = 0f;
     }
 
     private void Update()
@@ -20,9 +21,21 @@ public class Player : MonoBehaviour
 
         //transform.position += new Vector3(moveX, 0, moveZ).normalized * 0.01f;
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKey(KeyCode.R))
         {
-            GetComponent<ReplayRecorder>().StartReplay();
+            //GetComponent<ReplayRecorder>().StartReplay();
+            chargeSlider.fillAmount += 0.0005f;
+        }
+        else
+        {
+            chargeSlider.fillAmount = 0;
+        }
+
+
+
+        if(chargeSlider.fillAmount >= 0.4f)
+        {
+            chargeSlider.fillAmount = 0.4f;
         }
     }
 

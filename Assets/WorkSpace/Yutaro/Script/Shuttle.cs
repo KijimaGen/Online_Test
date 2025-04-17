@@ -9,13 +9,6 @@ public class Shuttle : MonoBehaviour
 
     RaycastHit[] hits;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
-
-    // Update is called once per frame
     void Update()
     {
         GameObject[] target = GameObject.FindGameObjectsWithTag("Player");
@@ -61,9 +54,28 @@ public class Shuttle : MonoBehaviour
 
     }
 
+    void Initialize()
+    {
+        rb = GetComponent<Rigidbody>();
+        gameObject.GetComponent<Collider>().enabled = true;
+        gameObject.GetComponent<MeshRenderer>().enabled = true;
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
-        
+        if(collision.gameObject.name == "ê‘è∞") 
+        { 
+            ScoreManager.instance.whiteScore++; 
+            gameObject.GetComponent<Collider>().enabled = false; 
+            gameObject.GetComponent<MeshRenderer>().enabled = false; 
+        }
+
+        if (collision.gameObject.name == "îíè∞")
+        {
+            ScoreManager.instance.redScore++;
+            gameObject.GetComponent<Collider>().enabled = false;
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
+        }
     }
 
 }

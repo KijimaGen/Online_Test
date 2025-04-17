@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
         //最初のゲームステートは待機状態
         state = gameState.standBy;
         Camera.main.transform.position = new Vector3 (0,14,-17);
+        RoundInitialize();
 
     }
 
@@ -145,7 +146,10 @@ public class GameManager : MonoBehaviour
         if(roundStart)
         {
             startCount += Time.deltaTime;
-
+            if(startCount > 3)
+            {
+                Round();
+            }
         }
     }
 
@@ -153,5 +157,10 @@ public class GameManager : MonoBehaviour
     {
         roundStart = false;
         startCount = 0;
+    }
+
+    private void Round()
+    {
+
     }
 }
