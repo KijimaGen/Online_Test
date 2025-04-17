@@ -61,4 +61,9 @@ public class Shuttle : MonoBehaviour
 
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        
+    }
+
 }
