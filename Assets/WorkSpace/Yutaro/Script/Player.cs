@@ -8,23 +8,23 @@ public class Player : MonoBehaviour
     bool independentTeam;
 
     [SerializeField] private Image chargeSlider;
+    [SerializeField] private Text nameText;
 
+    int playerName;
     void Start()
     {
         chargeSlider.fillAmount = 0f;
+        playerName = GameManager.instance.playerList.Count;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        //float moveX = Input.GetAxisRaw("Horizontal");
-        //float moveZ = Input.GetAxisRaw("Vertical");
-
-        //transform.position += new Vector3(moveX, 0, moveZ).normalized * 0.01f;
-
+        nameText.text = playerName.ToString() + "P";
+        nameText.rectTransform.LookAt(Camera.main.transform);
         if (Input.GetKey(KeyCode.R))
         {
-            //GetComponent<ReplayRecorder>().StartReplay();
-            chargeSlider.fillAmount += 0.0005f;
+            GetComponent<ReplayRecorder>().StartReplay();
+            //chargeSlider.fillAmount += 0.0005f;
         }
         else
         {
@@ -44,12 +44,12 @@ public class Player : MonoBehaviour
         if(collision.gameObject.name == "RedSetTeam")
         {
             gameObject.tag = "RedTeam";
-            gameObject.GetComponent<Renderer>().material.color = Color.red;
+            //gameObject.GetComponent<Renderer>().material.color = Color.red;
         }
         if (collision.gameObject.name == "WhiteSetTeam")
         {
             gameObject.tag = "WhiteTeam";
-            gameObject.GetComponent<Renderer>().material.color = Color.white;
+            //gameObject.GetComponent<Renderer>().material.color = Color.white;
         }
     }
 

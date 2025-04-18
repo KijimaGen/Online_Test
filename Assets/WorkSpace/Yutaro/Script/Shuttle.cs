@@ -9,9 +9,9 @@ public class Shuttle : MonoBehaviour
 
     RaycastHit[] hits;
 
-    void Update()
+    void FixedUpdate()
     {
-        GameObject[] target = GameObject.FindGameObjectsWithTag("Player");
+        GameObject[] target = GameObject.FindGameObjectsWithTag("Racket");
         if (target != null)
         {
             for (int i = 0; i < target.Length; i++)
@@ -44,17 +44,15 @@ public class Shuttle : MonoBehaviour
         // ヒットしたオブジェクトの名前を表示
         foreach (RaycastHit hit in hits)
         {
-            if (hit.collider.gameObject.tag == "Player")
+            if (hit.collider.gameObject.tag == "Racket")
             {
-                rb.AddForce(direction * -2, ForceMode.Impulse);
-                Quaternion targetRotation = Quaternion.LookRotation(rb.velocity.normalized);
-                rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, Time.fixedDeltaTime * 5f));
+                
             }
         }
 
     }
 
-    void Initialize()
+    public void Initialize()
     {
         rb = GetComponent<Rigidbody>();
         gameObject.GetComponent<Collider>().enabled = true;
@@ -78,4 +76,6 @@ public class Shuttle : MonoBehaviour
         }
     }
 
+
+   
 }

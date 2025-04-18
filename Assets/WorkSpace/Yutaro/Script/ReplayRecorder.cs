@@ -9,7 +9,7 @@ public class ReplayRecorder : MonoBehaviour
     private bool isReplaying = false;
     private int replayIndex = 0;
 
-    void Update()
+    void FixedUpdate()
     {
         if (isReplaying)
         {
