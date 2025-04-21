@@ -174,7 +174,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd8ff4bdc26b23543b82035977cf019c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  button: {fileID: 70623718}
+  RuleCanvas: {fileID: 1994647144}
+  OK: {fileID: 70623718}
 --- !u!114 &70623718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,6 +236,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
         m_MethodName: set_enabled
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 70623717}
+        m_TargetAssemblyTypeName: TitleButton, Assembly-CSharp
+        m_MethodName: OnClickOk
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -663,7 +676,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd8ff4bdc26b23543b82035977cf019c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  button: {fileID: 1184374632}
+  RuleCanvas: {fileID: 1994647144}
+  OK: {fileID: 70623718}
 --- !u!114 &1184374632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -988,18 +1002,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1461964266}
-        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
-        m_MethodName: 
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
 --- !u!114 &1261412814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1050,7 +1052,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd8ff4bdc26b23543b82035977cf019c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  button: {fileID: 1261412813}
+  RuleCanvas: {fileID: 1994647144}
+  OK: {fileID: 70623718}
 --- !u!1 &1375963015
 GameObject:
   m_ObjectHideFlags: 0
@@ -1289,7 +1292,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd8ff4bdc26b23543b82035977cf019c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  button: {fileID: 1461964268}
+  RuleCanvas: {fileID: 1994647144}
+  OK: {fileID: 70623718}
 --- !u!1 &1697914023
 GameObject:
   m_ObjectHideFlags: 0
@@ -1681,7 +1685,7 @@ GameObject:
   - component: {fileID: 1994647143}
   - component: {fileID: 1994647142}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: RuleCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
