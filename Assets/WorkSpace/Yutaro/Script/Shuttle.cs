@@ -26,7 +26,6 @@ public class Shuttle : MonoBehaviour
         {
             GetComponent<ReplayRecorder>().StartReplay();
         }
-
     }
 
 
@@ -93,19 +92,18 @@ public class Shuttle : MonoBehaviour
             {
                 Player player = other.transform.parent.GetComponent<Player>();
                 player.attack = false;
-               // other.transform.parent.position = new Vector3(transform.localPosition.x - 1f, 0, transform.position.z);
-                other.transform.DOMoveX(transform.position.x - 1f , 0.5f,true);
+                other.transform.parent.position = new Vector3(transform.localPosition.x - 0.5f, 0, transform.position.z);
 
                 Transform point = player.hitPoint.transform;
 
-                if(player.chargeSlider.fillAmount <= 0.1)
+                if(player.chargeSlider.fillAmount <= 0.2)
                 {
-                    player.chargeSlider.fillAmount = 1;
+                    player.chargeSlider.fillAmount = 0.3f;
                 }
 
                 var dirX = Vector3.zero.x - player.transform.position.x;
-
-                rb.AddForce((point.position - transform.position).normalized * player.chargeSlider.fillAmount* 10 * dirX, ForceMode.Impulse);
+                if(dirX < 10f) { dirX = 10; }
+                rb.AddForce((point.position - transform.position).normalized * player.chargeSlider.fillAmount* 12 * dirX, ForceMode.Impulse);
                 Debug.Log("ƒlƒbƒg‚Ì‹——£" + dirX);
                 Debug.Log( "power" + player.chargeSlider.fillAmount);
             }

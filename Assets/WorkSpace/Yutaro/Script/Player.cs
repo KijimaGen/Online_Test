@@ -51,7 +51,7 @@ public class Player : MonoBehaviour
         animator.SetBool("Attack",animPlay);
         OnMove();
 
-        if (Input.GetKey("joystick " + index + " button 1") && !animPlay)
+        if (Input.GetKey(KeyCode.Space) || Input.GetKey("joystick " + index + " button 1") && !animPlay)
         {
             chargeSlider.fillAmount += 0.005f;
         }
@@ -65,8 +65,8 @@ public class Player : MonoBehaviour
             chargeSlider.fillAmount = 0.4f;
         }
 
-
-        hitPoint.transform.position = new Vector3(0,10 - chargeSlider.fillAmount * 10, transform.position.z);
+        var dirX = Vector3.zero.x - transform.position.x;
+        hitPoint.transform.position = new Vector3(0,10 - chargeSlider.fillAmount * 10 + dirX / 4, transform.position.z);
 
     }
 
@@ -116,6 +116,13 @@ public class Player : MonoBehaviour
         //float angle = Mathf.Atan2(rotationNorm.x, rotationNorm.y) * Mathf.Rad2Deg;
         //transform.rotation = Quaternion.Euler(0f, angle, 0f);
         //transform.rotation = Quaternion.AngleAxis(0, rotationNorm);
+
+        float moveKeyX = Input.GetAxisRaw("Horizontal");
+        float moveKeyY = Input.GetAxisRaw("Vertical");
+
+        Vector3 moveKeyDir = new Vector3(moveKeyX, 0, moveKeyY).normalized;
+
+        transform.position += moveKeyDir * 5 * Time.deltaTime;
     }
 
     

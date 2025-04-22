@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
             roundSetting = true;
         }
 
-        if (Input.GetKeyUp(KeyCode.A))
+        if (Input.GetKeyUp(KeyCode.V))
         {
             ShuttleInstantiate(new Vector3(playerList[0].transform.position.x, 8, playerList[0].transform.position.z));
         }
@@ -98,7 +98,7 @@ public class GameManager : MonoBehaviour
 
     void Player1()
     {
-        if (Input.GetKey("joystick 1 button 4") && !addPlayer[0])
+        if (Input.GetKey(KeyCode.T) && !addPlayer[0] )
         {
             Debug.Log("ÉvÉåÉCÉÑÅ[1Ç™í«â¡Ç≥ÇÍÇ‹ÇµÇΩ" + playerList.Count);
             PlayerInstantiate(1);
