@@ -25,7 +25,10 @@ public class Shuttle : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             GetComponent<ReplayRecorder>().StartReplay();
+            Initialize();
         }
+
+        rb.AddForce(Vector3.down * 10, ForceMode.Acceleration);
     }
 
 

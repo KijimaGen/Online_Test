@@ -1,6 +1,7 @@
 using System;
 using System.Security.Cryptography.X509Certificates;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 public class Player : MonoBehaviour
@@ -60,14 +61,27 @@ public class Player : MonoBehaviour
            
             animPlay = true;
         }
+
+        float dirX = Vector3.zero.x - transform.position.x;
+        float velocityX=rb.velocity.x;
+
+
+        float dirZ = 3 - transform.position.z;
+        float velocityZ=rb.velocity.z;
+
+
         if (chargeSlider.fillAmount >= 0.4f)
         {
             chargeSlider.fillAmount = 0.4f;
+            hitPoint.transform.position = new Vector3(rb.velocity.x * dirX * 0.1f, 4, transform.position.z + velocityZ);
+        }
+        else
+        {
+            hitPoint.transform.position = new Vector3(rb.velocity.x * dirX * 0.1f, 8 - chargeSlider.fillAmount * 10 + dirX / 3, transform.position.z + velocityZ);
         }
 
-        var dirX = Vector3.zero.x - transform.position.x;
-        hitPoint.transform.position = new Vector3(0,10 - chargeSlider.fillAmount * 10 + dirX / 4, transform.position.z);
 
+        Debug.Log(velocityZ);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -120,9 +134,12 @@ public class Player : MonoBehaviour
         float moveKeyX = Input.GetAxisRaw("Horizontal");
         float moveKeyY = Input.GetAxisRaw("Vertical");
 
-        Vector3 moveKeyDir = new Vector3(moveKeyX, 0, moveKeyY).normalized;
+        Vector3 moveKeyDir = new Vector3(moveKeyX, rb.velocity.y, moveKeyY);
 
-        transform.position += moveKeyDir * 5 * Time.deltaTime;
+        Vector3 velocity = rb.velocity;
+        velocity.x = moveKeyDir.x * 5;
+        velocity.z = moveKeyDir.z * 5;
+        rb.velocity = velocity;
     }
 
     
