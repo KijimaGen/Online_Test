@@ -49,14 +49,17 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyUp(KeyCode.P))
+        if (Input.GetKeyUp(KeyCode.P))
         {
-            ShuttleInstantiate(new Vector3( playerList[0].transform.position.x , 8 , playerList[0].transform.position.z));
-            //state = gameState.start;
-            //roundSetting = true;
+            state = gameState.start;
+            roundSetting = true;
         }
 
-        //ゲームステートのスイッチ文
+        if (Input.GetKeyUp(KeyCode.A))
+        {
+            ShuttleInstantiate(new Vector3(playerList[0].transform.position.x, 8, playerList[0].transform.position.z));
+        }
+
         switch (state)
         {
             case gameState.standBy:
@@ -64,15 +67,26 @@ public class GameManager : MonoBehaviour
                 break;
             case gameState.start:
                 RoundStart();
-                
-
                 break;
             case gameState.repaly:
                 break;
             case gameState.result:
                 break;
         }
+
+        if (roundStart)
+        {
+            startCount += Time.unscaledDeltaTime;
+
+            if (startCount > 3f)
+            {
+                roundStart = false;
+                Round();
+                //Time.timeScale = 0;
+            }
+        }
     }
+
 
     void AddPlayer()
     {
@@ -84,7 +98,7 @@ public class GameManager : MonoBehaviour
 
     void Player1()
     {
-        if (Input.GetKeyDown(KeyCode.T) && !addPlayer[0])
+        if (Input.GetKey("joystick 1 button 4") && !addPlayer[0])
         {
             Debug.Log("プレイヤー1が追加されました" + playerList.Count);
             PlayerInstantiate(1);
@@ -93,7 +107,7 @@ public class GameManager : MonoBehaviour
     }
     void Player2()
     {
-        if (Input.GetKeyDown("joystick 2 button 4") && !addPlayer[1])
+        if (Input.GetKey("joystick 2 button 4") && !addPlayer[1])
         {
             Debug.Log("プレイヤー2が追加されました" + playerList.Count);
             PlayerInstantiate(2);
@@ -135,44 +149,38 @@ public class GameManager : MonoBehaviour
 
     private void RoundStart()
     {
+        if (!roundSetting) return;
 
-        if(roundSetting)
+        roundSetting = false;
+
+        if (playerList.Count != 2)
         {
-            for (int i = 0; i < playerList.Count; i++)
-            {
-                if (playerList.Count == 2)
-                {
-                    if (playerList[i].gameObject.tag == "RedTeam")
-                    {
-                        playerList[i].transform.position = new Vector3(-5, 2, 2.5f);
-                    }
-
-                    if (playerList[i].gameObject.tag == "WhiteTeam")
-                    {
-                        playerList[i].transform.position = new Vector3(5, 2, 2.5f);
-                    }
-                }
-
-                else
-                {
-                    Debug.Log("開始できません");
-                    roundSetting = false;
-                    state = gameState.standBy;
-                }
-            }
-
-
-            ShuttleInstantiate(new Vector3(playerList[0].transform.position.x, 8, playerList[0].transform.position.z));
-            Camera.main.transform.DOMove(new Vector3(0, 14, -9), 2);
-            startCount += Time.deltaTime;
-            if(startCount > 3)
-            {
-                Round();
-                roundSetting = false;
-            }
-            Time.timeScale = 0;
-            
+            Debug.Log("開始できません");
+            state = gameState.standBy;
+            return;
         }
+
+        foreach (var player in playerList)
+        {
+            if (player.tag == "RedTeam")
+            {
+                player.transform.position = new Vector3(-5, 1, 2.5f);
+            }
+            else if (player.tag == "WhiteTeam")
+            {
+                player.transform.position = new Vector3(5, 1, 2.5f);
+                player.transform.Rotate(new Vector3(0, 180, 0));
+            }
+        }
+
+        Camera.main.transform.DOKill();
+        Camera.main.transform.DOMove(new Vector3(0, 14, -9), 2);
+
+        ShuttleInstantiate(new Vector3(playerList[0].transform.position.x, 8, playerList[0].transform.position.z));
+
+        // タイマー開始
+        startCount = 0;
+        roundStart = true;
     }
 
     private void RoundInitialize()
