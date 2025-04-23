@@ -68,7 +68,7 @@ public class TitleButton : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
 
         // ÉQÅ[ÉÄÇèIóπÇ∑ÇÈ
-        UnityEditor.EditorApplication.isPlaying = false;
+        //UnityEditor.EditorApplication.isPlaying = false;
         Application.Quit();
     }
 

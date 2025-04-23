@@ -77,19 +77,19 @@ public class Shuttle : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //if(collision.gameObject.name == "ê‘è∞") 
-        //{ 
-        //    ScoreManager.instance.whiteScore++; 
-        //    gameObject.GetComponent<Collider>().enabled = false; 
-        //    gameObject.GetComponent<MeshRenderer>().enabled = false; 
-        //}
+        if (collision.gameObject.name == "ê‘è∞")
+        {
+            ScoreManager.instance.whiteScore++;
+            gameObject.GetComponent<Collider>().enabled = false;
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
+        }
 
-        //if (collision.gameObject.name == "îíè∞")
-        //{
-        //    ScoreManager.instance.redScore++;
-        //    gameObject.GetComponent<Collider>().enabled = false;
-        //    gameObject.GetComponent<MeshRenderer>().enabled = false;
-        //}
+        if (collision.gameObject.name == "îíè∞")
+        {
+            ScoreManager.instance.redScore++;
+            gameObject.GetComponent<Collider>().enabled = false;
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
+        }
     }
 
     private void OnTriggerStay(Collider other)
