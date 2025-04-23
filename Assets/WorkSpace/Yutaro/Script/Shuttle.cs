@@ -8,65 +8,21 @@ public class Shuttle : MonoBehaviour
 
     Rigidbody rb;
 
-    RaycastHit[] hits;
-
     private void Start()
     {
         Initialize();
     }
     void FixedUpdate()
     {
+        if(ReplayRecorder.instance.isReplaying) { Initialize(); }
+        if (GameManager.instance.roundStart) { rb.isKinematic = true; }
+
         GameObject[] target = GameObject.FindGameObjectsWithTag("Racket");
-
-        for (int i = 0; i < target.Length; i++)
-        {
-            if (target[i] != null)
-            {
-                Shoot(target[i]);
-            }
-        }
-
-        if (Input.GetKey(KeyCode.R))
-        {
-            GetComponent<ReplayRecorder>().StartReplay();
-            //Initialize();
-        }
 
         rb.AddForce(Vector3.down * 10, ForceMode.Acceleration);
         
     }
 
-
-
-    private void Shoot(GameObject _Target)
-    {
-        //Vector3 direction = (_Target.transform.position - transform.position).normalized;
-        //float radius = 0.1f;
-        //float maxDistance = 1f;
-
-        //// SphereCastAll
-        //RaycastHit[] hits = Physics.SphereCastAll(transform.position, radius, direction, maxDistance);
-
-        //// Debug用Rayをシーンに描画（赤い線）
-        //Debug.DrawRay(transform.position, direction * maxDistance, Color.red);
-
-        //// ヒットしたオブジェクトの名前を表示
-        //foreach (RaycastHit hit in hits)
-        //{
-        //    if (hit.collider.gameObject.tag == "Racket")
-        //    {
-        //        if (hit.collider.transform.parent.GetComponent<Player>().attack)
-        //        {
-        //            Player player = hit.collider.transform.parent.GetComponent<Player>();
-        //            player.attack = false;
-        //            hit.collider.transform.parent.position = new Vector3(transform.localPosition.x - 1.5f, 0, transform.position.z);
-        //            rb.AddForce(direction * -20, ForceMode.Impulse);
-
-        //        }
-        //    }
-        //}
-
-    }
 
     public void Initialize()
     {
@@ -82,6 +38,7 @@ public class Shuttle : MonoBehaviour
             ScoreManager.instance.whiteScore++;
             gameObject.GetComponent<Collider>().enabled = false;
             gameObject.GetComponent<MeshRenderer>().enabled = false;
+            GameManager.instance.state = GameManager.gameState.repaly;
         }
 
         if (collision.gameObject.name == "白床")
@@ -89,6 +46,7 @@ public class Shuttle : MonoBehaviour
             ScoreManager.instance.redScore++;
             gameObject.GetComponent<Collider>().enabled = false;
             gameObject.GetComponent<MeshRenderer>().enabled = false;
+            GameManager.instance.state = GameManager.gameState.repaly;
         }
     }
 
@@ -98,6 +56,7 @@ public class Shuttle : MonoBehaviour
         {
             if (other.transform.parent.GetComponent<Player>().attack)
             {
+                rb.isKinematic = false;
                 Player player = other.transform.parent.GetComponent<Player>();
                 player.attack = false;
                 other.transform.parent.position = new Vector3(transform.localPosition.x, 0, transform.position.z);

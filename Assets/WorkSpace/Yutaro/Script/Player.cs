@@ -38,40 +38,43 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         if (GetComponent<ReplayRecorder>().isReplaying) return;
+        if (GameManager.instance.roundStart) { rb.isKinematic = true; }
+        if (!GameManager.instance.roundStart) { rb.isKinematic = false; }
 
-            nameText.text = playerName.ToString() + "P";
+
+        nameText.text = playerName.ToString() + "P";
         nameText.rectTransform.LookAt(Camera.main.transform);
         if (Input.GetKey(KeyCode.R))
         {
             GetComponent<ReplayRecorder>().StartReplay();
             //chargeSlider.fillAmount += 0.0005f;
         }
-        
 
 
-        
+
+
         animator.SetBool("Attack", animPlay);
-       
+
         OnMove();
 
         if (Input.GetKey(KeyCode.Space) || Input.GetKey("joystick " + index + " button 1") && !animPlay)
         {
             chargeSlider.fillAmount += 0.005f;
         }
-        else if(chargeSlider.fillAmount > 0)
+        else if (chargeSlider.fillAmount > 0)
         {
-           
+
             animPlay = true;
             animator.SetBool("Attack", true);
         }
 
-        
+
         float dirX = Vector3.zero.x - transform.position.x;
-        float velocityX=rb.velocity.x;
+        float velocityX = rb.velocity.x;
 
 
         float dirZ = 3 - transform.position.z;
-        float velocityZ=rb.velocity.z;
+        float velocityZ = rb.velocity.z;
 
         if (transform.tag == "WhiteTeam")
         {
@@ -102,6 +105,9 @@ public class Player : MonoBehaviour
             }
 
         }
+
+
+
         // Debug.Log(velocityZ);
     }
 
@@ -126,6 +132,7 @@ public class Player : MonoBehaviour
 
     private void OnMove()
     {
+        if (rb.isKinematic) return;
         // InputManager で設定した名前を動的に作る
         string horizontalAxisL = "Horizontal_P" + index + "_L";
         string verticalAxisL = "Vertical_P" + index + "_L";
@@ -135,15 +142,13 @@ public class Player : MonoBehaviour
 
         Vector3 moveDir = new Vector3(moveY, 0, -moveX).normalized;
 
-        if(!rb.isKinematic)
-        {
-            // プレイヤーを移動
-            Vector3 conVelocity = rb.velocity;
-            conVelocity.x = moveDir.x * 5;
-            conVelocity.z = moveDir.z * 5;
-            rb.velocity = conVelocity;
-        }
-        
+
+        // プレイヤーを移動
+        Vector3 conVelocity = rb.velocity;
+        conVelocity.x = moveDir.x * 5;
+        conVelocity.z = moveDir.z * 5;
+        rb.velocity = conVelocity;
+
 
         //string horizontalAxisR = "Horizontal_P" + index + "_R";
         //string verticalAxisR = "Vertical_P" + index + "_R";
@@ -157,15 +162,15 @@ public class Player : MonoBehaviour
         //transform.rotation = Quaternion.Euler(0f, angle, 0f);
         //transform.rotation = Quaternion.AngleAxis(0, rotationNorm);
 
-        //float moveKeyX = Input.GetAxisRaw("Horizontal");
-        //float moveKeyY = Input.GetAxisRaw("Vertical");
+        float moveKeyX = Input.GetAxisRaw("Horizontal");
+        float moveKeyY = Input.GetAxisRaw("Vertical");
 
-        //Vector3 moveKeyDir = new Vector3(moveKeyX, rb.velocity.y, moveKeyY);
+        Vector3 moveKeyDir = new Vector3(moveKeyX, rb.velocity.y, moveKeyY);
 
-        //Vector3 keyVelocity = rb.velocity;
-        //keyVelocity.x = moveKeyDir.x * 5;
-        //keyVelocity.z = moveKeyDir.z * 5;
-        //rb.velocity = keyVelocity;
+        Vector3 keyVelocity = rb.velocity;
+        keyVelocity.x = moveKeyDir.x * 5;
+        keyVelocity.z = moveKeyDir.z * 5;
+        rb.velocity = keyVelocity;
     }
     
     public bool AnimEnd()
