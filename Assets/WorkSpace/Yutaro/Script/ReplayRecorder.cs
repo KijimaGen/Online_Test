@@ -40,15 +40,19 @@ public class ReplayRecorder : MonoBehaviour
         var floatParams = new Dictionary<string, float>();
         var boolParams = new Dictionary<string, bool>();
 
-        foreach (AnimatorControllerParameter param in animator.parameters)
+        if(animator != null)
         {
-            switch (param.type)
+            foreach (AnimatorControllerParameter param in animator.parameters)
             {
-                case AnimatorControllerParameterType.Bool:
-                    boolParams[param.name] = animator.GetBool(param.name);
-                    break;
+                switch (param.type)
+                {
+                    case AnimatorControllerParameterType.Bool:
+                        boolParams[param.name] = animator.GetBool(param.name);
+                        break;
+                }
             }
         }
+        
 
         // フレーム追加
         frames.Add(new ReplayFrameData
@@ -83,13 +87,14 @@ public class ReplayRecorder : MonoBehaviour
         transform.rotation = frame.rotation;
 
         // アニメーションのパラメータをセット
-
-        foreach (var param in frame.boolParams)
+        if (animator != null)
         {
-            animator.SetBool(param.Key, param.Value);
+            foreach (var param in frame.boolParams)
+            {
+                animator.SetBool(param.Key, param.Value);
+            }
+
         }
-
-
 
         replayIndex++;
     }

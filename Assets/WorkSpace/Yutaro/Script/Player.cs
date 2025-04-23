@@ -135,11 +135,15 @@ public class Player : MonoBehaviour
 
         Vector3 moveDir = new Vector3(moveY, 0, -moveX).normalized;
 
-        // プレイヤーを移動
-        Vector3 conVelocity = rb.velocity;
-        conVelocity.x = moveDir.x * 5;
-        conVelocity.z = moveDir.z * 5;
-        rb.velocity = conVelocity;
+        if(!rb.isKinematic)
+        {
+            // プレイヤーを移動
+            Vector3 conVelocity = rb.velocity;
+            conVelocity.x = moveDir.x * 5;
+            conVelocity.z = moveDir.z * 5;
+            rb.velocity = conVelocity;
+        }
+        
 
         //string horizontalAxisR = "Horizontal_P" + index + "_R";
         //string verticalAxisR = "Vertical_P" + index + "_R";
