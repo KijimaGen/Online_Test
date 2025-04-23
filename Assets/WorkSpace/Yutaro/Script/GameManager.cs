@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using static UnityEditor.PlayerSettings;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -55,7 +56,7 @@ public class GameManager : MonoBehaviour
             roundSetting = true;
         }
 
-        if (Input.GetKeyUp(KeyCode.V))
+        if (Input.GetKeyUp(KeyCode.V)|| Input.GetKeyUp("joystick 1 button 5"))
         {
             ShuttleInstantiate(new Vector3(playerList[0].transform.position.x, 8, playerList[0].transform.position.z));
         }
@@ -98,7 +99,7 @@ public class GameManager : MonoBehaviour
 
     void Player1()
     {
-        if (Input.GetKey(KeyCode.T) && !addPlayer[0] )
+        if (Input.GetKey("joystick 1 button 4") && !addPlayer[0] )
         {
             Debug.Log("プレイヤー1が追加されました" + playerList.Count);
             PlayerInstantiate(1);
@@ -116,7 +117,7 @@ public class GameManager : MonoBehaviour
     }
     void Player3()
     {
-        if (Input.GetKeyDown("joystick 3 button 4") && !addPlayer[2])
+        if (Input.GetKey("joystick 3 button 4") && !addPlayer[2])
         {
             Debug.Log("プレイヤー3が追加されました" + playerList.Count);
             PlayerInstantiate(3);
@@ -125,7 +126,7 @@ public class GameManager : MonoBehaviour
     }
     void Player4()
     {
-        if (Input.GetKeyDown("joystick 4 button 4") && !addPlayer[3])
+        if (Input.GetKey("joystick 4 button 4") && !addPlayer[3])
         {
             Debug.Log("プレイヤー4が追加されました" + playerList.Count);
             PlayerInstantiate(4);
@@ -153,12 +154,12 @@ public class GameManager : MonoBehaviour
 
         roundSetting = false;
 
-        if (playerList.Count != 2)
-        {
-            Debug.Log("開始できません");
-            state = gameState.standBy;
-            return;
-        }
+        //if (playerList.Count != 2)
+        //{
+        //    Debug.Log("開始できません");
+        //    state = gameState.standBy;
+        //    return;
+        //}
 
         foreach (var player in playerList)
         {

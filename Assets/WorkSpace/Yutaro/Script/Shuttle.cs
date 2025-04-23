@@ -10,6 +10,10 @@ public class Shuttle : MonoBehaviour
 
     RaycastHit[] hits;
 
+    private void Start()
+    {
+        Initialize();
+    }
     void FixedUpdate()
     {
         GameObject[] target = GameObject.FindGameObjectsWithTag("Racket");
@@ -22,13 +26,14 @@ public class Shuttle : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKey(KeyCode.R))
         {
             GetComponent<ReplayRecorder>().StartReplay();
-            Initialize();
+            //Initialize();
         }
 
         rb.AddForce(Vector3.down * 10, ForceMode.Acceleration);
+        
     }
 
 
@@ -72,19 +77,19 @@ public class Shuttle : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.name == "ê‘è∞") 
-        { 
-            ScoreManager.instance.whiteScore++; 
-            gameObject.GetComponent<Collider>().enabled = false; 
-            gameObject.GetComponent<MeshRenderer>().enabled = false; 
-        }
+        //if(collision.gameObject.name == "ê‘è∞") 
+        //{ 
+        //    ScoreManager.instance.whiteScore++; 
+        //    gameObject.GetComponent<Collider>().enabled = false; 
+        //    gameObject.GetComponent<MeshRenderer>().enabled = false; 
+        //}
 
-        if (collision.gameObject.name == "îíè∞")
-        {
-            ScoreManager.instance.redScore++;
-            gameObject.GetComponent<Collider>().enabled = false;
-            gameObject.GetComponent<MeshRenderer>().enabled = false;
-        }
+        //if (collision.gameObject.name == "îíè∞")
+        //{
+        //    ScoreManager.instance.redScore++;
+        //    gameObject.GetComponent<Collider>().enabled = false;
+        //    gameObject.GetComponent<MeshRenderer>().enabled = false;
+        //}
     }
 
     private void OnTriggerStay(Collider other)
@@ -95,7 +100,7 @@ public class Shuttle : MonoBehaviour
             {
                 Player player = other.transform.parent.GetComponent<Player>();
                 player.attack = false;
-                other.transform.parent.position = new Vector3(transform.localPosition.x - 0.5f, 0, transform.position.z);
+                other.transform.parent.position = new Vector3(transform.localPosition.x, 0, transform.position.z);
 
                 Transform point = player.hitPoint.transform;
 

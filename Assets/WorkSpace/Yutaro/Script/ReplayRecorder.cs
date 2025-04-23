@@ -3,12 +3,20 @@ using UnityEngine;
 
 public class ReplayRecorder : MonoBehaviour
 {
-    private float recordDuration = 5f;
-    private List<ReplayFrame> frames = new List<ReplayFrame>();
-    private float startTime;
-    private bool isReplaying = false;
+    static public ReplayRecorder instance;
+    private float recordDuration = 10f;
+    public List<ReplayFrameData> frames = new List<ReplayFrameData>();
+    //private float startTime;
+    public bool isReplaying = false;
     private int replayIndex = 0;
 
+    private Animator animator;
+
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+        instance = this;
+    }
     void FixedUpdate()
     {
         if (isReplaying)
@@ -23,16 +31,33 @@ public class ReplayRecorder : MonoBehaviour
 
     void RecordFrame()
     {
-        if (Time.time - startTime > recordDuration)
+        float currentTime = Time.time;
+
+        // 古いフレーム削除
+        frames.RemoveAll(frame => currentTime - frame.time > recordDuration);
+
+        // パラメーター収集
+        var floatParams = new Dictionary<string, float>();
+        var boolParams = new Dictionary<string, bool>();
+
+        foreach (AnimatorControllerParameter param in animator.parameters)
         {
-            if (frames.Count > 0) frames.RemoveAt(0);
+            switch (param.type)
+            {
+                case AnimatorControllerParameterType.Bool:
+                    boolParams[param.name] = animator.GetBool(param.name);
+                    break;
+            }
         }
 
-        frames.Add(new ReplayFrame
+        // フレーム追加
+        frames.Add(new ReplayFrameData
         {
             position = transform.position,
             rotation = transform.rotation,
-            time = Time.time
+            time = currentTime,
+            floatParams = floatParams,
+            boolParams = boolParams
         });
     }
 
@@ -40,22 +65,35 @@ public class ReplayRecorder : MonoBehaviour
     {
         isReplaying = true;
         replayIndex = 0;
+        transform.GetComponent<Rigidbody>().isKinematic = true;
     }
 
     void PlayReplay()
     {
         if (replayIndex >= frames.Count)
         {
-            EndReplay(); // 自動終了して状態リセット
+            StopReplayAndReset();
             return;
         }
 
-        ReplayFrame frame = frames[replayIndex];
+        ReplayFrameData frame = frames[replayIndex];
+
+        // 位置と回転の再生
         transform.position = frame.position;
         transform.rotation = frame.rotation;
 
+        // アニメーションのパラメータをセット
+
+        foreach (var param in frame.boolParams)
+        {
+            animator.SetBool(param.Key, param.Value);
+        }
+
+
+
         replayIndex++;
     }
+
 
     void EndReplay()
     {
@@ -66,6 +104,7 @@ public class ReplayRecorder : MonoBehaviour
 
     public void StopReplayAndReset()
     {
+        transform.GetComponent<Rigidbody>().isKinematic = false;
         EndReplay();
         frames.Clear(); // ← これで記録も完全リセット！
     }
