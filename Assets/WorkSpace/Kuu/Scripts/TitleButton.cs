@@ -68,7 +68,8 @@ public class TitleButton : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
 
         // ゲームを終了する
-        UnityEditor.EditorApplication.isPlaying = false;
+        // UnityEditorはビルドでは使えないので別の方法で落とす必要がある
+        //UnityEditor.EditorApplication.isPlaying = false;
         Application.Quit();
     }
 
