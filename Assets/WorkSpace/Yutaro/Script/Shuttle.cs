@@ -10,6 +10,8 @@ public class Shuttle : MonoBehaviour
 
     RaycastHit[] hits;
 
+    
+
     private void Start()
     {
         Initialize();
@@ -36,7 +38,11 @@ public class Shuttle : MonoBehaviour
         
     }
 
-
+    private void Update() {
+        Vector3 velocity = rb.velocity;
+        Quaternion targetRotation = Quaternion.LookRotation(velocity);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 100);
+    }
 
     private void Shoot(GameObject _Target)
     {
