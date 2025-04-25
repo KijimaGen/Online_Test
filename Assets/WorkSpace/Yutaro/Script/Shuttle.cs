@@ -59,7 +59,7 @@ public class Shuttle : MonoBehaviour
                 rb.isKinematic = false;
                 Player player = other.transform.parent.GetComponent<Player>();
                 player.attack = false;
-                other.transform.parent.position = new Vector3(transform.localPosition.x, 0, transform.position.z);
+                //other.transform.parent.position = new Vector3(transform.localPosition.x, 0, transform.position.z);
 
                 Transform point = player.hitPoint.transform;
 
@@ -73,7 +73,11 @@ public class Shuttle : MonoBehaviour
                 rb.AddForce((point.position - transform.position).normalized * player.chargeSlider.fillAmount* 12 * dirX, ForceMode.Impulse);
                 Debug.Log("ƒlƒbƒg‚Ì‹——£" + dirX);
                 Debug.Log( "power" + player.chargeSlider.fillAmount);
+
+                
             }
+
+            
         }
     }
 
