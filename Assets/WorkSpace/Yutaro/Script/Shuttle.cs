@@ -39,6 +39,7 @@ public class Shuttle : MonoBehaviour
             gameObject.GetComponent<Collider>().enabled = false;
             gameObject.GetComponent<MeshRenderer>().enabled = false;
             GameManager.instance.state = GameManager.gameState.repaly;
+            Destroy(gameObject);
         }
 
         if (collision.gameObject.name == "îíè∞")
@@ -47,6 +48,7 @@ public class Shuttle : MonoBehaviour
             gameObject.GetComponent<Collider>().enabled = false;
             gameObject.GetComponent<MeshRenderer>().enabled = false;
             GameManager.instance.state = GameManager.gameState.repaly;
+            Destroy(gameObject);
         }
     }
 
