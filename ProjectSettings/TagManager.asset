@@ -8,6 +8,9 @@ TagManager:
   - WhiteTeam
   - Racket
   - Shuttle
+  - Front
+  - Right
+  - Left
   layers:
   - Default
   - TransparentFX

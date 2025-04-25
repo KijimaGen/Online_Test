@@ -12,6 +12,8 @@ public class ReplayRecorder : MonoBehaviour
 
     private Animator animator;
 
+    private float animTimeEnd;
+
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -31,6 +33,7 @@ public class ReplayRecorder : MonoBehaviour
 
     void RecordFrame()
     {
+        if (GameManager.instance.state != GameManager.gameState.start) return;
         float currentTime = Time.time;
 
         // 古いフレーム削除
@@ -112,5 +115,13 @@ public class ReplayRecorder : MonoBehaviour
         transform.GetComponent<Rigidbody>().isKinematic = false;
         EndReplay();
         frames.Clear(); // ← これで記録も完全リセット！
+
+        animTimeEnd += Time.deltaTime;
+        if(animTimeEnd > 3)
+        {
+            animTimeEnd = 0;
+            GameManager.instance.state = GameManager.gameState.start;
+        }
+
     }
 }

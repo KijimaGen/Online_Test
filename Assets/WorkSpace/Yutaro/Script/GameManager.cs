@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-using static UnityEditor.PlayerSettings;
-using System;
+using TMPro;
+using UnityEngine.InputSystem.iOS;
 
 public class GameManager : MonoBehaviour
 {
     //ゲームステートの enum型
-    enum gameState
+    public enum gameState
     {
         standBy,    //待機状態
         start,      //ゲーム開始
@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
         result      //ゲーム終了
     }
     //ゲームステートの変数
-    gameState state;
+    public gameState state;
 
     [SerializeField] private GameObject playerPrefab;
     public List<Player> playerList = new List<Player>();
@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
 
     public int playerIndex;
 
+    [SerializeField] private GameObject countDownTitle;
+    bool setReplay;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,6 +46,9 @@ public class GameManager : MonoBehaviour
         state = gameState.standBy;
         Camera.main.transform.position = new Vector3 (0,14,-17);
         RoundInitialize();
+
+
+        countDownTitle.SetActive(false);
 
     }
 
@@ -68,8 +73,10 @@ public class GameManager : MonoBehaviour
                 break;
             case gameState.start:
                 RoundStart();
+                
                 break;
             case gameState.repaly:
+               // Invoke("Replay", 3);
                 break;
             case gameState.result:
                 break;
@@ -78,12 +85,14 @@ public class GameManager : MonoBehaviour
         if (roundStart)
         {
             startCount += Time.unscaledDeltaTime;
-
+            countDownTitle.SetActive(true);
+            countDownTitle.GetComponent<TextMeshProUGUI>().text = (3.4f - startCount).ToString("f0");
             if (startCount > 3f)
             {
                 roundStart = false;
                 Round();
-                //Time.timeScale = 0;
+                countDownTitle.SetActive(false);
+                setReplay = false;
             }
         }
     }
@@ -165,11 +174,11 @@ public class GameManager : MonoBehaviour
         {
             if (player.tag == "RedTeam")
             {
-                player.transform.position = new Vector3(-5, 1, 2.5f);
+                player.transform.position = new Vector3(-5, 0, 2.5f);
             }
             else if (player.tag == "WhiteTeam")
             {
-                player.transform.position = new Vector3(5, 1, 2.5f);
+                player.transform.position = new Vector3(5, 0, 2.5f);
                 player.transform.Rotate(new Vector3(0, 180, 0));
             }
         }
@@ -177,7 +186,7 @@ public class GameManager : MonoBehaviour
         Camera.main.transform.DOKill();
         Camera.main.transform.DOMove(new Vector3(0, 14, -9), 2);
 
-        ShuttleInstantiate(new Vector3(playerList[0].transform.position.x, 8, playerList[0].transform.position.z));
+        ShuttleInstantiate(new Vector3(playerList[0].transform.position.x, 3, playerList[0].transform.position.z));
 
         // タイマー開始
         startCount = 0;
@@ -193,5 +202,21 @@ public class GameManager : MonoBehaviour
     private void Round()
     {
 
+    }
+
+    private void Replay()
+    {
+        if (setReplay) return;
+
+        GameObject shuttle = GameObject.FindGameObjectWithTag("Shuttle");
+
+        for (int i = 0; i < playerList.Count; i++)
+        {
+            playerList[i].GetComponent<ReplayRecorder>().StartReplay();
+        }
+        shuttle.GetComponent<ReplayRecorder>().StartReplay();
+
+        setReplay = true;
+        
     }
 }

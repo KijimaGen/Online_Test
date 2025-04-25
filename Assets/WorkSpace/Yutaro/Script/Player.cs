@@ -23,6 +23,11 @@ public class Player : MonoBehaviour
     Animator animator;
     bool animPlay;
 
+    bool Smash;
+    bool right;
+    bool left;
+    bool jump;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -37,72 +42,112 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+        Debug.Log(right);
         if (GetComponent<ReplayRecorder>().isReplaying) return;
+        if (GameManager.instance.roundStart) { rb.isKinematic = true; }
+        if (!GameManager.instance.roundStart) { rb.isKinematic = false; }
 
-            nameText.text = playerName.ToString() + "P";
+
+        nameText.text = playerName.ToString() + "P";
         nameText.rectTransform.LookAt(Camera.main.transform);
         if (Input.GetKey(KeyCode.R))
         {
             GetComponent<ReplayRecorder>().StartReplay();
             //chargeSlider.fillAmount += 0.0005f;
         }
-        
 
+        //animator.SetBool("Attack", animPlay);
 
-        
-        animator.SetBool("Attack", animPlay);
-       
         OnMove();
 
-        if (Input.GetKey(KeyCode.Space) || Input.GetKey("joystick " + index + " button 1") && !animPlay)
+        if (Input.GetKey("joystick " + index + " button 1") && !animPlay && transform.tag != "Player" || 
+            Input.GetKey(KeyCode.Space)  && !animPlay && transform.tag != "Player" )
         {
             chargeSlider.fillAmount += 0.005f;
         }
-        else if(chargeSlider.fillAmount > 0)
+        else if (chargeSlider.fillAmount > 0)
         {
-           
+
             animPlay = true;
-            animator.SetBool("Attack", true);
+            animator.SetBool("Walk", false);
+            if (right) { animator.SetBool("Right", true); }
+            if (left) { animator.SetBool("Left", true); }
+            if (Smash) 
+            { 
+                animator.SetBool("Smash", true);
+                if (!jump)
+                {
+                    //rb.AddForce(transform.up * 5f,ForceMode.Impulse);
+                    jump = true;
+                }
+            }
+            if (!right && !left && !Smash)
+            { animator.SetBool("Front", true); }
+        }
+        if(!animPlay)
+        {
+            
+            if(rb.velocity.magnitude > 0.01f)
+            {
+                animator.SetBool("Walk", true);
+            }
+            else
+            {
+                animator.SetBool("Walk", false);
+            }
         }
 
-        
         float dirX = Vector3.zero.x - transform.position.x;
-        float velocityX=rb.velocity.x;
+        float velocityZ = rb.velocity.z;
 
-
-        float dirZ = 3 - transform.position.z;
-        float velocityZ=rb.velocity.z;
-
+        BoxCollider boxCollider = transform.Find("尻尾").GetComponent<BoxCollider>();
         if (transform.tag == "WhiteTeam")
         {
 
             if (chargeSlider.fillAmount >= 0.4f)
             {
+                Smash = true;
+                jump = false;
                 chargeSlider.fillAmount = 0.4f;
-                hitPoint.transform.position = new Vector3(rb.velocity.x * -dirX * 0.1f, 4, transform.position.z + velocityZ);
+                hitPoint.transform.position = new Vector3(rb.velocity.x * -dirX * 0.1f, 4f + dirX/4, transform.position.z + velocityZ);
+                boxCollider.center = new Vector3(boxCollider.center.x, 10, boxCollider.center.z);
+                boxCollider.size = new Vector3(boxCollider.size.x, 10, boxCollider.size.z);
             }
             else
             {
                 hitPoint.transform.position = new Vector3(rb.velocity.x * -dirX * 0.1f, 8 - chargeSlider.fillAmount * 10 - dirX / 3, transform.position.z + velocityZ);
+                boxCollider.center = new Vector3(boxCollider.center.x, 1.18f, boxCollider.center.z);
+                boxCollider.size = new Vector3(boxCollider.size.x, 5.37f, boxCollider.size.z);
             }
 
         }
 
         if (transform.tag == "RedTeam")
         {
-
+           
             if (chargeSlider.fillAmount >= 0.4f)
             {
+                Smash = true;
+                jump = false;
                 chargeSlider.fillAmount = 0.4f;
-                hitPoint.transform.position = new Vector3(rb.velocity.x * dirX * 0.1f, 4, transform.position.z + velocityZ);
+                hitPoint.transform.position = new Vector3(rb.velocity.x * dirX * 0.1f, 4f + dirX * 0.1f, transform.position.z + velocityZ);
+                boxCollider.center = new Vector3(boxCollider.center.x, 10, boxCollider.center.z);
+                boxCollider.size = new Vector3(boxCollider.size.x, 10, boxCollider.size.z);
             }
             else
             {
                 hitPoint.transform.position = new Vector3(rb.velocity.x * dirX * 0.1f, 8 - chargeSlider.fillAmount * 10 + dirX / 3, transform.position.z + velocityZ);
+                boxCollider.center = new Vector3(boxCollider.center.x, 1.18f, boxCollider.center.z);
+                boxCollider.size = new Vector3(boxCollider.size.x, 5.37f, boxCollider.size.z);
             }
 
+             //Debug.Log(dirX * 0.1f);
         }
-        // Debug.Log(velocityZ);
+
+        Vector3 center = GameObject.Find("court").transform.position;
+        var distance = (hitPoint.transform.position - center).normalized;
+
+       // Debug.Log(distance);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -124,8 +169,24 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Shuttle")
+        {
+            var norm = (other.transform.position - transform.position).normalized;
+            //var magnitude = (other.transform.position.z - transform.position.z);
+            if (norm.z < -0.3f)
+            { right = true; }
+            if (norm.z > 0.3f) { left = true; }
+
+            
+        }
+    }
+
     private void OnMove()
     {
+        float Speed = 8;
+        if (rb.isKinematic) return;
         // InputManager で設定した名前を動的に作る
         string horizontalAxisL = "Horizontal_P" + index + "_L";
         string verticalAxisL = "Vertical_P" + index + "_L";
@@ -135,15 +196,13 @@ public class Player : MonoBehaviour
 
         Vector3 moveDir = new Vector3(moveY, 0, -moveX).normalized;
 
-        if(!rb.isKinematic)
-        {
-            // プレイヤーを移動
-            Vector3 conVelocity = rb.velocity;
-            conVelocity.x = moveDir.x * 5;
-            conVelocity.z = moveDir.z * 5;
-            rb.velocity = conVelocity;
-        }
-        
+
+        // プレイヤーを移動
+        Vector3 conVelocity = rb.velocity;
+        conVelocity.x = moveDir.x * Speed;
+        conVelocity.z = moveDir.z * Speed;
+        rb.velocity = conVelocity;
+
 
         //string horizontalAxisR = "Horizontal_P" + index + "_R";
         //string verticalAxisR = "Vertical_P" + index + "_R";
@@ -160,16 +219,25 @@ public class Player : MonoBehaviour
         //float moveKeyX = Input.GetAxisRaw("Horizontal");
         //float moveKeyY = Input.GetAxisRaw("Vertical");
 
-        //Vector3 moveKeyDir = new Vector3(moveKeyX, rb.velocity.y, moveKeyY);
+        //Vector3 moveKeyDir = new Vector3(moveKeyX, 0, moveKeyY);
 
         //Vector3 keyVelocity = rb.velocity;
-        //keyVelocity.x = moveKeyDir.x * 5;
-        //keyVelocity.z = moveKeyDir.z * 5;
+        //keyVelocity.x = moveKeyDir.x * Speed;
+        //keyVelocity.z = moveKeyDir.z * Speed;
         //rb.velocity = keyVelocity;
+
+        //rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
     }
     
     public bool AnimEnd()
     {
+        animator.SetBool("Front", false);
+        animator.SetBool("Right", false);
+        animator.SetBool("Left", false);
+        animator.SetBool("Smash", false);
+        Smash = false;
+        right = false;
+        left = false;
         chargeSlider.fillAmount = 0;
         return animPlay = false;
     }
