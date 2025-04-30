@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 
 public class StanManager : MonoBehaviour
 {
@@ -23,7 +25,7 @@ public class StanManager : MonoBehaviour
     {
         if (stanflag = true)
         {
-            //await UniTask.Delay(TimeSpan.FromSeconds(waitTime));
+            //async Task UniTask.Delay(TimeSpan.FromSeconds(waitTime));
             stanflag = false;
         }
     }
