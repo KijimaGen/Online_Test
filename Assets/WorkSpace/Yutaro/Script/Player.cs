@@ -50,6 +50,7 @@ public class Player : MonoBehaviour
 
         nameText.text = playerName.ToString() + "P";
         nameText.rectTransform.LookAt(Camera.main.transform);
+        nameText.rectTransform.Rotate(0, 180f, 0);
         if (Input.GetKey(KeyCode.R))
         {
             GetComponent<ReplayRecorder>().StartReplay();
@@ -132,18 +133,17 @@ public class Player : MonoBehaviour
                 Smash = true;
                 jump = false;
                 chargeSlider.fillAmount = 0.4f;
-                hitPoint.transform.position = new Vector3(rb.velocity.x * dirX * 0.05f, 4f + dirX * 0.1f, transform.position.z + velocityZ / 2 * -dir.z * 0.05f);
+                hitPoint.transform.position = new Vector3(rb.velocity.x * dirX * 0.05f, 4f + dirX * 0.1f, transform.position.z + velocityZ / 2 );
                 boxCollider.center = new Vector3(boxCollider.center.x, 10, boxCollider.center.z);
                 boxCollider.size = new Vector3(boxCollider.size.x, 10, boxCollider.size.z);
             }
             else
             {
-                hitPoint.transform.position = new Vector3(rb.velocity.x * dirX * 0.05f, 8 - chargeSlider.fillAmount * 10 + dirX / 3, transform.position.z + velocityZ +dir.z * 15);
+                hitPoint.transform.position = new Vector3(rb.velocity.x * dirX * 0.05f, 8 - chargeSlider.fillAmount * 10 + dirX / 3, transform.position.z + velocityZ /2);
                 boxCollider.center = new Vector3(boxCollider.center.x, 1.18f, boxCollider.center.z);
                 boxCollider.size = new Vector3(boxCollider.size.x, 5.37f, boxCollider.size.z);
             }
 
-             Debug.Log(dir.z);
         }
 
         
@@ -155,7 +155,7 @@ public class Player : MonoBehaviour
             hitPoint.transform.SetParent(null);
 
             Vector3 pos = hitPoint.transform.position;
-            pos.z = center.z - 6f; // 固定したいZの値にする
+            pos.z = center.z - 5f; // 固定したいZの値にする
             hitPoint.transform.position = pos;
         }
         else if(distance.z >= 0.4f)
@@ -164,7 +164,7 @@ public class Player : MonoBehaviour
             hitPoint.transform.SetParent(null);
 
             Vector3 pos = hitPoint.transform.position;
-            pos.z = center.z + 6f; // 固定したいZの値にする
+            pos.z = center.z + 5f; // 固定したいZの値にする
             hitPoint.transform.position = pos;
         }
         else
@@ -253,19 +253,19 @@ public class Player : MonoBehaviour
         //transform.rotation = Quaternion.Euler(0f, angle, 0f);
         //transform.rotation = Quaternion.AngleAxis(0, rotationNorm);
 
-        //float moveKeyX = Input.GetAxisRaw("Horizontal");
-        //float moveKeyY = Input.GetAxisRaw("Vertical");
+        float moveKeyX = Input.GetAxisRaw("Horizontal");
+        float moveKeyY = Input.GetAxisRaw("Vertical");
 
-        //Vector3 moveKeyDir = new Vector3(moveKeyX, 0, moveKeyY);
+        Vector3 moveKeyDir = new Vector3(moveKeyX, 0, moveKeyY);
 
-        //Vector3 keyVelocity = rb.velocity;
-        //keyVelocity.x = moveKeyDir.x * Speed;
-        //keyVelocity.z = moveKeyDir.z * Speed;
-        //rb.velocity = keyVelocity;
+        Vector3 keyVelocity = rb.velocity;
+        keyVelocity.x = moveKeyDir.x * Speed;
+        keyVelocity.z = moveKeyDir.z * Speed;
+        rb.velocity = keyVelocity;
 
-        //rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
+        rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
     }
-    
+
     public bool AnimEnd()
     {
         animator.SetBool("Front", false);
