@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour
                 replayCamera.gameObject.SetActive(false);
                 AddPlayer();
 
-                roundTime = 10;
+                roundTime = 3;
                 ScoreManager.instance.redScore = 0;
                 ScoreManager.instance.whiteScore = 0;
                 resultTitle.SetActive(false);
