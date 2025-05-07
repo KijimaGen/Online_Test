@@ -68,6 +68,7 @@ public class ReplayRecorder : MonoBehaviour
             floatParams = floatParams,
             boolParams = boolParams
         });
+
     }
 
     public void StartReplay()

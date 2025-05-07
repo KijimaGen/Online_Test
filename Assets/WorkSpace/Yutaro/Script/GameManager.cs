@@ -78,22 +78,22 @@ public class GameManager : MonoBehaviour
         switch (state)
         {
             case gameState.standBy:
-                replayCamera.gameObject.SetActive(false);
+                //replayCamera.gameObject.SetActive(false);
                 AddPlayer();
                 break;
             case gameState.start:
-                replayCamera.gameObject.SetActive(false);
+                //replayCamera.gameObject.SetActive(false);
                 RoundStart();
                 Round();
 
 
                 break;
             case gameState.repaly:
-                replayCamera.gameObject.SetActive(true);
-                Invoke("Replay", 3);
+                //replayCamera.gameObject.SetActive(true);
+                Replay();
                 break;
             case gameState.result:
-                replayCamera.gameObject.SetActive(false);
+                //replayCamera.gameObject.SetActive(false);
                 break;
         }
 
@@ -202,7 +202,7 @@ public class GameManager : MonoBehaviour
         replayCamera.targetDisplay = 1;
 
         replayCamera.transform.position = new Vector3(0, 10, -1);
-        replayCamera.GetComponent<Rigidbody>().isKinematic = true;
+        //replayCamera.GetComponent<Rigidbody>().isKinematic = true;
         mainCamera.transform.DOKill();
         mainCamera.transform.DOMove(new Vector3(0, 14, -9), 2);
 
@@ -253,6 +253,7 @@ public class GameManager : MonoBehaviour
         mainCamera.targetDisplay = 1;
         replayCamera.targetDisplay = 0;
 
+        replayCamera.GetComponent<Rigidbody>().velocity = Vector3.zero;
         replayCamera.GetComponent<Rigidbody>().isKinematic = false;
         replayCamera.transform.position = new Vector3(0, 10, -1);
 

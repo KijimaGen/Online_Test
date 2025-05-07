@@ -39,7 +39,7 @@ public class Shuttle : MonoBehaviour
         {
             gameObject.GetComponent<Collider>().enabled = false;
             gameObject.GetComponent<MeshRenderer>().enabled = false;
-            GameManager.instance.state = GameManager.gameState.repaly;
+            Invoke("SetGameReplay", 3);
             rb.isKinematic = true;
             TriggerShockwave();
 
@@ -51,7 +51,7 @@ public class Shuttle : MonoBehaviour
         {
             gameObject.GetComponent<Collider>().enabled = false;
             gameObject.GetComponent<MeshRenderer>().enabled = false;
-            GameManager.instance.state = GameManager.gameState.repaly;
+            Invoke("SetGameReplay", 3);
             rb.isKinematic = true;
             TriggerShockwave();
 
@@ -63,7 +63,7 @@ public class Shuttle : MonoBehaviour
         {
             gameObject.GetComponent<Collider>().enabled = false;
             gameObject.GetComponent<MeshRenderer>().enabled = false;
-            GameManager.instance.state = GameManager.gameState.repaly;
+            Invoke("SetGameReplay", 3);
             rb.isKinematic = true;
 
             if (ReplayRecorder.instance.isReplaying) return;
@@ -111,11 +111,17 @@ public class Shuttle : MonoBehaviour
             Rigidbody rb = hit.GetComponent<Rigidbody>();
             if (rb != null)
             {
+                if (ReplayRecorder.instance.isReplaying) return;
                 // ÕŒ‚”g‚ğŠOŒü‚«‚É—^‚¦‚é
                 rb.AddExplosionForce(10000, ExplosionPos, 20);
-                //Debug.Log($"[ÕŒ‚”g] {hit.name} ‚É—Í‚ğ“K—p‚µ‚Ü‚µ‚½");
+                Debug.Log($"[ÕŒ‚”g] {hit.name} ‚É—Í‚ğ“K—p‚µ‚Ü‚µ‚½");
             }
         }
 
+    }
+
+    private void SetGameReplay()
+    {
+        GameManager.instance.state = GameManager.gameState.repaly;
     }
 }
