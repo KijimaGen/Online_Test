@@ -9,6 +9,7 @@ public class Shuttle : MonoBehaviour
     Rigidbody rb;
 
     int touchTeam;
+    public bool initialize;
 
     private void Start()
     {
@@ -22,12 +23,13 @@ public class Shuttle : MonoBehaviour
         GameObject[] target = GameObject.FindGameObjectsWithTag("Racket");
 
         rb.AddForce(Vector3.down * 10, ForceMode.Acceleration);
-        
+        //Debug.Log(ReplayRecorder.instance.isReplaying);
     }
 
 
     public void Initialize()
     {
+        if (initialize) return; initialize = true;
         rb = GetComponent<Rigidbody>();
         gameObject.GetComponent<Collider>().enabled = true;
         gameObject.GetComponent<MeshRenderer>().enabled = true;
@@ -35,6 +37,8 @@ public class Shuttle : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (!gameObject.GetComponent<MeshRenderer>().enabled) return;
+        if (GameManager.instance.state==GameManager.gameState.standBy) return;
         if (collision.gameObject.name == "ê‘è∞")
         {
             gameObject.GetComponent<Collider>().enabled = false;
@@ -51,7 +55,7 @@ public class Shuttle : MonoBehaviour
         {
             gameObject.GetComponent<Collider>().enabled = false;
             gameObject.GetComponent<MeshRenderer>().enabled = false;
-            Invoke("SetGameReplay", 3);
+            Invoke("SetGameReplay", 2);
             rb.isKinematic = true;
             TriggerShockwave();
 
@@ -63,12 +67,12 @@ public class Shuttle : MonoBehaviour
         {
             gameObject.GetComponent<Collider>().enabled = false;
             gameObject.GetComponent<MeshRenderer>().enabled = false;
-            Invoke("SetGameReplay", 3);
+            Invoke("SetGameReplay", 2);
             rb.isKinematic = true;
 
             if (ReplayRecorder.instance.isReplaying) return;
-            if(touchTeam == 0) { ScoreManager.instance.whiteScore++; }
-            if(touchTeam == 1) { ScoreManager.instance.redScore++; }
+            if(touchTeam == 0) { ScoreManager.instance.redScore++; }
+            if(touchTeam == 1) { ScoreManager.instance.whiteScore++; }
             //ScoreManager.instance.redScore++;
         }
     }

@@ -107,7 +107,7 @@ public class ReplayRecorder : MonoBehaviour
 
     public async void StopReplayAndReset()
     {
-        transform.GetComponent<Rigidbody>().isKinematic = false;
+        //transform.GetComponent<Rigidbody>().isKinematic = false;
         frames.Clear(); // ← これで記録も完全リセット！
         await Task.Delay(2000);
         GameManager.instance.RoundInitialize();

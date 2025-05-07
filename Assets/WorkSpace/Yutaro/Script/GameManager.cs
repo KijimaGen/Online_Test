@@ -5,6 +5,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine.InputSystem.iOS;
 using UnityEngine.UI;
+using SuperBlur;
 
 public class GameManager : MonoBehaviour
 {
@@ -47,6 +48,8 @@ public class GameManager : MonoBehaviour
     float roundTime;
     bool inGame;
 
+    [SerializeField] GameObject resultTitle;
+    bool setResult;
     // Start is called before the first frame update
     void Start()
     {
@@ -78,22 +81,29 @@ public class GameManager : MonoBehaviour
         switch (state)
         {
             case gameState.standBy:
-                //replayCamera.gameObject.SetActive(false);
+                replayCamera.gameObject.SetActive(false);
                 AddPlayer();
+
+                roundTime = 120;
+                ScoreManager.instance.redScore = 0;
+                ScoreManager.instance.whiteScore = 0;
+                resultTitle.SetActive(false);
+
                 break;
             case gameState.start:
-                //replayCamera.gameObject.SetActive(false);
+                replayCamera.gameObject.SetActive(false);
                 RoundStart();
                 Round();
 
-
                 break;
             case gameState.repaly:
-                //replayCamera.gameObject.SetActive(true);
+                replayCamera.gameObject.SetActive(true);
                 Replay();
                 break;
             case gameState.result:
-                //replayCamera.gameObject.SetActive(false);
+                Result();
+                replayCamera.gameObject.SetActive(false);
+
                 break;
         }
 
@@ -202,7 +212,6 @@ public class GameManager : MonoBehaviour
         replayCamera.targetDisplay = 1;
 
         replayCamera.transform.position = new Vector3(0, 10, -1);
-        //replayCamera.GetComponent<Rigidbody>().isKinematic = true;
         mainCamera.transform.DOKill();
         mainCamera.transform.DOMove(new Vector3(0, 14, -9), 2);
 
@@ -217,6 +226,7 @@ public class GameManager : MonoBehaviour
     {
         roundSetting = true;
         state = gameState.start;
+        shuttle.GetComponent<Shuttle>().initialize = false;
     }
 
     private void Round()
@@ -230,14 +240,27 @@ public class GameManager : MonoBehaviour
                 int minutes = Mathf.FloorToInt(roundTime / 60);
                 int seconds = Mathf.FloorToInt(roundTime % 60);
 
-                timeText.text = string.Format("{0}:{1:00}", minutes, seconds);
+                if (roundTime <= 0)
+                {
+                    state = gameState.result;
+                    roundTime = 0.0f;
+                    timeText.text = "0:00";
+                }
+                else
+                {
+                    timeText.text = string.Format("{0}:{1:00}", minutes, seconds);
+                }
+                
             }
+
+            
         }
     }
 
     private void Replay()
     {
         if (setReplay) return;
+
 
         inGame = false;
         GameObject shuttle = GameObject.FindGameObjectWithTag("Shuttle");
@@ -247,16 +270,44 @@ public class GameManager : MonoBehaviour
             playerList[i].GetComponent<ReplayRecorder>().StartReplay();
         }
         shuttle.GetComponent<ReplayRecorder>().StartReplay();
-
+        shuttle.GetComponent<Shuttle>().initialize = false;
         setReplay = true;
 
         mainCamera.targetDisplay = 1;
         replayCamera.targetDisplay = 0;
-
-        replayCamera.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        replayCamera.GetComponent<Rigidbody>().isKinematic = false;
         replayCamera.transform.position = new Vector3(0, 10, -1);
 
     }
 
+    private void Result()
+    {
+        if(setResult) return;
+        Camera.main.GetComponent<SuperBlurBase>().interpolation = 1;
+        Camera.main.GetComponent<SuperBlurBase>().downsample = 1;
+        
+        resultTitle.SetActive(true);
+        resultTitle.GetComponent<Animator>().SetBool("result",true);
+
+        for (int i = 0; i < playerList.Count; i++)
+        {    
+            playerList[i].GetComponent<Rigidbody>().isKinematic = true;
+            if (playerList[i].gameObject.tag == "RedTeam")
+            {
+                playerList[i].transform.parent = resultTitle.transform.Find("Canvas/red•Ç").transform;
+                playerList[i].transform.localPosition = Vector3.zero;
+                playerList[i].transform.localRotation = Quaternion.Euler(0,0,0);
+            }
+
+            if (playerList[i].gameObject.tag == "WhiteTeam")
+            {
+                playerList[i].transform.parent = resultTitle.transform.Find("Canvas/white•Ç").transform;
+                playerList[i].transform.localPosition = Vector3.zero;
+                playerList[i].transform.localRotation = Quaternion.Euler(0, 180, 0);
+            }
+
+        }
+
+        Time.timeScale = 0;
+        //setReplay = true;
+    }
 }
