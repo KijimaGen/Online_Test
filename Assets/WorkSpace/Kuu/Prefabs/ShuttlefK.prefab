@@ -33,7 +33,7 @@ Transform:
   m_GameObject: {fileID: 6623901861672829275}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -5, y: 3, z: 2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -175,7 +175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d53a0f7dc30dcda419effe8755ade310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particle: {fileID: 8884371268655795233, guid: f40a238e0311216429a68c5b27e6be39, type: 3}
+  particle: {fileID: 198000012777718758, guid: e96cb15b9b7781e4e9d68aa036dfb8c8, type: 3}
 --- !u!96 &5243411232517047261
 TrailRenderer:
   serializedVersion: 3
@@ -231,6 +231,15 @@ TrailRenderer:
         value: 1
         inSlope: 0
         outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.52589035
+        value: 0.21653575
+        inSlope: -1.3545935
+        outSlope: -1.3545935
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334

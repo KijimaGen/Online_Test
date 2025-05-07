@@ -4,9 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
+using static UnityEngine.UI.Image;
 
 public class StanManager : MonoBehaviour
 {
+    [SerializeField] GameObject clone;
+
     // スタンのフラグ
     bool stanflag;
     // スタン時間
@@ -28,13 +31,18 @@ public class StanManager : MonoBehaviour
             //async Task UniTask.Delay(TimeSpan.FromSeconds(waitTime));
             stanflag = false;
         }
+
+        // シャトルを出す(作業用)
+        if (Input.GetKeyDown(KeyCode.L) || Input.GetKeyDown(KeyCode.JoystickButton5) == true) {
+            Instantiate(clone, new Vector3(0, 5, -10), Quaternion.identity);
+        }
     }
 
     public void OnTriggerStay(Collider collider) {
         // 相手のタグがWhiteTeamだったら
         if (collider.gameObject.CompareTag("WhiteTeam")) {
                 Debug.Log("hit");
-            if (Input.GetKey(KeyCode.Space)/* || Input.GetKey("joystick " + index + " button 1")*/) {
+            if (Input.GetKey(KeyCode.Space)) {
                 //chargeSlider.fillAmount += 0.005f;
                 Debug.Log("atack");
                 stanflag = true;
