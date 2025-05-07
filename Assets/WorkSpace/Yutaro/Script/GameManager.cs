@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using TMPro;
 using UnityEngine.InputSystem.iOS;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -24,7 +25,7 @@ public class GameManager : MonoBehaviour
     bool[] addPlayer = { false,false,false,false };
 
 
-    [SerializeField] private GameObject shuttlePrefab;
+    [SerializeField] private GameObject shuttle;
 
 
     public bool roundSetting = false;
@@ -37,16 +38,24 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject countDownTitle;
     bool setReplay;
+
+    [SerializeField] Camera mainCamera;
+    [SerializeField] Camera replayCamera;
+
+    [SerializeField] Text timeText;
+
+    float roundTime;
+    bool inGame;
+
     // Start is called before the first frame update
     void Start()
     {
         instance = this;
 
+        roundTime = 120;
         //最初のゲームステートは待機状態
         state = gameState.standBy;
-        Camera.main.transform.position = new Vector3 (0,14,-17);
-        RoundInitialize();
-
+        mainCamera.transform.position = new Vector3 (0,14,-17);
 
         countDownTitle.SetActive(false);
 
@@ -69,16 +78,22 @@ public class GameManager : MonoBehaviour
         switch (state)
         {
             case gameState.standBy:
+                //replayCamera.gameObject.SetActive(false);
                 AddPlayer();
                 break;
             case gameState.start:
+                //replayCamera.gameObject.SetActive(false);
                 RoundStart();
-                
+                Round();
+
+
                 break;
             case gameState.repaly:
-               // Invoke("Replay", 3);
+                //replayCamera.gameObject.SetActive(true);
+                Replay();
                 break;
             case gameState.result:
+                //replayCamera.gameObject.SetActive(false);
                 break;
         }
 
@@ -90,9 +105,9 @@ public class GameManager : MonoBehaviour
             if (startCount > 3f)
             {
                 roundStart = false;
-                Round();
                 countDownTitle.SetActive(false);
                 setReplay = false;
+                inGame = true;
             }
         }
     }
@@ -108,7 +123,7 @@ public class GameManager : MonoBehaviour
 
     void Player1()
     {
-        if (Input.GetKey("joystick 1 button 4") && !addPlayer[0] )
+        if (Input.GetKey("joystick 1 button 4") && !addPlayer[0] || Input.GetKey(KeyCode.T) && !addPlayer[0])
         {
             Debug.Log("プレイヤー1が追加されました" + playerList.Count);
             PlayerInstantiate(1);
@@ -153,7 +168,7 @@ public class GameManager : MonoBehaviour
 
     private void ShuttleInstantiate(Vector3 pos)
     {
-        GameObject shuttle = Instantiate(shuttlePrefab, pos, Quaternion.identity);
+        shuttle.transform.position = pos;
         shuttle.GetComponent<Shuttle>().Initialize();
     }
 
@@ -175,16 +190,21 @@ public class GameManager : MonoBehaviour
             if (player.tag == "RedTeam")
             {
                 player.transform.position = new Vector3(-5, 0, 2.5f);
+                player.transform.rotation = Quaternion.Euler(0, 0, 0);
             }
             else if (player.tag == "WhiteTeam")
             {
                 player.transform.position = new Vector3(5, 0, 2.5f);
-                player.transform.Rotate(new Vector3(0, 180, 0));
+                player.transform.rotation = Quaternion.Euler(0, 180, 0);
             }
         }
+        mainCamera.targetDisplay = 0;
+        replayCamera.targetDisplay = 1;
 
-        Camera.main.transform.DOKill();
-        Camera.main.transform.DOMove(new Vector3(0, 14, -9), 2);
+        replayCamera.transform.position = new Vector3(0, 10, -1);
+        //replayCamera.GetComponent<Rigidbody>().isKinematic = true;
+        mainCamera.transform.DOKill();
+        mainCamera.transform.DOMove(new Vector3(0, 14, -9), 2);
 
         ShuttleInstantiate(new Vector3(playerList[0].transform.position.x, 3, playerList[0].transform.position.z));
 
@@ -193,21 +213,33 @@ public class GameManager : MonoBehaviour
         roundStart = true;
     }
 
-    private void RoundInitialize()
+    public void RoundInitialize()
     {
-        roundStart = false;
-        startCount = 0;
+        roundSetting = true;
+        state = gameState.start;
     }
 
     private void Round()
     {
+        if (inGame)
+        {
+            if (!shuttle.GetComponent<Rigidbody>().isKinematic)
+            {
+                roundTime -= Time.deltaTime;
 
+                int minutes = Mathf.FloorToInt(roundTime / 60);
+                int seconds = Mathf.FloorToInt(roundTime % 60);
+
+                timeText.text = string.Format("{0}:{1:00}", minutes, seconds);
+            }
+        }
     }
 
     private void Replay()
     {
         if (setReplay) return;
 
+        inGame = false;
         GameObject shuttle = GameObject.FindGameObjectWithTag("Shuttle");
 
         for (int i = 0; i < playerList.Count; i++)
@@ -217,6 +249,14 @@ public class GameManager : MonoBehaviour
         shuttle.GetComponent<ReplayRecorder>().StartReplay();
 
         setReplay = true;
-        
+
+        mainCamera.targetDisplay = 1;
+        replayCamera.targetDisplay = 0;
+
+        replayCamera.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        replayCamera.GetComponent<Rigidbody>().isKinematic = false;
+        replayCamera.transform.position = new Vector3(0, 10, -1);
+
     }
+
 }

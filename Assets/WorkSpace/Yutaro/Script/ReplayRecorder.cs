@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class ReplayRecorder : MonoBehaviour
 {
@@ -66,6 +68,7 @@ public class ReplayRecorder : MonoBehaviour
             floatParams = floatParams,
             boolParams = boolParams
         });
+
     }
 
     public void StartReplay()
@@ -102,26 +105,15 @@ public class ReplayRecorder : MonoBehaviour
         replayIndex++;
     }
 
-
-    void EndReplay()
-    {
-        isReplaying = false;
-        replayIndex = 0;
-        // 必要なら、初期位置に戻す処理などもここで！
-    }
-
-    public void StopReplayAndReset()
+    public async void StopReplayAndReset()
     {
         transform.GetComponent<Rigidbody>().isKinematic = false;
-        EndReplay();
         frames.Clear(); // ← これで記録も完全リセット！
+        await Task.Delay(2000);
+        GameManager.instance.RoundInitialize();
 
-        animTimeEnd += Time.deltaTime;
-        if(animTimeEnd > 3)
-        {
-            animTimeEnd = 0;
-            GameManager.instance.state = GameManager.gameState.start;
-        }
-
+        isReplaying = false;
+        replayIndex = 0;
     }
+
 }
