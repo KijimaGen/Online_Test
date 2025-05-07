@@ -49,8 +49,8 @@ public class Player : MonoBehaviour
 
 
         nameText.text = playerName.ToString() + "P";
-        nameText.rectTransform.LookAt(Camera.main.transform);
-        nameText.rectTransform.Rotate(0, 180f, 0);
+        //nameText.rectTransform.LookAt(Camera.main.transform);
+        //nameText.rectTransform.Rotate(0, 180f, 0);
         if (Input.GetKey(KeyCode.R))
         {
             GetComponent<ReplayRecorder>().StartReplay();
