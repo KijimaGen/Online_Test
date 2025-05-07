@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
-using UnityEngine.InputSystem.iOS;
 using UnityEngine.UI;
 using SuperBlur;
 
@@ -84,7 +83,7 @@ public class GameManager : MonoBehaviour
                 replayCamera.gameObject.SetActive(false);
                 AddPlayer();
 
-                roundTime = 120;
+                roundTime = 10;
                 ScoreManager.instance.redScore = 0;
                 ScoreManager.instance.whiteScore = 0;
                 resultTitle.SetActive(false);
@@ -294,14 +293,14 @@ public class GameManager : MonoBehaviour
             if (playerList[i].gameObject.tag == "RedTeam")
             {
                 playerList[i].transform.parent = resultTitle.transform.Find("Canvas/red•Ç").transform;
-                playerList[i].transform.localPosition = Vector3.zero;
+                playerList[i].transform.localPosition = new Vector3(-18,0,0);
                 playerList[i].transform.localRotation = Quaternion.Euler(0,0,0);
             }
 
             if (playerList[i].gameObject.tag == "WhiteTeam")
             {
                 playerList[i].transform.parent = resultTitle.transform.Find("Canvas/white•Ç").transform;
-                playerList[i].transform.localPosition = Vector3.zero;
+                playerList[i].transform.localPosition = new Vector3(18, 0, 0);
                 playerList[i].transform.localRotation = Quaternion.Euler(0, 180, 0);
             }
 

@@ -14,10 +14,11 @@ public class Player : MonoBehaviour
     [SerializeField] public GameObject hitPoint;
     [SerializeField] public Image chargeSlider;
     [SerializeField] private Text nameText;
+    [SerializeField] private GameObject scoreBoard;
 
     public bool attack;
 
-    int playerName;
+    public int playerName;
 
     int index;
     Rigidbody rb;
@@ -28,6 +29,12 @@ public class Player : MonoBehaviour
     bool right;
     bool left;
     bool jump;
+
+    public int score;
+    public int goal;
+    public int save;
+    public int punch;
+    public int counter;
 
     void Start()
     {
@@ -47,7 +54,7 @@ public class Player : MonoBehaviour
         if (GameManager.instance.roundStart) { rb.isKinematic = true; }
         if (!GameManager.instance.roundStart) { rb.isKinematic = false; }
 
-
+        ScoreBoard();
         nameText.text = playerName.ToString() + "P";
         //nameText.rectTransform.LookAt(Camera.main.transform);
         //nameText.rectTransform.Rotate(0, 180f, 0);
@@ -287,5 +294,24 @@ public class Player : MonoBehaviour
     public bool OnAttack()
     {
         return attack = true;
+    }
+
+    private void ScoreBoard()
+    {
+        if(GameManager.instance.state == GameManager.gameState.result)
+        {
+            scoreBoard.SetActive(true);
+            Text scoreText = scoreBoard.transform.Find("スコア").GetComponent<Text>();
+            Text goalText = scoreBoard.transform.Find("ゴール").GetComponent<Text>();
+            Text saveText = scoreBoard.transform.Find("セーブ").GetComponent<Text>();
+            Text punchText = scoreBoard.transform.Find("パンチ").GetComponent<Text>();
+            Text counterText = scoreBoard.transform.Find("カウンター").GetComponent<Text>();
+
+            scoreText.text = score.ToString();
+            goalText.text = goal.ToString();
+            saveText.text = save.ToString();
+            punchText.text = punch.ToString();
+            counterText.text = counter.ToString();
+        }
     }
 }

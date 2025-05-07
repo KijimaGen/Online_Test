@@ -9,6 +9,7 @@ public class Shuttle : MonoBehaviour
     Rigidbody rb;
 
     int touchTeam;
+    int lastTouch;
     public bool initialize;
 
     private void Start()
@@ -23,7 +24,7 @@ public class Shuttle : MonoBehaviour
         GameObject[] target = GameObject.FindGameObjectsWithTag("Racket");
 
         rb.AddForce(Vector3.down * 10, ForceMode.Acceleration);
-        //Debug.Log(ReplayRecorder.instance.isReplaying);
+        Debug.Log(GameManager.instance.playerList.Count);
     }
 
 
@@ -49,6 +50,11 @@ public class Shuttle : MonoBehaviour
 
             if (ReplayRecorder.instance.isReplaying) return;
             ScoreManager.instance.whiteScore++;
+
+            for (int i = 0; i < GameManager.instance.playerList.Count; i++)
+            {
+                if(lastTouch == i + 1) { GameManager.instance.playerList[i].goal++; }
+            }
         }
 
         if (collision.gameObject.name == "”’°")
@@ -61,6 +67,11 @@ public class Shuttle : MonoBehaviour
 
             if (ReplayRecorder.instance.isReplaying) return;
             ScoreManager.instance.redScore++;
+
+            for (int i = 0; i < GameManager.instance.playerList.Count; i++)
+            {
+                if (lastTouch == i + 1) { GameManager.instance.playerList[i].goal++; }
+            }
         }
 
         if (collision.gameObject.tag == "Out")
@@ -101,6 +112,8 @@ public class Shuttle : MonoBehaviour
 
                 if(other.transform.parent.tag == "WhiteTeam") { touchTeam = 0; }
                 if(other.transform.parent.tag == "RedTeam") { touchTeam = 1; }
+
+                lastTouch = other.transform.parent.GetComponent<Player>().playerName;
             }
         }
     }
