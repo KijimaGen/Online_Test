@@ -23,11 +23,12 @@ public class ItemManager : MonoBehaviour {
 
     private async UniTask CreateItem() {
         while (isStopped) {
-            await UniTask.Delay(Random.Range(1000, 10000));  //ここで乱数で待ち時間を取ることでランダム化を図る
-            //await UniTask.Delay(1);
+            await UniTask.Delay(Random.Range(500, 5000));  //ここで乱数で待ち時間を取ることでランダム化を図る
+            //await UniTask.Delay(100);
             canSpawn = Random.Range(0, 10); //乱数を生成
             if (canSpawn < 11) {
                 Instantiate(items[Random.Range(0,items.Count)], transform.position, Quaternion.identity); //アイテムの生成
+                SoundManager.Instance.PlaySoud(0);
             }
         }
     }
