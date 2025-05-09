@@ -49,12 +49,19 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] GameObject resultTitle;
     bool setResult;
+
+
+    int tempScore = 0;
+    GameObject crownPlayer;
+    [SerializeField] GameObject crown;
+
+    [SerializeField] Text winnerTeamText;
     // Start is called before the first frame update
     void Start()
     {
         instance = this;
 
-        roundTime = 120;
+        roundTime = 60;
         //最初のゲームステートは待機状態
         state = gameState.standBy;
         mainCamera.transform.position = new Vector3 (0,14,-17);
@@ -83,7 +90,7 @@ public class GameManager : MonoBehaviour
                 replayCamera.gameObject.SetActive(false);
                 AddPlayer();
 
-                roundTime = 3;
+                roundTime = 12;
                 ScoreManager.instance.redScore = 0;
                 ScoreManager.instance.whiteScore = 0;
                 resultTitle.SetActive(false);
@@ -98,6 +105,8 @@ public class GameManager : MonoBehaviour
             case gameState.repaly:
                 replayCamera.gameObject.SetActive(true);
                 Replay();
+                ReplayCancel();
+
                 break;
             case gameState.result:
                 Result();
@@ -278,6 +287,21 @@ public class GameManager : MonoBehaviour
 
     }
 
+    private void ReplayCancel()
+    {
+        for (int i = 0;i < playerList.Count;i++)
+        {
+            if (!playerList[i].replayCancel) return;
+            playerList[i].replayCancel = false;
+        }
+
+        ReplayRecorder[] replayObj = FindObjectsOfType<ReplayRecorder>();
+        foreach(ReplayRecorder rec in replayObj)
+        {
+            rec.StopReplayAndReset();
+        }
+    }
+
     private void Result()
     {
         if(setResult) return;
@@ -304,7 +328,36 @@ public class GameManager : MonoBehaviour
                 playerList[i].transform.localRotation = Quaternion.Euler(0, 180, 0);
             }
 
+            if (playerList[i].score >= tempScore)
+            {
+                tempScore = playerList[i].score;
+                crownPlayer = playerList[i].gameObject;
+            }
+            else
+            {
+                if(playerList[i].transform.Find("王冠") != null)
+                {
+                    Destroy(playerList[i].transform.Find("王冠").gameObject);
+                }
+            }
         }
+
+        GameObject crownPrefab = Instantiate(crown, crownPlayer.transform);
+        crownPrefab.transform.localPosition= new Vector3(3,2,0);
+
+        if(ScoreManager.instance.redScore > ScoreManager.instance.whiteScore)
+        {
+            winnerTeamText.text = "Red";
+        }
+        else if(ScoreManager.instance.redScore < ScoreManager.instance.whiteScore)
+        {
+            winnerTeamText.text = "White";
+        }
+        else
+        {
+            winnerTeamText.text = "Drow";
+        }
+       
 
         Time.timeScale = 0;
         //setReplay = true;

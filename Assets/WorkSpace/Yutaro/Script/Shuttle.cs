@@ -24,7 +24,10 @@ public class Shuttle : MonoBehaviour
         GameObject[] target = GameObject.FindGameObjectsWithTag("Racket");
 
         rb.AddForce(Vector3.down * 10, ForceMode.Acceleration);
-        Debug.Log(GameManager.instance.playerList.Count);
+
+        //transform.forward = rb.velocity.normalized;
+        Quaternion toRotation = Quaternion.LookRotation(rb.velocity);
+        transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, Time.deltaTime * 10f);
     }
 
 
@@ -32,18 +35,18 @@ public class Shuttle : MonoBehaviour
     {
         if (initialize) return; initialize = true;
         rb = GetComponent<Rigidbody>();
-        gameObject.GetComponent<Collider>().enabled = true;
-        gameObject.GetComponent<MeshRenderer>().enabled = true;
+        transform.GetComponent<Collider>().enabled = true;
+        transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!gameObject.GetComponent<MeshRenderer>().enabled) return;
+        if (!transform.GetChild(0).GetComponent<MeshRenderer>().enabled) return;
         if (GameManager.instance.state==GameManager.gameState.standBy) return;
         if (collision.gameObject.name == "ê‘è∞")
         {
-            gameObject.GetComponent<Collider>().enabled = false;
-            gameObject.GetComponent<MeshRenderer>().enabled = false;
+            transform.GetComponent<Collider>().enabled = false;
+            transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
             Invoke("SetGameReplay", 3);
             rb.isKinematic = true;
             TriggerShockwave();
@@ -59,8 +62,8 @@ public class Shuttle : MonoBehaviour
 
         if (collision.gameObject.name == "îíè∞")
         {
-            gameObject.GetComponent<Collider>().enabled = false;
-            gameObject.GetComponent<MeshRenderer>().enabled = false;
+            transform.GetComponent<Collider>().enabled = false;
+            transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
             Invoke("SetGameReplay", 2);
             rb.isKinematic = true;
             TriggerShockwave();
@@ -71,13 +74,14 @@ public class Shuttle : MonoBehaviour
             for (int i = 0; i < GameManager.instance.playerList.Count; i++)
             {
                 if (lastTouch == i + 1) { GameManager.instance.playerList[i].goal++; }
+                //Debug.Log("ÉSÅ[Éã"+ GameManager.instance.playerList[i].goal);
             }
         }
 
         if (collision.gameObject.tag == "Out")
         {
-            gameObject.GetComponent<Collider>().enabled = false;
-            gameObject.GetComponent<MeshRenderer>().enabled = false;
+            transform.GetComponent<Collider>().enabled = false;
+            transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
             Invoke("SetGameReplay", 2);
             rb.isKinematic = true;
 
@@ -114,6 +118,11 @@ public class Shuttle : MonoBehaviour
                 if(other.transform.parent.tag == "RedTeam") { touchTeam = 1; }
 
                 lastTouch = other.transform.parent.GetComponent<Player>().playerName;
+
+                if(transform.position.y <= 0.5f)
+                {
+                    other.transform.parent.GetComponent<Player>().save++;
+                }
             }
         }
     }

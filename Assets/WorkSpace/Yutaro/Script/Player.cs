@@ -36,6 +36,8 @@ public class Player : MonoBehaviour
     public int punch;
     public int counter;
 
+    public bool replayCancel;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -50,6 +52,13 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (ReplayRecorder.instance.isReplaying)
+        {
+            if (Input.GetKey("joystick " + index + " button 0"))
+            {
+                replayCancel = true;
+            }
+        }
         if (GetComponent<ReplayRecorder>().isReplaying) return;
         if (GameManager.instance.roundStart) { rb.isKinematic = true; }
         if (!GameManager.instance.roundStart) { rb.isKinematic = false; }
@@ -113,19 +122,21 @@ public class Player : MonoBehaviour
         BoxCollider boxCollider = transform.Find("êKîˆ").GetComponent<BoxCollider>();
         if (transform.tag == "WhiteTeam")
         {
-
+            nameText.transform.localRotation = Quaternion.Euler(0, 180, 0);
+            chargeSlider.transform.localRotation = Quaternion.Euler(90,0, 162);
+            scoreBoard.transform.localRotation = Quaternion.Euler(0,180, 0);
             if (chargeSlider.fillAmount >= 0.4f)
             {
                 Smash = true;
                 jump = false;
                 chargeSlider.fillAmount = 0.4f;
-                hitPoint.transform.position = new Vector3(rb.velocity.x * -dirX * 0.1f, 4f + dirX/4, transform.position.z + velocityZ / 2 * dir.z * 0.05f);
+                hitPoint.transform.position = new Vector3(rb.velocity.x * -dirX * 0.05f, 4f + dirX * 0.1f, transform.position.z + velocityZ / 2);
                 boxCollider.center = new Vector3(boxCollider.center.x, 10, boxCollider.center.z);
                 boxCollider.size = new Vector3(boxCollider.size.x, 10, boxCollider.size.z);
             }
             else
             {
-                hitPoint.transform.position = new Vector3(rb.velocity.x * -dirX * 0.1f, 8 - chargeSlider.fillAmount * 10 - dirX / 3, transform.position.z + velocityZ / 2 * dir.z * 0.1f);
+                hitPoint.transform.position = new Vector3(rb.velocity.x * -dirX * 0.05f, 8 - chargeSlider.fillAmount * 10 - dirX / 3, transform.position.z + velocityZ / 2);
                 boxCollider.center = new Vector3(boxCollider.center.x, 1.18f, boxCollider.center.z);
                 boxCollider.size = new Vector3(boxCollider.size.x, 5.37f, boxCollider.size.z);
             }
@@ -134,7 +145,9 @@ public class Player : MonoBehaviour
 
         if (transform.tag == "RedTeam")
         {
-           
+            nameText.transform.localRotation = Quaternion.Euler(0, 0, 0);
+            chargeSlider.transform.localRotation = Quaternion.Euler(-90, 0, 162);
+            scoreBoard.transform.localRotation = Quaternion.Euler(0, 0, 0);
             if (chargeSlider.fillAmount >= 0.4f)
             {
                 Smash = true;
@@ -260,15 +273,15 @@ public class Player : MonoBehaviour
         //transform.rotation = Quaternion.Euler(0f, angle, 0f);
         //transform.rotation = Quaternion.AngleAxis(0, rotationNorm);
 
-        float moveKeyX = Input.GetAxisRaw("Horizontal");
-        float moveKeyY = Input.GetAxisRaw("Vertical");
+        //float moveKeyX = Input.GetAxisRaw("Horizontal");
+        //float moveKeyY = Input.GetAxisRaw("Vertical");
 
-        Vector3 moveKeyDir = new Vector3(moveKeyX, 0, moveKeyY);
+        //Vector3 moveKeyDir = new Vector3(moveKeyX, 0, moveKeyY);
 
-        Vector3 keyVelocity = rb.velocity;
-        keyVelocity.x = moveKeyDir.x * Speed;
-        keyVelocity.z = moveKeyDir.z * Speed;
-        rb.velocity = keyVelocity;
+        //Vector3 keyVelocity = rb.velocity;
+        //keyVelocity.x = moveKeyDir.x * Speed;
+        //keyVelocity.z = moveKeyDir.z * Speed;
+        //rb.velocity = keyVelocity;
 
         rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
     }
@@ -298,8 +311,6 @@ public class Player : MonoBehaviour
 
     private void ScoreBoard()
     {
-        if(GameManager.instance.state == GameManager.gameState.result)
-        {
             scoreBoard.SetActive(true);
             Text scoreText = scoreBoard.transform.Find("ÉXÉRÉA").GetComponent<Text>();
             Text goalText = scoreBoard.transform.Find("ÉSÅ[Éã").GetComponent<Text>();
@@ -312,6 +323,7 @@ public class Player : MonoBehaviour
             saveText.text = save.ToString();
             punchText.text = punch.ToString();
             counterText.text = counter.ToString();
-        }
+
+        Debug.Log(goal);
     }
 }

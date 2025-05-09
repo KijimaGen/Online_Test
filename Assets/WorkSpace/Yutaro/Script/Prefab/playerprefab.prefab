@@ -860,13 +860,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1933564840248175020}
-  m_LocalRotation: {x: -0.106957585, y: 0.69897074, z: 0.69897074, w: 0.106957585}
+  m_LocalRotation: {x: 0.111387335, y: -0.72791934, z: 0.66877025, w: 0.10233626}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.09, y: 0.09, z: 0.09}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 7178149300069129719}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 162.6}
+  m_LocalEulerAnglesHint: {x: 94.85, y: 0, z: 162.6}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 3.76, y: 1}
@@ -3957,6 +3957,12 @@ MonoBehaviour:
   nameText: {fileID: 994466701449033434}
   scoreBoard: {fileID: 943413114768497329}
   attack: 0
+  playerName: 0
+  score: 0
+  goal: 0
+  save: 0
+  punch: 0
+  counter: 0
 --- !u!136 &5599911920797311561
 CapsuleCollider:
   m_ObjectHideFlags: 0
