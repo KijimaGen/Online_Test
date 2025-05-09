@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static GameManager;
 
 public class ItemManager : MonoBehaviour {
 
@@ -11,7 +12,7 @@ public class ItemManager : MonoBehaviour {
     Vector3 center;
     float radius = 10;
     [SerializeField]float speed = 1;
-     
+    
 
 
     void Start () {
@@ -19,10 +20,15 @@ public class ItemManager : MonoBehaviour {
         isStopped = true;               //¡Œã‚±‚¢‚Â‚ğ~‚ß‚È‚¢‚Æ‚¢‚¯‚È‚­‚È‚é‚©‚à‚µ‚ê‚È‚¢‚©‚ç’u‚¢‚Ä‚¨‚­
         CreateItem();
         CalcPosition();
+        
+    }
+
+    void Update () {
+       
     }
 
     private async UniTask CreateItem() {
-        while (isStopped) {
+        while (!isStopped) {
             await UniTask.Delay(Random.Range(500, 5000));  //‚±‚±‚Å—”‚Å‘Ò‚¿ŠÔ‚ğæ‚é‚±‚Æ‚Åƒ‰ƒ“ƒ_ƒ€‰»‚ğ}‚é
             //await UniTask.Delay(100);
             canSpawn = Random.Range(0, 10); //—”‚ğ¶¬
@@ -36,7 +42,7 @@ public class ItemManager : MonoBehaviour {
     private async UniTask CalcPosition() {
         float time = 0f;
 
-        while (isStopped) {
+        while (!isStopped) {
             time += Time.deltaTime;
 
             // Šp“x‚ğŠÔ‚Å•Ï‰»‚³‚¹‚é

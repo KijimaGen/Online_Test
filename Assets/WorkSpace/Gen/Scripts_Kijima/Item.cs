@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static GameManager;
 using static UnityEngine.GraphicsBuffer;
 
 public abstract class Item : MonoBehaviour{
@@ -15,6 +16,7 @@ public abstract class Item : MonoBehaviour{
     private Material[] materials;
     [SerializeField] public GameObject ownEffect;
     [SerializeField] private Vector3 offset = Vector3.zero;  // エフェクトのオフセット（位置調整用）
+    
 
     private void Start() {
         Initialize();
@@ -26,6 +28,12 @@ public abstract class Item : MonoBehaviour{
         }
 
         FadeOut(fadeDuration).Forget(); // UniTaskを起動
+        
+        
+    }
+
+    private void Update() {
+        
     }
 
     private void SetupMaterialForFade(Material mat) {
@@ -63,23 +71,23 @@ public abstract class Item : MonoBehaviour{
 
     
     private void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.tag == "Player") {
-            Player_MoveTest playerScript = collision.gameObject.GetComponent<Player_MoveTest>();  //ぶつかった相手のプレイヤースクリプトを入手
+        if (collision.gameObject.tag == "RedTeam" || collision.gameObject.tag == "WhiteTeam") {
+            //Player_MoveTest playerScript = collision.gameObject.GetComponent<Player_MoveTest>();  //ぶつかった相手のプレイヤースクリプトを入手
 
             if (this.gameObject.name == "NoStanPrefab(Clone)") {
-                playerScript.SetNoStanCoin(); 
-                if (!playerScript.CheckHasChild("NoStanEffect(Clone)")) {
+                //playerScript.SetNoStanCoin(); 
+                //if (!playerScript.CheckHasChild("NoStanEffect(Clone)")) {
                     GameObject instance = Instantiate(ownEffect, collision.gameObject.transform.position + offset, Quaternion.identity);
                     instance.transform.parent = collision.gameObject.transform;  // 親を設定して子オブジェクトにする
-                }
+                //}
             }
             if (this.gameObject.name == "SpeedUpPrefab(Clone)") {
-                playerScript.SetSpeedUpItem();
+                //playerScript.SetSpeedUpItem();
 
-                if (!playerScript.CheckHasChild("SpeedUpEffect(Clone)")) {
+                //if (!playerScript.CheckHasChild("SpeedUpEffect(Clone)")) {
                     GameObject instance = Instantiate(ownEffect, collision.gameObject.transform.position + offset, Quaternion.identity);
                     instance.transform.parent = collision.gameObject.transform;  // 親を設定して子オブジェクトにする
-                }
+               // }
             }
 
             Destroy(gameObject);
