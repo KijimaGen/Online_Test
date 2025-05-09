@@ -8,8 +8,6 @@ public class RacketEffect : MonoBehaviour
     [Tooltip("発生させるエフェクト(パーティクル)")]
     public ParticleSystem particle;
 
-    [SerializeField] Animator animator;
-
     private bool buttonFlag;
     // Update is called once per frame
     void Update()
@@ -33,7 +31,7 @@ public class RacketEffect : MonoBehaviour
     /// プレイヤーに衝突した時
     /// </summary>
     /// <param name="collision"></param>
-    public void OnTriggerExit(Collider collision) {
+    /*public void OnTriggerExit(Collider collision) {
         // 当たった相手が"Player"タグを持っていたら
         if (collision.gameObject.tag == "Racket") {
             //Debug.Log("当たってまーーす");
@@ -49,7 +47,21 @@ public class RacketEffect : MonoBehaviour
                 Destroy(newParticle.gameObject, 5.0f);
             //}
         }
+    }*/
+
+    private void OnTriggerStay(Collider collision) {
+        if (collision.gameObject.tag == "Racket") {
+            if (collision.transform.parent.GetComponent<Player>().attack) {
+                // パーティクルシステムのインスタンスを生成する。
+                ParticleSystem newParticle = Instantiate(particle);
+            // パーティクルの発生場所をこのスクリプトをアタッチしているGameObjectの場所にする。
+            newParticle.transform.position = this.transform.position;
+            // パーティクルを発生させる。
+            newParticle.Play();
+            // インスタンス化したパーティクルシステムのGameObjectを5秒後に削除する。(任意)
+            // ※第一引数をnewParticleだけにするとコンポーネントしか削除されない。
+            Destroy(newParticle.gameObject, 5.0f);
+            }
+        }
     }
-
-
 }

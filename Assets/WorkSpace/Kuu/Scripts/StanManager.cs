@@ -36,6 +36,8 @@ public class StanManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L) || Input.GetKeyDown(KeyCode.JoystickButton5) == true) {
             Instantiate(clone, new Vector3(-5, 5, 2.5f), Quaternion.identity);
         }
+
+        
     }
 
     public void OnTriggerStay(Collider collider) {
