@@ -658,7 +658,6 @@ GameObject:
   - component: {fileID: 2996935489411235904}
   - component: {fileID: 1453163687238715132}
   - component: {fileID: 3593611462025435310}
-  - component: {fileID: 8268870227513198342}
   m_Layer: 0
   m_Name: "\u5C3B\u5C3E"
   m_TagString: Racket
@@ -795,19 +794,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 7.48, y: 5.34, z: 7.55}
   m_Center: {x: 1.03, y: 1.18, z: 0}
---- !u!114 &8268870227513198342
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1796415501715882237}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98dff50ef0262d842827590930460892, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  particle: {fileID: 2095606205811567574, guid: 4595326579a99f1488d6300d1be44aa7, type: 3}
 --- !u!1 &1933564840248175020
 GameObject:
   m_ObjectHideFlags: 0

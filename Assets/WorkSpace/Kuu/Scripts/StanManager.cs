@@ -34,7 +34,7 @@ public class StanManager : MonoBehaviour
 
         // シャトルを出す(作業用)
         if (Input.GetKeyDown(KeyCode.L) || Input.GetKeyDown(KeyCode.JoystickButton5) == true) {
-            Instantiate(clone, new Vector3(0, 5, -10), Quaternion.identity);
+            Instantiate(clone, new Vector3(-5, 5, 2.5f), Quaternion.identity);
         }
     }
 
