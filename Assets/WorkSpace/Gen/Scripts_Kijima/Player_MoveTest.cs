@@ -24,7 +24,6 @@ public class Player_MoveTest : MonoBehaviour{
         }
 
         Vector3 move = Vector3.zero;
-
         if (Input.GetKeyDown(KeyCode.LeftArrow)) {move.x--;}
         if (Input.GetKeyDown(KeyCode.RightArrow)) { move.x++;}
         if (Input.GetKeyDown(KeyCode.UpArrow)) { move.z++; }
@@ -45,8 +44,7 @@ public class Player_MoveTest : MonoBehaviour{
     public bool CheckHasChild(string name) {
         foreach (Transform child in transform)  // このオブジェクトのすべての子オブジェクトをループ
         {
-            if (child.gameObject.name == name) // 子の名前が一致するか確認
-            {
+            if (child.gameObject.name == name) { // 子の名前が一致するか確認
                 return true;
             }
         }
@@ -55,8 +53,7 @@ public class Player_MoveTest : MonoBehaviour{
     public void RemoveChildByName(string name) {
         // 親オブジェクトのすべての子オブジェクトをループ
         foreach (Transform child in transform) {
-            if (child.gameObject.name == name)  // 名前が一致する場合
-            {
+            if (child.gameObject.name == name) {  // 名前が一致する場合
                 // 子オブジェクトを削除
                 Destroy(child.gameObject);
                 return;  // 最初に見つけた子オブジェクトを削除したら終了

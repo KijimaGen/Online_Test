@@ -29,15 +29,16 @@ public class Player : MonoBehaviour
     bool left;
     bool jump;
 
+    [SerializeField]Camera cam;
+
+
     void Start()
     {
         animator = GetComponent<Animator>();
 
-
         index = GameManager.instance.playerIndex;
         rb = GetComponent<Rigidbody>();
 
-        // chargeSlider.fillAmount = 0f;
         playerName = GameManager.instance.playerList.Count;
     }
 
