@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static CommonModule;
 
 public class Player_MoveTest : MonoBehaviour{
     [SerializeField] float speedUpTime = 0;
@@ -15,12 +16,12 @@ public class Player_MoveTest : MonoBehaviour{
 
         //効果けし
         if (noStanTime <= 0) {
-            if(CheckHasChild("NoStanEffect(Clone)"))
-            RemoveChildByName("NoStanEffect(Clone)");
+            if(CheckHasChild("NoStanEffect(Clone)",this.transform))
+            RemoveChildByName("NoStanEffect(Clone)", this.transform);
         }
         if (speedUpTime <= 0) {
-            if(CheckHasChild("SpeedUpEffect(Clone)"))
-            RemoveChildByName("SpeedUpEffect(Clone)");
+            if(CheckHasChild("SpeedUpEffect(Clone)",this.transform))
+            RemoveChildByName("SpeedUpEffect(Clone)", this.transform);
         }
 
         Vector3 move = Vector3.zero;
@@ -41,23 +42,6 @@ public class Player_MoveTest : MonoBehaviour{
         speedUpTime = 10.0f;
     }
 
-    public bool CheckHasChild(string name) {
-        foreach (Transform child in transform)  // このオブジェクトのすべての子オブジェクトをループ
-        {
-            if (child.gameObject.name == name) { // 子の名前が一致するか確認
-                return true;
-            }
-        }
-        return false;
-    }
-    public void RemoveChildByName(string name) {
-        // 親オブジェクトのすべての子オブジェクトをループ
-        foreach (Transform child in transform) {
-            if (child.gameObject.name == name) {  // 名前が一致する場合
-                // 子オブジェクトを削除
-                Destroy(child.gameObject);
-                return;  // 最初に見つけた子オブジェクトを削除したら終了
-            }
-        }
-    }
+    
+    
 }

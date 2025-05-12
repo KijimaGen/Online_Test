@@ -11,4 +11,15 @@ public static class CommonModule{
         }
         return false;
     }
+
+    public static void RemoveChildByName(string name,Transform transform) {
+        // 親オブジェクトのすべての子オブジェクトをループ
+        foreach (Transform child in transform) {
+            if (child.gameObject.name == name) {  // 名前が一致する場合
+                // 子オブジェクトを削除
+                MonoBehaviour.Destroy(child.gameObject);
+                return;  // 最初に見つけた子オブジェクトを削除したら終了
+            }
+        }
+    }
 }

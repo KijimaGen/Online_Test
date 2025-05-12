@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static GameManager;
 using static UnityEngine.GraphicsBuffer;
+using static CommonModule;
 
 public abstract class Item : MonoBehaviour{
     public float baseSpeed { get; private set;} = 100f;      // 回転の基準速度
@@ -33,7 +34,9 @@ public abstract class Item : MonoBehaviour{
     }
 
     private void Update() {
-        
+        if(GameManager.instance.state != GameManager.gameState.start) {
+            Destroy(gameObject);
+        }
     }
 
     private void SetupMaterialForFade(Material mat) {
@@ -72,22 +75,22 @@ public abstract class Item : MonoBehaviour{
     
     private void OnCollisionEnter(Collision collision) {
         if (collision.gameObject.tag == "RedTeam" || collision.gameObject.tag == "WhiteTeam") {
-            //Player_MoveTest playerScript = collision.gameObject.GetComponent<Player_MoveTest>();  //ぶつかった相手のプレイヤースクリプトを入手
+            AdminEffect playerScript = collision.gameObject.GetComponent<AdminEffect>();  //ぶつかった相手のプレイヤースクリプトを入手
 
             if (this.gameObject.name == "NoStanPrefab(Clone)") {
-                //playerScript.SetNoStanCoin(); 
-                //if (!playerScript.CheckHasChild("NoStanEffect(Clone)")) {
+                playerScript.SetNoStanCoin(); 
+                if (!CheckHasChild("NoStanEffect(Clone)",collision.transform)) {
                     GameObject instance = Instantiate(ownEffect, collision.gameObject.transform.position + offset, Quaternion.identity);
                     instance.transform.parent = collision.gameObject.transform;  // 親を設定して子オブジェクトにする
-                //}
+                }
             }
             if (this.gameObject.name == "SpeedUpPrefab(Clone)") {
-                //playerScript.SetSpeedUpItem();
+                playerScript.SetSpeedUpItem();
 
-                //if (!playerScript.CheckHasChild("SpeedUpEffect(Clone)")) {
+                if (!CheckHasChild("SpeedUpEffect(Clone)",collision.transform)) {
                     GameObject instance = Instantiate(ownEffect, collision.gameObject.transform.position + offset, Quaternion.identity);
                     instance.transform.parent = collision.gameObject.transform;  // 親を設定して子オブジェクトにする
-               // }
+                }
             }
 
             Destroy(gameObject);

@@ -9,15 +9,30 @@ public class PlayerCards : MonoBehaviour{
     [SerializeField]
     GameObject[] PlayerCard;
     [SerializeField]
-    RawImage[] PlayerTextureRender;
+    RenderTexture[] PlayerTextureRender;
     const int maxCards = 4;
     public static PlayerCards Instance { get; private set; }
+
+    int PlayerNumberIndex = 0;
 
     private void Start() {
         Instance = this;
     }
+    private void Update() {
+        //ゲーム中、スタンバイ中は描画
+        if (GameManager.instance.state == GameManager.gameState.start || GameManager.instance.state == GameManager.gameState.standBy) {
+            for (int i = 0; i < PlayerNumberIndex; i++) {
+                PlayerCard[i].SetActive(true);
+            }
+        }
+        else {
+            for (int i = 0; i < PlayerCard.Length; i++) {
+                PlayerCard[i].SetActive(false);
+            }
+        }
+    }
 
-    public void AddPlayer(Camera cam) {
+    public void AddPlayer() {
         //左から順番に確認して、順番にカードの見た目のオフからオンを切り替えていく処理
         for (int i = 0; i < PlayerCard.Length; i++) {
             if (PlayerCard[i].gameObject.activeSelf == false) {
@@ -26,10 +41,21 @@ public class PlayerCards : MonoBehaviour{
                 Transform child = transform.Find("Camera");
 
                 // SpriteRenderer を取得して色を変更
-                SpriteRenderer sr = child.GetComponent<SpriteRenderer>();
-                PlayerCard[i].transform.Find("");
+                //SpriteRenderer sr = child.GetComponent<SpriteRenderer>();
+                //PlayerCard[i].transform.Find("");
                 break;
             }
         }
+    }
+
+    public RenderTexture GetPlayerIcon() {
+        if (PlayerNumberIndex >= maxCards) {
+            
+            return null;
+        }
+
+        PlayerNumberIndex++;
+       return PlayerTextureRender[PlayerNumberIndex-1];
+        
     }
 }

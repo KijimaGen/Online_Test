@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using static GameManager;
 
@@ -8,41 +9,50 @@ public class ItemManager : MonoBehaviour {
 
     [SerializeField]List<GameObject> items = new List<GameObject>(4);
     [SerializeField]int canSpawn;
-    public static bool isStopped;
+    [SerializeField] private bool isStopped;
     Vector3 center;
-    float radius = 10;
+    float radius = 7;
     [SerializeField]float speed = 1;
+    float time = 0f;
     
 
 
     void Start () {
         center = transform.position;
-        isStopped = true;               //今後こいつを止めないといけなくなるかもしれないから置いておく
+        isStopped = false;               //今後こいつを止めないといけなくなるかもしれないから置いておく
         CreateItem();
-        CalcPosition();
-        
     }
 
-    void Update () {
-       
+    async void Update() {
+        if (GameManager.instance.state != GameManager.gameState.start)
+            isStopped = true;
+
+        else
+            isStopped = false;
+        if (!isStopped) { 
+            await CalcPosition();
+            
+        }
     }
 
     private async UniTask CreateItem() {
-        while (!isStopped) {
+        while (true) {
             await UniTask.Delay(Random.Range(500, 5000));  //ここで乱数で待ち時間を取ることでランダム化を図る
-            //await UniTask.Delay(100);
-            canSpawn = Random.Range(0, 10); //乱数を生成
-            if (canSpawn < 11) {
-                Instantiate(items[Random.Range(0,items.Count)], transform.position, Quaternion.identity); //アイテムの生成
-                SoundManager.Instance.PlaySoud(0);
+            if (!isStopped) {
+                                                               //await UniTask.Delay(100);
+                canSpawn = Random.Range(0, 10); //乱数を生成
+                if (canSpawn < 11) {
+                    Instantiate(items[Random.Range(0, items.Count)], transform.position, Quaternion.identity); //アイテムの生成
+                    SoundManager.Instance.PlaySoud(0);
+                }
             }
         }
     }
 
     private async UniTask CalcPosition() {
-        float time = 0f;
+        
 
-        while (!isStopped) {
+        
             time += Time.deltaTime;
 
             // 角度を時間で変化させる
@@ -56,10 +66,8 @@ public class ItemManager : MonoBehaviour {
             transform.position = center + new Vector3(x, 0, z);
 
             await UniTask.Delay(1);
-        }
+        
     }
 
-    public static void StoppSpawn() {
-        isStopped = false;
-    }
+    
 }
