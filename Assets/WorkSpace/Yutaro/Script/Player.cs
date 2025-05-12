@@ -80,6 +80,7 @@ public class Player : MonoBehaviour
         if (Input.GetKey("joystick " + index + " button 1") && !animPlay && transform.tag != "Player" || 
             Input.GetKey(KeyCode.Space)  && !animPlay && transform.tag != "Player" )
         {
+            GetComponent<PlayerEffect>().ChargeEffect();
             chargeSlider.fillAmount += 0.005f;
         }
         else if (chargeSlider.fillAmount > 0)
