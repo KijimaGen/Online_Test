@@ -316,11 +316,10 @@ GameObject:
   - component: {fileID: 74003726}
   - component: {fileID: 74003725}
   - component: {fileID: 74003724}
-  - component: {fileID: 74003723}
   - component: {fileID: 74003722}
   - component: {fileID: 74003728}
-  - component: {fileID: 74003727}
   - component: {fileID: 74003729}
+  - component: {fileID: 74003730}
   m_Layer: 0
   m_Name: Shuttle
   m_TagString: Shuttle
@@ -342,19 +341,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   frames: []
   isReplaying: 0
---- !u!114 &74003723
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 74003721}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38d7afaed5df27c4b8fbd1390be15988, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  initialize: 0
 --- !u!135 &74003724
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -419,19 +405,6 @@ Transform:
   - {fileID: 1753953277}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &74003727
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 74003721}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98dff50ef0262d842827590930460892, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  particle: {fileID: 2095606205811567574, guid: 4595326579a99f1488d6300d1be44aa7, type: 3}
 --- !u!114 &74003728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -444,7 +417,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d53a0f7dc30dcda419effe8755ade310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particle: {fileID: 198000012777718758, guid: e96cb15b9b7781e4e9d68aa036dfb8c8, type: 3}
+  particle1: {fileID: 198000012777718758, guid: e96cb15b9b7781e4e9d68aa036dfb8c8, type: 3}
+  particle2: {fileID: 970440554703164915, guid: 960cae30dcf69fd4fa80607f0a39c195, type: 3}
 --- !u!96 &74003729
 TrailRenderer:
   serializedVersion: 3
@@ -567,6 +541,19 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!114 &74003730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 74003721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b58819b97a0ddc409af96cf17a49a12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialize: 0
 --- !u!1 &145561683
 GameObject:
   m_ObjectHideFlags: 0

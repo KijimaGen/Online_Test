@@ -12,12 +12,12 @@ public class RacketEffect : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.JoystickButton1) == true) {
+        /*if (GetComponent<PlayerK>().GetAnimPlay()) {
             buttonFlag = true;
             //Debug.Log("buttonFlag;true");
         } else {
             buttonFlag = false;
-        }
+        }*/
 
         // 使えないらしい
         /*if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1) {
@@ -51,14 +51,14 @@ public class RacketEffect : MonoBehaviour
 
     private void OnTriggerStay(Collider collision) {
         if (collision.gameObject.tag == "Racket") {
-            if (collision.transform.parent.GetComponent<Player>().attack) {
+            if (buttonFlag) {
                 // パーティクルシステムのインスタンスを生成する。
                 ParticleSystem newParticle = Instantiate(particle);
             // パーティクルの発生場所をこのスクリプトをアタッチしているGameObjectの場所にする。
             newParticle.transform.position = this.transform.position;
             // パーティクルを発生させる。
             newParticle.Play();
-            // インスタンス化したパーティクルシステムのGameObjectを5秒後に削除する。(任意)
+            // インスタンス化したパーティクルシステムのGameObjectを5秒後に削除する。
             // ※第一引数をnewParticleだけにするとコンポーネントしか削除されない。
             Destroy(newParticle.gameObject, 5.0f);
             }

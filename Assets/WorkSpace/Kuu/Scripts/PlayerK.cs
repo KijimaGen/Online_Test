@@ -5,7 +5,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 using UnityEngine.UI;
-public class Player : MonoBehaviour
+using UnityEngine.Video;
+
+public class PlayerK : MonoBehaviour
 {
     bool redTeam;
     bool whiteTeam;
@@ -80,7 +82,6 @@ public class Player : MonoBehaviour
         if (Input.GetKey("joystick " + index + " button 1") && !animPlay && transform.tag != "Player" || 
             Input.GetKey(KeyCode.Space)  && !animPlay && transform.tag != "Player" )
         {
-            GetComponent<PlayerEffect>().ChargeEffect();
             chargeSlider.fillAmount += 0.005f;
         }
         else if (chargeSlider.fillAmount > 0)
@@ -326,5 +327,9 @@ public class Player : MonoBehaviour
             counterText.text = counter.ToString();
 
         Debug.Log(goal);
+    }
+    
+    public bool GetAnimPlay() {
+        return animPlay;
     }
 }
