@@ -63,7 +63,7 @@ public class Player : MonoBehaviour
         if (GameManager.instance.roundStart) { rb.isKinematic = true; }
         if (!GameManager.instance.roundStart) { rb.isKinematic = false; }
 
-        ScoreBoard();
+        //ScoreBoard();
         nameText.text = playerName.ToString() + "P";
         //nameText.rectTransform.LookAt(Camera.main.transform);
         //nameText.rectTransform.Rotate(0, 180f, 0);
@@ -274,15 +274,15 @@ public class Player : MonoBehaviour
         //transform.rotation = Quaternion.Euler(0f, angle, 0f);
         //transform.rotation = Quaternion.AngleAxis(0, rotationNorm);
 
-        //float moveKeyX = Input.GetAxisRaw("Horizontal");
-        //float moveKeyY = Input.GetAxisRaw("Vertical");
+        float moveKeyX = Input.GetAxisRaw("Horizontal");
+        float moveKeyY = Input.GetAxisRaw("Vertical");
 
-        //Vector3 moveKeyDir = new Vector3(moveKeyX, 0, moveKeyY);
+        Vector3 moveKeyDir = new Vector3(moveKeyX, 0, moveKeyY);
 
-        //Vector3 keyVelocity = rb.velocity;
-        //keyVelocity.x = moveKeyDir.x * Speed;
-        //keyVelocity.z = moveKeyDir.z * Speed;
-        //rb.velocity = keyVelocity;
+        Vector3 keyVelocity = rb.velocity;
+        keyVelocity.x = moveKeyDir.x * Speed;
+        keyVelocity.z = moveKeyDir.z * Speed;
+        rb.velocity = keyVelocity;
 
         rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
     }
@@ -312,19 +312,30 @@ public class Player : MonoBehaviour
 
     private void ScoreBoard()
     {
-            scoreBoard.SetActive(true);
-            Text scoreText = scoreBoard.transform.Find("スコア").GetComponent<Text>();
-            Text goalText = scoreBoard.transform.Find("ゴール").GetComponent<Text>();
-            Text saveText = scoreBoard.transform.Find("セーブ").GetComponent<Text>();
-            Text punchText = scoreBoard.transform.Find("パンチ").GetComponent<Text>();
-            Text counterText = scoreBoard.transform.Find("カウンター").GetComponent<Text>();
+        if (GameManager.instance.state != GameManager.gameState.result)
+        {
+            scoreBoard.SetActive(false);
+            return;
+        }
 
-            scoreText.text = score.ToString();
-            goalText.text = goal.ToString();
-            saveText.text = save.ToString();
-            punchText.text = punch.ToString();
-            counterText.text = counter.ToString();
+        scoreBoard.SetActive(true);
+        Text scoreText = scoreBoard.transform.Find("スコア").GetComponent<Text>();
+        Text goalText = scoreBoard.transform.Find("ゴール").GetComponent<Text>();
+        Text saveText = scoreBoard.transform.Find("セーブ").GetComponent<Text>();
+        Text punchText = scoreBoard.transform.Find("パンチ").GetComponent<Text>();
+        Text counterText = scoreBoard.transform.Find("カウンター").GetComponent<Text>();
+
+        scoreText.text = score.ToString();
+        goalText.text = goal.ToString();
+        saveText.text = save.ToString();
+        punchText.text = punch.ToString();
+        counterText.text = counter.ToString();
 
         
+    }
+
+    private void Update()
+    {
+        ScoreBoard();
     }
 }
