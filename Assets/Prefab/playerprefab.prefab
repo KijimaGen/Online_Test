@@ -3839,6 +3839,7 @@ GameObject:
   - component: {fileID: 5599911920797311561}
   - component: {fileID: 4133429505082177435}
   - component: {fileID: -1513835736538212313}
+  - component: {fileID: -6467126927670487680}
   m_Layer: 0
   m_Name: playerprefab
   m_TagString: Player
@@ -4051,8 +4052,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8144b7c586c782042b8a68662afdcc63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  knockBackPower: 10
+  knockBackPower: 100
   attack: 0
+--- !u!114 &-6467126927670487680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6558246480615012065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 891e9dda1b2bc8741842b739363246ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speedUpTime: 0
+  noStanTime: 0
 --- !u!1 &6629824569692408270
 GameObject:
   m_ObjectHideFlags: 0

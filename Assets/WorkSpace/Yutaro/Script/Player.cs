@@ -254,6 +254,9 @@ public class Player : MonoBehaviour
 
         Vector3 moveDir = new Vector3(moveY, 0, -moveX).normalized;
 
+        if (CommonModule.CheckHasChild("SpeedUpEffect(Clone)", this.transform)) {
+            moveDir *= 2;
+        }
 
         // ÉvÉåÉCÉÑÅ[Çà⁄ìÆ
         Vector3 conVelocity = rb.velocity;
@@ -274,15 +277,15 @@ public class Player : MonoBehaviour
         //transform.rotation = Quaternion.Euler(0f, angle, 0f);
         //transform.rotation = Quaternion.AngleAxis(0, rotationNorm);
 
-        float moveKeyX = Input.GetAxisRaw("Horizontal");
-        float moveKeyY = Input.GetAxisRaw("Vertical");
-
-        Vector3 moveKeyDir = new Vector3(moveKeyX, 0, moveKeyY);
-
-        Vector3 keyVelocity = rb.velocity;
-        keyVelocity.x = moveKeyDir.x * Speed;
-        keyVelocity.z = moveKeyDir.z * Speed;
-        rb.velocity = keyVelocity;
+        //float moveKeyX = Input.GetAxisRaw("Horizontal");
+        //float moveKeyY = Input.GetAxisRaw("Vertical");
+        //
+        //Vector3 moveKeyDir = new Vector3(moveKeyX, 0, moveKeyY);
+        //
+        //Vector3 keyVelocity = rb.velocity;
+        //keyVelocity.x = moveKeyDir.x * Speed;
+        //keyVelocity.z = moveKeyDir.z * Speed;
+        //rb.velocity = keyVelocity;
 
         rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
     }

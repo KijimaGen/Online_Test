@@ -7,6 +7,8 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
+using static CommonModule;
+
 public class KnockBack : MonoBehaviour{
     [SerializeField]
     private float knockBackPower = 10.0f;
@@ -42,6 +44,7 @@ public class KnockBack : MonoBehaviour{
             //親オブジェクトと自分のチームが同じならノックバックしない
             if (this.gameObject.tag == collision.gameObject.tag) return;
             if (!collision.gameObject.GetComponent<KnockBack>().GetAttack()) return;
+            if (CheckHasChild("NoStanEffect(Clone)", this.transform)) return;
 
             //現在の位置と当たったものの反転ベクトルを作成(デフォルトの値が低すぎるのでここで大きくしておく)
             Vector3 knockBackVector = (- 1 *(transform.position- collision.transform.position)) * 2 * chargePower / 10;
