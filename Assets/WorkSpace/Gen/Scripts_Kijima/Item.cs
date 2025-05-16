@@ -80,7 +80,7 @@ public abstract class Item : MonoBehaviour{
             if (this.gameObject.name == "NoStanPrefab(Clone)") {
                 playerScript.SetNoStanCoin(); 
                 if (!CheckHasChild("NoStanEffect(Clone)",collision.transform)) {
-                    GameObject instance = Instantiate(ownEffect, collision.gameObject.transform.position + offset, Quaternion.identity);
+                    GameObject instance = Instantiate(ownEffect, collision.gameObject.transform.position + offset, Quaternion.Euler(-90,0,0));
                     instance.transform.parent = collision.gameObject.transform;  // 親を設定して子オブジェクトにする
                 }
             }
@@ -88,7 +88,7 @@ public abstract class Item : MonoBehaviour{
                 playerScript.SetSpeedUpItem();
 
                 if (!CheckHasChild("SpeedUpEffect(Clone)",collision.transform)) {
-                    GameObject instance = Instantiate(ownEffect, collision.gameObject.transform.position + offset, Quaternion.identity);
+                    GameObject instance = Instantiate(ownEffect, collision.gameObject.transform.position + offset, Quaternion.Euler(-90,0,0));
                     instance.transform.parent = collision.gameObject.transform;  // 親を設定して子オブジェクトにする
                 }
             }

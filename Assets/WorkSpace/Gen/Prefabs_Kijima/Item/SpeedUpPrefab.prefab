@@ -132,5 +132,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadeDuration: 2
-  ownEffect: {fileID: 1880050280345692761, guid: 818231cbca8410c4c8cae1aeaca1228b, type: 3}
+  ownEffect: {fileID: 419411002348774512, guid: 2a33ff1b88a9f6b4a86d35d44ed26cde, type: 3}
   offset: {x: 0, y: 0, z: 0}
