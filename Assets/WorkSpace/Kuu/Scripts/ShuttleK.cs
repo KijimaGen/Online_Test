@@ -25,7 +25,7 @@ public class ShuttleK : MonoBehaviour
 
         rb.AddForce(Vector3.down * 10, ForceMode.Acceleration);
 
-        //transform.forward = rb.velocity.normalized;
+        
         Quaternion toRotation = Quaternion.LookRotation(rb.velocity);
         transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, Time.deltaTime * 10f);
     }
@@ -58,6 +58,8 @@ public class ShuttleK : MonoBehaviour
             {
                 if(lastTouch == i + 1) { GameManager.instance.playerList[i].goal++; }
             }
+            //効果音(爆発(得点))
+            SoundManager.Instance.PlaySoud(1);
         }
 
         if (collision.gameObject.name == "白床")
@@ -76,6 +78,8 @@ public class ShuttleK : MonoBehaviour
                 if (lastTouch == i + 1) { GameManager.instance.playerList[i].goal++; }
                 //Debug.Log("ゴール"+ GameManager.instance.playerList[i].goal);
             }
+            //効果音(爆発(得点))
+            SoundManager.Instance.PlaySoud(1);
         }
 
         if (collision.gameObject.tag == "Out")
@@ -89,6 +93,8 @@ public class ShuttleK : MonoBehaviour
             if(touchTeam == 0) { ScoreManager.instance.redScore++; }
             if(touchTeam == 1) { ScoreManager.instance.whiteScore++; }
             //ScoreManager.instance.redScore++;
+            //効果音(爆発(失点))
+            SoundManager.Instance.PlaySoud(2);
         }
     }
 
@@ -125,6 +131,8 @@ public class ShuttleK : MonoBehaviour
                 {
                     other.transform.parent.GetComponent<Player>().save++;
                 }
+                //効果音(カキーン)
+                SoundManager.Instance.PlaySoud(3);
             }
         }
     }

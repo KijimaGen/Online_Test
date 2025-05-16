@@ -325,6 +325,6 @@ public class Player : MonoBehaviour
             punchText.text = punch.ToString();
             counterText.text = counter.ToString();
 
-        Debug.Log(goal);
+        
     }
 }

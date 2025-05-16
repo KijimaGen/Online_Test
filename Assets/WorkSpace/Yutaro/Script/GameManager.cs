@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
 
-        roundTime = 60;
+        roundTime = 12;
         //最初のゲームステートは待機状態
         state = gameState.standBy;
         mainCamera.transform.position = new Vector3 (0,14,-17);

@@ -17,11 +17,11 @@ public class AdminEffect : MonoBehaviour{
         if (noStanTime > 0) noStanTime -= Time.deltaTime;
 
         //Œø‰Ê‚¯‚µ
-        if (noStanTime <= 0) {
+        if (noStanTime <= 0 || GameManager.instance.state != GameManager.gameState.start) {
             if (CheckHasChild("NoStanEffect(Clone)", this.transform))
                 RemoveChildByName("NoStanEffect(Clone)",this.transform);
         }
-        if (speedUpTime <= 0) {
+        if (speedUpTime <= 0 || GameManager.instance.state != GameManager.gameState.start) {
             if (CheckHasChild("SpeedUpEffect(Clone)", this.transform))
                 RemoveChildByName("SpeedUpEffect(Clone)", this.transform);
         }

@@ -32,17 +32,16 @@ public class PlayerCards : MonoBehaviour{
         }
     }
 
-    public void AddPlayer() {
+    public void AddPlayer(GameObject _player) {
         //左から順番に確認して、順番にカードの見た目のオフからオンを切り替えていく処理
         for (int i = 0; i < PlayerCard.Length; i++) {
             if (PlayerCard[i].gameObject.activeSelf == false) {
                 PlayerCard[i].SetActive(true);
-                // 子オブジェクト "MyChild" を取得
+                // 子オブジェクト "Camera" を取得
                 Transform child = transform.Find("Camera");
-
-                // SpriteRenderer を取得して色を変更
-                //SpriteRenderer sr = child.GetComponent<SpriteRenderer>();
-                //PlayerCard[i].transform.Find("");
+                PlayerCard[i].GetComponent<Cards>().ConnectPlayer(_player);
+                
+               
                 break;
             }
         }

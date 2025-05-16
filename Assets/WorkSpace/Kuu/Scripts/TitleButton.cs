@@ -48,7 +48,7 @@ public class TitleButton : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
 
         // ƒQ[ƒ€ƒV[ƒ“
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("MainGame");
     }
 
     public void OnClickRule() {

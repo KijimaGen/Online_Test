@@ -22,4 +22,16 @@ public static class CommonModule{
             }
         }
     }
+
+    public static void SetActiveChildByName (string name, Transform transform,bool _set) {
+        // 親オブジェクトのすべての子オブジェクトをループ
+        foreach (Transform child in transform) {
+            if (child.gameObject.name == name) {  // 名前が一致する場合
+                                                           
+                child.gameObject.SetActive(_set);// 子オブジェクトを非表示にする
+                return;  // 最初に見つけた子オブジェクトを非表示したら終了
+            }
+        }
+    }
+    
 }

@@ -8,12 +8,6 @@ public class PlayerIcon : MonoBehaviour{
 
     private void Start() {
         camera.targetTexture = PlayerCards.Instance.GetPlayerIcon();
-        PlayerCards.Instance.AddPlayer();
+        PlayerCards.Instance.AddPlayer(this.gameObject);
     }
-    private void Update() {
-        if(CheckHasChild("NoStanEffect(Clone)", this.transform)) {
-
-        }
-    }
-
 }
