@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class KnockBack : MonoBehaviour{
     [SerializeField]
-    private float knockBackPower = 10000.0f;
+    private float knockBackPower = 10.0f;
     Rigidbody rb;
     int index;
     public bool attack;

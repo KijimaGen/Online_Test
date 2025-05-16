@@ -187,7 +187,7 @@ public class GameManager : MonoBehaviour
     private void ShuttleInstantiate(Vector3 pos)
     {
         shuttle.transform.position = pos;
-        shuttle.GetComponent<Shuttle>().Initialize();
+        shuttle.GetComponent<ShuttleK>().Initialize();
     }
 
     private void RoundStart()
@@ -234,7 +234,7 @@ public class GameManager : MonoBehaviour
     {
         roundSetting = true;
         state = gameState.start;
-        shuttle.GetComponent<Shuttle>().initialize = false;
+        shuttle.GetComponent<ShuttleK>().initialize = false;
     }
 
     private void Round()
@@ -278,7 +278,7 @@ public class GameManager : MonoBehaviour
             playerList[i].GetComponent<ReplayRecorder>().StartReplay();
         }
         shuttle.GetComponent<ReplayRecorder>().StartReplay();
-        shuttle.GetComponent<Shuttle>().initialize = false;
+        shuttle.GetComponent<ShuttleK>().initialize = false;
         setReplay = true;
 
         mainCamera.targetDisplay = 1;
