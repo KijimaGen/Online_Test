@@ -90,11 +90,17 @@ public class Shuttle : MonoBehaviour
             rb.isKinematic = true;
 
             if (ReplayRecorder.instance.isReplaying) return;
-            if(touchTeam == 0) { ScoreManager.instance.redScore++; }
+            if(touchTeam == 0) { ScoreManager.instance.redScore++;}
             if(touchTeam == 1) { ScoreManager.instance.whiteScore++; }
+            GameManager.instance.serveTeam = touchTeam;
             //ScoreManager.instance.redScore++;
             //Œø‰Ê‰¹(”š”­(Ž¸“_))
             SoundManager.Instance.PlaySoud(2);
+
+            for (int i = 0; i < GameManager.instance.playerList.Count; i++)
+            {
+                GameManager.instance.playerList[i].score += 10;
+            }
         }
     }
 
@@ -130,6 +136,7 @@ public class Shuttle : MonoBehaviour
                     other.transform.parent.GetComponent<Player>().save++;
                 }
                 SoundManager.Instance.PlaySoud(3);
+
             }
         }
     }
