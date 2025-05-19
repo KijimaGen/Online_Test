@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
                 replayCamera.gameObject.SetActive(false);
                 AddPlayer();
 
-                roundTime = 1;
+                roundTime = 60;
                 ScoreManager.instance.redScore = 0;
                 ScoreManager.instance.whiteScore = 0;
                 resultTitle.SetActive(false);
@@ -119,7 +119,7 @@ public class GameManager : MonoBehaviour
 
         if (roundStart)
         {
-            startCount += Time.unscaledDeltaTime;
+            startCount += Time.deltaTime;
             countDownTitle.SetActive(true);
             countDownTitle.GetComponent<TextMeshProUGUI>().text = (3.4f - startCount).ToString("f0");
             if (startCount > 3f)
@@ -129,6 +129,8 @@ public class GameManager : MonoBehaviour
                 setReplay = false;
                 inGame = true;
             }
+            if(Mathf.Abs(startCount -3) <= 3)
+            SoundManager.Instance.PlayeSoundOne(5);
         }
     }
 

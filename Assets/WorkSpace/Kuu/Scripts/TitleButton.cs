@@ -46,6 +46,7 @@ public class TitleButton : MonoBehaviour
     public void OnClickStart() {
         // 全てのフォーカスを解除
         EventSystem.current.SetSelectedGameObject(null);
+        SoundManager.Instance.PlaySound(4);
 
         // ゲームシーン
         SceneManager.LoadScene("MainGame");
@@ -61,6 +62,7 @@ public class TitleButton : MonoBehaviour
         OK.Select();
         // SelectCanvasを非表示
         SelectCanvas.transform.gameObject.SetActive(false);
+        SoundManager.Instance.PlaySound(7);
     }
 
     public void OnClickExit() {
@@ -70,6 +72,7 @@ public class TitleButton : MonoBehaviour
         // ゲームを終了する
         // UnityEditorはビルドでは使えないので別の方法で落とす必要がある
         //UnityEditor.EditorApplication.isPlaying = false;
+        SoundManager.Instance.PlaySound(7);
         Application.Quit();
     }
 
@@ -83,5 +86,6 @@ public class TitleButton : MonoBehaviour
         GameStart.Select();
         // RuleCanvasを非表示
         RuleCanvas.transform.gameObject.SetActive(false);
+        SoundManager.Instance.PlaySound(7);
     }
 }

@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
     Animator animator;
     bool animPlay;
 
-    bool Smash;
+    public bool Smash { get; private set; }
     bool right;
     bool left;
     bool jump;

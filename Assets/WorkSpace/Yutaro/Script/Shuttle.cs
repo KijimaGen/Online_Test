@@ -59,7 +59,7 @@ public class Shuttle : MonoBehaviour
                 if(lastTouch == i + 1) { GameManager.instance.playerList[i].goal++; }
             }
             //効果音(爆発(得点))
-            SoundManager.Instance.PlaySoud(1);
+            SoundManager.Instance.PlaySound(1);
         }
 
         if (collision.gameObject.name == "白床")
@@ -79,7 +79,7 @@ public class Shuttle : MonoBehaviour
                 //Debug.Log("ゴール"+ GameManager.instance.playerList[i].goal);
             }
             //効果音(爆発(得点))
-            SoundManager.Instance.PlaySoud(1);
+            SoundManager.Instance.PlaySound(1);
         }
 
         if (collision.gameObject.tag == "Out")
@@ -94,7 +94,7 @@ public class Shuttle : MonoBehaviour
             if(touchTeam == 1) { ScoreManager.instance.whiteScore++; }
             //ScoreManager.instance.redScore++;
             //効果音(爆発(失点))
-            SoundManager.Instance.PlaySoud(2);
+            SoundManager.Instance.PlaySound(2);
         }
     }
 
@@ -129,7 +129,11 @@ public class Shuttle : MonoBehaviour
                 {
                     other.transform.parent.GetComponent<Player>().save++;
                 }
-                SoundManager.Instance.PlaySoud(3);
+                //効果音(カキーン)
+                if (player.Smash)
+                    SoundManager.Instance.PlaySound(8);
+                else
+                    SoundManager.Instance.PlaySound(3);
             }
         }
     }

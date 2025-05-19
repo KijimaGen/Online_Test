@@ -43,7 +43,7 @@ public class ItemManager : MonoBehaviour {
                 canSpawn = Random.Range(0, 10); //—”‚ğ¶¬
                 if (canSpawn < 11) {
                     Instantiate(items[Random.Range(0, items.Count)], transform.position, Quaternion.identity); //ƒAƒCƒeƒ€‚Ì¶¬
-                    SoundManager.Instance.PlaySoud(0);
+                    SoundManager.Instance.PlaySound(0);
                 }
             }
         }

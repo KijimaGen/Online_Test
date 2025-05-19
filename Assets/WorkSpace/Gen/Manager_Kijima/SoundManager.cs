@@ -7,6 +7,7 @@ public class SoundManager : MonoBehaviour{
     public static SoundManager Instance { get; private set; }
     [SerializeField]List<AudioClip>audioClips = new List<AudioClip>();
     AudioSource audioSource;
+    
     void Start() {
         audioSource = GetComponent<AudioSource>();
        
@@ -20,7 +21,8 @@ public class SoundManager : MonoBehaviour{
         
     }
 
-    public void PlaySoud(int soundIndex) {
+    
+    public void PlaySound(int soundIndex) {
         if(soundIndex < -1 || soundIndex > audioClips.Count) {
             Debug.LogWarning(soundIndex + "番はaudioClipsのListの範囲外です");
             return;
@@ -29,8 +31,17 @@ public class SoundManager : MonoBehaviour{
             Debug.LogWarning("audioClipsの" + soundIndex + "番目は存在しませんInspectorのListをご確認ください");
             return;
         }
+        if (GameManager.instance.state == GameManager.gameState.repaly) return;
         audioSource.PlayOneShot(audioClips[soundIndex]);
     }
 
-   
+    public void PlayeSoundOne(int soundIndex) {
+        if (audioClips[soundIndex] == null) {
+            Debug.LogWarning("audioClipsの" + soundIndex + "番目は存在しませんInspectorのListをご確認ください");
+            return;
+        }
+        if (!audioSource.isPlaying)
+            audioSource.PlayOneShot(audioClips[soundIndex]);
+    }
+
 }
