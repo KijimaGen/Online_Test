@@ -58,6 +58,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] Text winnerTeamText;
 
     [SerializeField] private GameObject wall;
+
+    int redCount = 0;
+    int whiteCount = 0;
+
+    public int serveTeam = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -68,17 +73,25 @@ public class GameManager : MonoBehaviour
         mainCamera.transform.position = new Vector3 (0,14,-17);
 
         countDownTitle.SetActive(false);
+        roundTime = 120;
+        int minutes = Mathf.FloorToInt(roundTime / 60);
+        int seconds = Mathf.FloorToInt(roundTime % 60);
 
+        if (roundTime <= 0)
+        {
+            state = gameState.result;
+            roundTime = 0.0f;
+            timeText.text = "0:00";
+        }
+        else
+        {
+            timeText.text = string.Format("{0}:{1:00}", minutes, seconds);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.P))
-        {
-            state = gameState.start;
-            roundSetting = true;
-        }
 
         if (Input.GetKeyUp(KeyCode.V)|| Input.GetKeyUp("joystick 1 button 5"))
         {
@@ -88,10 +101,16 @@ public class GameManager : MonoBehaviour
         switch (state)
         {
             case gameState.standBy:
+                Time.timeScale = 1;
                 replayCamera.gameObject.SetActive(false);
                 AddPlayer();
+                if (Input.GetKeyUp(KeyCode.P))
+                {
+                    state = gameState.start;
+                    roundSetting = true;
+                }
 
-                roundTime = 60;
+                
                 ScoreManager.instance.redScore = 0;
                 ScoreManager.instance.whiteScore = 0;
                 resultTitle.SetActive(false);
@@ -113,7 +132,11 @@ public class GameManager : MonoBehaviour
             case gameState.result:
                 Result();
                 replayCamera.gameObject.SetActive(false);
-
+                if (Input.GetKeyUp(KeyCode.P))
+                {
+                    state = gameState.standBy;
+                    roundSetting = true;
+                }
                 break;
         }
 
@@ -121,16 +144,16 @@ public class GameManager : MonoBehaviour
         {
             startCount += Time.deltaTime;
             countDownTitle.SetActive(true);
-            countDownTitle.GetComponent<TextMeshProUGUI>().text = (3.4f - startCount).ToString("f0");
+            countDownTitle.GetComponent<TextMeshProUGUI>().text = (3f - startCount).ToString("f0");
             if (startCount > 3f)
             {
                 roundStart = false;
                 countDownTitle.SetActive(false);
                 setReplay = false;
                 inGame = true;
+                startCount = 0;
             }
-            if(Mathf.Abs(startCount -3) <= 3)
-            SoundManager.Instance.PlayeSoundOne(5);
+            Debug.Log(startCount);
         }
     }
 
@@ -206,26 +229,54 @@ public class GameManager : MonoBehaviour
         //    state = gameState.standBy;
         //    return;
         //}
-        int redCount = 0;
-        int whiteCount = 0;
+
 
         foreach (var player in playerList)
         {
             if (player.tag == "RedTeam")
             {
-                player.transform.position = new Vector3(-5, 0, 2.5f);
-                player.transform.rotation = Quaternion.Euler(0, 0, 0);
                 redCount++;
             }
             else if (player.tag == "WhiteTeam")
             {
-                player.transform.position = new Vector3(5, 0, 2.5f);
-                player.transform.rotation = Quaternion.Euler(0, 180, 0);
                 whiteCount++;
             }
         }
 
+        for (int i = 0; i < playerList.Count; i++)
+        {
+            if (playerList[i].tag == "RedTeam")
+            {
+                if(redCount == 1)
+                {
+                    playerList[i].transform.position = new Vector3(-5, 0, 2.5f);
+                    playerList[i].transform.rotation = Quaternion.Euler(0, 0, 0);
+                }
+                else
+                {
+                    playerList[i].transform.position = new Vector3(-5, 0, 5 - (i * 5f));
+                    playerList[i].transform.rotation = Quaternion.Euler(0, 0, 0);
+                }
+            }
 
+            if (playerList[i].tag == "WhiteTeam")
+            {
+                if (whiteCount == 1)
+                {
+                    playerList[i].transform.position = new Vector3(5, 0, 2.5f);
+                    playerList[i].transform.rotation = Quaternion.Euler(0, 180, 0);
+                }
+                else
+                {
+                    playerList[i].transform.position = new Vector3(5, 0, 5f - (i * 5));
+                    playerList[i].transform.rotation = Quaternion.Euler(0, 180, 0);
+                }
+            }
+        }
+
+
+        redCount = 0;
+        whiteCount = 0;
         mainCamera.targetDisplay = 0;
         replayCamera.targetDisplay = 1;
 
@@ -233,10 +284,14 @@ public class GameManager : MonoBehaviour
         mainCamera.transform.DOKill();
         mainCamera.transform.DOMove(new Vector3(0, 14, -9), 2);
 
-        ShuttleInstantiate(new Vector3(playerList[0].transform.position.x, 3, playerList[0].transform.position.z));
+        if(serveTeam == 0)
+            ShuttleInstantiate(new Vector3(-4,3,3.5f));
+
+        if (serveTeam == 1)
+            ShuttleInstantiate(new Vector3(4, 3, 3.5f));
 
         // タイマー開始
-        startCount = 0;
+        
         roundStart = true;
     }
 
@@ -324,11 +379,22 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < playerList.Count; i++)
         {    
             playerList[i].GetComponent<Rigidbody>().isKinematic = true;
+            playerList[i].transform.localScale = new Vector3(8, 8, 8);
             if (playerList[i].gameObject.tag == "RedTeam")
             {
-                playerList[i].transform.parent = resultTitle.transform.Find("Canvas/red壁").transform;
-                playerList[i].transform.localPosition = new Vector3(-18,0,0);
-                playerList[i].transform.localRotation = Quaternion.Euler(0,0,0);
+                if(redCount == 1)
+                {
+                    playerList[i].transform.parent = resultTitle.transform.Find("Canvas/red壁").transform;
+                    playerList[i].transform.localPosition = new Vector3(-18, 0, 0);
+                    playerList[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
+                }
+                else
+                {
+                    playerList[i].transform.parent = resultTitle.transform.Find("Canvas/red壁").transform;
+                    playerList[i].transform.localPosition = new Vector3(-18, 70 - (i * 140), 0);
+                    playerList[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
+                }
+                
             }
 
             if (playerList[i].gameObject.tag == "WhiteTeam")

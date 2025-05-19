@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Security.Cryptography.X509Certificates;
 using TMPro;
@@ -52,6 +53,7 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+
         if (ReplayRecorder.instance.isReplaying)
         {
             if (Input.GetKey("joystick " + index + " button 0"))
@@ -73,19 +75,21 @@ public class Player : MonoBehaviour
             //chargeSlider.fillAmount += 0.0005f;
         }
 
-        //animator.SetBool("Attack", animPlay);
-
         OnMove();
         WhichDir();
+        if (Input.GetKeyDown("joystick " + index + " button 0")){
+            transform.DOLocalRotate(Vector3.zero, 0.5f);
+        }
         if (Input.GetKey("joystick " + index + " button 1") && !animPlay && transform.tag != "Player" || 
             Input.GetKey(KeyCode.Space)  && !animPlay && transform.tag != "Player" )
         {
             GetComponent<PlayerEffect>().ChargeEffect();
             chargeSlider.fillAmount += 0.005f;
+            
         }
         else if (chargeSlider.fillAmount > 0)
         {
-
+            
             animPlay = true;
             animator.SetBool("Walk", false);
             if (Smash)
@@ -264,7 +268,12 @@ public class Player : MonoBehaviour
         conVelocity.z = moveDir.z * Speed;
         rb.velocity = conVelocity;
 
-
+        string horizontalCrossAxisL = "HorizontalCross_P" + index + "_L";
+        string verticalCrossAxisL = "VerticalCross_P" + index + "_L";
+        if (Input.GetAxis(horizontalCrossAxisL) > 0)
+        {
+            Debug.Log("aaaaaa");
+        }
         //string horizontalAxisR = "Horizontal_P" + index + "_R";
         //string verticalAxisR = "Vertical_P" + index + "_R";
 
