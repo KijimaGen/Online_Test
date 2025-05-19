@@ -49,7 +49,7 @@ public class RacketEffect : MonoBehaviour
         }
     }*/
 
-    private void OnTriggerStay(Collider collision) {
+    private void OnTriggerExit(Collider collision) {
         if (collision.gameObject.tag == "Racket") {
             if (buttonFlag) {
                 // パーティクルシステムのインスタンスを生成する。

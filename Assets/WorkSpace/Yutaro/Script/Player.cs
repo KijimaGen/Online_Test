@@ -274,6 +274,19 @@ public class Player : MonoBehaviour
         {
             Debug.Log("aaaaaa");
         }
+        if (Input.GetAxis(horizontalCrossAxisL) < 0)
+        {
+            Debug.Log("aaaaaa");
+        }
+
+        if (Input.GetAxis(verticalCrossAxisL) > 0)
+        {
+            Debug.Log("aaaaaa");
+        }
+        if (Input.GetAxis(verticalCrossAxisL) < 0)
+        {
+            Debug.Log("aaaaaa");
+        }
         //string horizontalAxisR = "Horizontal_P" + index + "_R";
         //string verticalAxisR = "Vertical_P" + index + "_R";
 

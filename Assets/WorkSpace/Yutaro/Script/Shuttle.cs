@@ -110,6 +110,7 @@ public class Shuttle : MonoBehaviour
         {
             if (other.transform.parent.GetComponent<Player>().attack)
             {
+                GetComponent<shatleEffect>().ShotEffect();
                 rb.isKinematic = false;
                 Player player = other.transform.parent.GetComponent<Player>();
                 player.attack = false;
