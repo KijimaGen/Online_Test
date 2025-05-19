@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 7085495199339083488}
   - component: {fileID: 3917818064289790648}
   - component: {fileID: 7487336600765843091}
-  - component: {fileID: 4892110762568788527}
   - component: {fileID: 715417941916039715}
   - component: {fileID: 359065886939180135}
+  - component: {fileID: 8101466030293279676}
+  - component: {fileID: 8573775963203942597}
   m_Layer: 0
   m_Name: Shuttle
   m_TagString: Shuttle
@@ -31,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 851582193128135044}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5, y: 3, z: 2.5}
+  m_LocalPosition: {x: 0, y: 3.37, z: 2.19}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -100,19 +101,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   frames: []
   isReplaying: 0
---- !u!114 &4892110762568788527
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 851582193128135044}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b58819b97a0ddc409af96cf17a49a12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  initialize: 1
 --- !u!114 &715417941916039715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,7 +168,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.86792374
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -188,10 +176,10 @@ TrailRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.5275072
-        value: 0.2813549
-        inSlope: -1.2971045
-        outSlope: -1.2971045
+        time: 0.52589035
+        value: 0.21653575
+        inSlope: -1.3545935
+        outSlope: -1.3545935
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
@@ -250,6 +238,32 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!114 &8101466030293279676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 851582193128135044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98dff50ef0262d842827590930460892, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particle: {fileID: 2095606205811567574, guid: 4595326579a99f1488d6300d1be44aa7, type: 3}
+--- !u!114 &8573775963203942597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 851582193128135044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38d7afaed5df27c4b8fbd1390be15988, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialize: 0
 --- !u!1001 &4302710718001791782
 PrefabInstance:
   m_ObjectHideFlags: 0
