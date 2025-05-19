@@ -277,11 +277,11 @@ public class Player : MonoBehaviour
         //transform.rotation = Quaternion.Euler(0f, angle, 0f);
         //transform.rotation = Quaternion.AngleAxis(0, rotationNorm);
 
-        //float moveKeyX = Input.GetAxisRaw("Horizontal");
+        //float moveKeyX = Input.GetAxisRaw("Hosrizontal");
         //float moveKeyY = Input.GetAxisRaw("Vertical");
-        //
+
         //Vector3 moveKeyDir = new Vector3(moveKeyX, 0, moveKeyY);
-        //
+
         //Vector3 keyVelocity = rb.velocity;
         //keyVelocity.x = moveKeyDir.x * Speed;
         //keyVelocity.z = moveKeyDir.z * Speed;

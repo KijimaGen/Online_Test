@@ -56,12 +56,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject crown;
 
     [SerializeField] Text winnerTeamText;
+
+    [SerializeField] private GameObject wall;
     // Start is called before the first frame update
     void Start()
     {
         instance = this;
 
-        roundTime = 12;
         //最初のゲームステートは待機状態
         state = gameState.standBy;
         mainCamera.transform.position = new Vector3 (0,14,-17);
@@ -90,14 +91,15 @@ public class GameManager : MonoBehaviour
                 replayCamera.gameObject.SetActive(false);
                 AddPlayer();
 
-                roundTime = 12;
+                roundTime = 1;
                 ScoreManager.instance.redScore = 0;
                 ScoreManager.instance.whiteScore = 0;
                 resultTitle.SetActive(false);
-
+                wall.SetActive(false);
                 break;
             case gameState.start:
                 replayCamera.gameObject.SetActive(false);
+                wall.SetActive(true);
                 RoundStart();
                 Round();
 
@@ -187,7 +189,7 @@ public class GameManager : MonoBehaviour
     private void ShuttleInstantiate(Vector3 pos)
     {
         shuttle.transform.position = pos;
-        shuttle.GetComponent<ShuttleK>().Initialize();
+        shuttle.GetComponent<Shuttle>().Initialize();
     }
 
     private void RoundStart()
@@ -202,6 +204,8 @@ public class GameManager : MonoBehaviour
         //    state = gameState.standBy;
         //    return;
         //}
+        int redCount = 0;
+        int whiteCount = 0;
 
         foreach (var player in playerList)
         {
@@ -209,13 +213,17 @@ public class GameManager : MonoBehaviour
             {
                 player.transform.position = new Vector3(-5, 0, 2.5f);
                 player.transform.rotation = Quaternion.Euler(0, 0, 0);
+                redCount++;
             }
             else if (player.tag == "WhiteTeam")
             {
                 player.transform.position = new Vector3(5, 0, 2.5f);
                 player.transform.rotation = Quaternion.Euler(0, 180, 0);
+                whiteCount++;
             }
         }
+
+
         mainCamera.targetDisplay = 0;
         replayCamera.targetDisplay = 1;
 
@@ -234,7 +242,7 @@ public class GameManager : MonoBehaviour
     {
         roundSetting = true;
         state = gameState.start;
-        shuttle.GetComponent<ShuttleK>().initialize = false;
+        shuttle.GetComponent<Shuttle>().initialize = false;
     }
 
     private void Round()
@@ -278,7 +286,7 @@ public class GameManager : MonoBehaviour
             playerList[i].GetComponent<ReplayRecorder>().StartReplay();
         }
         shuttle.GetComponent<ReplayRecorder>().StartReplay();
-        shuttle.GetComponent<ShuttleK>().initialize = false;
+        shuttle.GetComponent<Shuttle>().initialize = false;
         setReplay = true;
 
         mainCamera.targetDisplay = 1;
