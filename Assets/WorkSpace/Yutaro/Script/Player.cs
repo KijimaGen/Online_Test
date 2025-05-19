@@ -77,8 +77,11 @@ public class Player : MonoBehaviour
 
         OnMove();
         WhichDir();
-        if (Input.GetKeyDown("joystick " + index + " button 0")){
-            transform.DOLocalRotate(Vector3.zero, 0.5f);
+        if (Input.GetKey("joystick " + index + " button 0")){
+            if (gameObject.transform.tag == "RedTeam")
+                transform.DOLocalRotate(Vector3.zero, 0.5f);
+            else
+                transform.DOLocalRotate(Vector3.zero + new Vector3(0, 180, 0), 0.5f);
         }
         if (Input.GetKey("joystick " + index + " button 1") && !animPlay && transform.tag != "Player" || 
             Input.GetKey(KeyCode.Space)  && !animPlay && transform.tag != "Player" )

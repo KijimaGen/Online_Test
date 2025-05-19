@@ -31,11 +31,10 @@ public class SoundManager : MonoBehaviour{
             Debug.LogWarning("audioClipsの" + soundIndex + "番目は存在しませんInspectorのListをご確認ください");
             return;
         }
-        if (GameManager.instance.state == GameManager.gameState.repaly) return;
         audioSource.PlayOneShot(audioClips[soundIndex]);
     }
 
-    public void PlayeSoundOne(int soundIndex) {
+    public void PlaySoundOne(int soundIndex) {
         if (audioClips[soundIndex] == null) {
             Debug.LogWarning("audioClipsの" + soundIndex + "番目は存在しませんInspectorのListをご確認ください");
             return;

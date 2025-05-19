@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
         mainCamera.transform.position = new Vector3 (0,14,-17);
 
         countDownTitle.SetActive(false);
-        roundTime = 120;
+        roundTime = 60;
         int minutes = Mathf.FloorToInt(roundTime / 60);
         int seconds = Mathf.FloorToInt(roundTime % 60);
 
@@ -154,6 +154,7 @@ public class GameManager : MonoBehaviour
                 startCount = 0;
             }
             Debug.Log(startCount);
+            SoundManager.Instance.PlaySoundOne(5);
         }
     }
 

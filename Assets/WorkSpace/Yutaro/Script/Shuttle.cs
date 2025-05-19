@@ -108,6 +108,8 @@ public class Shuttle : MonoBehaviour
                 Player player = other.transform.parent.GetComponent<Player>();
                 player.attack = false;
                 //other.transform.parent.position = new Vector3(transform.localPosition.x, 0, transform.position.z);
+                GetComponent<shatleEffect>().ShotEffect();
+
 
                 Transform point = player.hitPoint.transform;
 
