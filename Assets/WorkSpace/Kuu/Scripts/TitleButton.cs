@@ -88,4 +88,12 @@ public class TitleButton : MonoBehaviour
         RuleCanvas.transform.gameObject.SetActive(false);
         SoundManager.Instance.PlaySound(7);
     }
+
+    public void OnClickChutorial() {
+        // 全てのフォーカスを解除
+        //EventSystem.current.SetSelectedGameObject(null);
+
+        // ゲームシーン
+        //SceneManager.LoadScene("MainGame");
+    }
 }
