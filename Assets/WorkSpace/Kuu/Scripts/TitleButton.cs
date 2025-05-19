@@ -84,4 +84,12 @@ public class TitleButton : MonoBehaviour
         // RuleCanvasを非表示
         RuleCanvas.transform.gameObject.SetActive(false);
     }
+
+    public void OnClickChutorial() {
+        // 全てのフォーカスを解除
+        //EventSystem.current.SetSelectedGameObject(null);
+
+        // ゲームシーン
+        //SceneManager.LoadScene("MainGame");
+    }
 }
