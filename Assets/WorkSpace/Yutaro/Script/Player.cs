@@ -63,7 +63,6 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Debug.Log(replayCancel);
         if (ReplayRecorder.instance.isReplaying)
         {
             replaySkipText.text = playerName.ToString() + "P";
