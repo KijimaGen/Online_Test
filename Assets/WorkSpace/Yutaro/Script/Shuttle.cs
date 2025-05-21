@@ -53,7 +53,11 @@ public class Shuttle : MonoBehaviour
 
             if (ReplayRecorder.instance.isReplaying) return;
             ScoreManager.instance.whiteScore++;
+            if(touchTeam == 1)
+            GameManager.instance.serveTeam = 0;
 
+            if (touchTeam == 0)
+                GameManager.instance.serveTeam = 0;
             for (int i = 0; i < GameManager.instance.playerList.Count; i++)
             {
                 if(lastTouch == i + 1) { GameManager.instance.playerList[i].goal++; }
@@ -72,7 +76,11 @@ public class Shuttle : MonoBehaviour
 
             if (ReplayRecorder.instance.isReplaying) return;
             ScoreManager.instance.redScore++;
+            if (touchTeam == 0)
+                GameManager.instance.serveTeam = 1;
 
+            if (touchTeam == 1)
+                GameManager.instance.serveTeam = 1;
             for (int i = 0; i < GameManager.instance.playerList.Count; i++)
             {
                 if (lastTouch == i + 1) { GameManager.instance.playerList[i].goal++; }
@@ -90,17 +98,11 @@ public class Shuttle : MonoBehaviour
             rb.isKinematic = true;
 
             if (ReplayRecorder.instance.isReplaying) return;
-            if(touchTeam == 0) { ScoreManager.instance.redScore++;}
-            if(touchTeam == 1) { ScoreManager.instance.whiteScore++; }
-            GameManager.instance.serveTeam = touchTeam;
+            if(touchTeam == 0) { ScoreManager.instance.redScore++; GameManager.instance.serveTeam = 1; }
+            if(touchTeam == 1) { ScoreManager.instance.whiteScore++; GameManager.instance.serveTeam = 0; }
             //ScoreManager.instance.redScore++;
             //Œø‰Ê‰¹(”š”­(Ž¸“_))
             SoundManager.Instance.PlaySoud(2);
-
-            for (int i = 0; i < GameManager.instance.playerList.Count; i++)
-            {
-                GameManager.instance.playerList[i].score += 10;
-            }
         }
     }
 
@@ -110,12 +112,13 @@ public class Shuttle : MonoBehaviour
         {
             if (other.transform.parent.GetComponent<Player>().attack)
             {
+                rb.velocity = Vector3.zero;
                 GetComponent<shatleEffect>().ShotEffect();
                 rb.isKinematic = false;
                 Player player = other.transform.parent.GetComponent<Player>();
                 player.attack = false;
                 //other.transform.parent.position = new Vector3(transform.localPosition.x, 0, transform.position.z);
-
+                player.score += 10;
                 Transform point = player.hitPoint.transform;
 
                 if(player.chargeSlider.fillAmount <= 0.2)

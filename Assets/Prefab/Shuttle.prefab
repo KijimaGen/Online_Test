@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 715417941916039715}
   - component: {fileID: 359065886939180135}
   - component: {fileID: 8573775963203942597}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Shuttle
   m_TagString: Shuttle
   m_Icon: {fileID: 0}

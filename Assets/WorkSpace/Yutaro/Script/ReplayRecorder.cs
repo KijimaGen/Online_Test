@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class ReplayRecorder : MonoBehaviour
 {
@@ -108,9 +109,9 @@ public class ReplayRecorder : MonoBehaviour
     public async void StopReplayAndReset()
     {
         //transform.GetComponent<Rigidbody>().isKinematic = false;
-        await Task.Delay(2000);
+        await Task.Delay(1000);
         GameManager.instance.RoundInitialize();
-
+        frames.Clear();
         isReplaying = false;
         replayIndex = 0;
     }
