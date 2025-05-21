@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     [SerializeField] public Image chargeSlider;
     [SerializeField] private Text nameText;
     [SerializeField] private GameObject scoreBoard;
+    [SerializeField] private Image[] stampPrefab;
 
     public bool attack;
 
@@ -26,12 +27,13 @@ public class Player : MonoBehaviour
     Animator animator;
     bool animPlay;
 
-    public bool Smash { get; private set; }
+    bool Smash;
     bool right;
     bool left;
     bool jump;
 
     public int score;
+    int scoreTmp;
     public int goal;
     public int save;
     public int punch;
@@ -39,12 +41,20 @@ public class Player : MonoBehaviour
 
     public bool replayCancel;
 
+    bool stampPlay;
+    float stampTime;
+
+    [SerializeField]Text replaySkipText;
+    GameObject textObj;
+
+    bool fall;
+
     void Start()
     {
         animator = GetComponent<Animator>();
 
-
         index = GameManager.instance.playerIndex;
+       
         rb = GetComponent<Rigidbody>();
 
         // chargeSlider.fillAmount = 0f;
@@ -53,31 +63,43 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-
+        Debug.Log(replayCancel);
         if (ReplayRecorder.instance.isReplaying)
         {
+            replaySkipText.text = playerName.ToString() + "P";
+            if (textObj == null && !replayCancel)
+            {
+                textObj = Instantiate(replaySkipText.gameObject, GameObject.Find("ReplayCamera").transform.Find("Canvas/スキップタグ").transform);
+            }
+            
+
             if (Input.GetKey("joystick " + index + " button 0"))
             {
                 replayCancel = true;
+                Destroy(textObj);
             }
         }
         if (GetComponent<ReplayRecorder>().isReplaying) return;
         if (GameManager.instance.roundStart) { rb.isKinematic = true; }
         if (!GameManager.instance.roundStart) { rb.isKinematic = false; }
-
+        if (fall)
+        {
+            if(transform.tag == "RedTeam") {transform.position = new Vector3(-5, 10, 2.5f); }
+            if(transform.tag == "WhiteTeam") { transform.position = new Vector3(5, 10, 2.5f); }
+            rb.velocity = Vector3.zero;
+            
+            fall = false;
+          // return;
+        }
         //ScoreBoard();
         nameText.text = playerName.ToString() + "P";
         //nameText.rectTransform.LookAt(Camera.main.transform);
         //nameText.rectTransform.Rotate(0, 180f, 0);
-        if (Input.GetKey(KeyCode.R))
-        {
-            GetComponent<ReplayRecorder>().StartReplay();
-            //chargeSlider.fillAmount += 0.0005f;
-        }
 
         OnMove();
         WhichDir();
-        if (Input.GetKey("joystick " + index + " button 0")){
+        if (Input.GetKey("joystick " + index + " button 0"))
+        {
             if (gameObject.transform.tag == "RedTeam")
                 transform.DOLocalRotate(Vector3.zero, 0.5f);
             else
@@ -199,6 +221,12 @@ public class Player : MonoBehaviour
         {
             hitPoint.transform.SetParent(transform.Find("尻尾"));
         }
+
+        if(transform.position.y <= -10)
+        {
+            fall = true;
+        }
+
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -273,33 +301,67 @@ public class Player : MonoBehaviour
 
         string horizontalCrossAxisL = "HorizontalCross_P" + index + "_L";
         string verticalCrossAxisL = "VerticalCross_P" + index + "_L";
-        if (Input.GetAxis(horizontalCrossAxisL) > 0)
+
+        if (!stampPlay)
         {
-            Debug.Log("aaaaaa");
+            if (Input.GetAxis(horizontalCrossAxisL) > 0)
+            {
+                var stampObj = Instantiate(stampPrefab[0], transform.Find("PlayerUI/スタンプ"));
+                stampObj.transform.LookAt(Camera.main.transform.position);
+                stampPlay = true;
+            }
+            if (Input.GetAxis(horizontalCrossAxisL) < 0)
+            {
+                //ここはエモートにしようかな？
+            }
+
+            if (Input.GetAxis(verticalCrossAxisL) > 0)
+            {
+                var stampObj = Instantiate(stampPrefab[2], transform.Find("PlayerUI/スタンプ"));
+                stampObj.transform.LookAt(Camera.main.transform.position);
+                stampPlay = true;
+            }
+            if (Input.GetAxis(verticalCrossAxisL) < 0)
+            {
+                var stampObj = Instantiate(stampPrefab[1], transform.Find("PlayerUI/スタンプ"));
+                stampObj.transform.LookAt(Camera.main.transform.position);
+                stampPlay = true;
+            }
         }
-        //string horizontalAxisR = "Horizontal_P" + index + "_R";
-        //string verticalAxisR = "Vertical_P" + index + "_R";
+        if (stampPlay)
+        {
+            stampTime += Time.deltaTime;
+            if(stampTime > 2f)
+            {
+                stampTime = 0;
+                stampPlay = false;
+                Destroy(transform.Find("PlayerUI/スタンプ").GetChild(0).gameObject);
+            }
+        }
 
-        //float rotationX = Input.GetAxisRaw(horizontalAxisR);
-        //float rotationY = Input.GetAxisRaw(verticalAxisR);
+            //string horizontalAxisR = "Horizontal_P" + index + "_R";
+            //string verticalAxisR = "Vertical_P" + index + "_R";
 
-        //Vector2 rotationNorm = new Vector3(rotationX, rotationY).normalized;
+            //float rotationX = Input.GetAxisRaw(horizontalAxisR);
+            //float rotationY = Input.GetAxisRaw(verticalAxisR);
 
-        //float angle = Mathf.Atan2(rotationNorm.x, rotationNorm.y) * Mathf.Rad2Deg;
-        //transform.rotation = Quaternion.Euler(0f, angle, 0f);
-        //transform.rotation = Quaternion.AngleAxis(0, rotationNorm);
+            //Vector2 rotationNorm = new Vector3(rotationX, rotationY).normalized;
 
-        //float moveKeyX = Input.GetAxisRaw("Hosrizontal");
-        //float moveKeyY = Input.GetAxisRaw("Vertical");
+            //float angle = Mathf.Atan2(rotationNorm.x, rotationNorm.y) * Mathf.Rad2Deg;
+            //transform.rotation = Quaternion.Euler(0f, angle, 0f);
+            //transform.rotation = Quaternion.AngleAxis(0, rotationNorm);
 
-        //Vector3 moveKeyDir = new Vector3(moveKeyX, 0, moveKeyY);
+            //float moveKeyX = Input.GetAxisRaw("Hosrizontal");
+            //float moveKeyY = Input.GetAxisRaw("Vertical");
 
-        //Vector3 keyVelocity = rb.velocity;
-        //keyVelocity.x = moveKeyDir.x * Speed;
-        //keyVelocity.z = moveKeyDir.z * Speed;
-        //rb.velocity = keyVelocity;
+            //Vector3 moveKeyDir = new Vector3(moveKeyX, 0, moveKeyY);
 
-        rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
+            //Vector3 keyVelocity = rb.velocity;
+            //keyVelocity.x = moveKeyDir.x * Speed;
+            //keyVelocity.z = moveKeyDir.z * Speed;
+            //rb.velocity = keyVelocity;
+
+            rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
     }
 
     public bool AnimEnd()
@@ -330,8 +392,11 @@ public class Player : MonoBehaviour
         if (GameManager.instance.state != GameManager.gameState.result)
         {
             scoreBoard.SetActive(false);
+            scoreTmp = score;
             return;
         }
+
+        score = scoreTmp + (goal * 200) + (save * 100) + (punch * 20) + (counter * 150);
 
         scoreBoard.SetActive(true);
         Text scoreText = scoreBoard.transform.Find("スコア").GetComponent<Text>();
