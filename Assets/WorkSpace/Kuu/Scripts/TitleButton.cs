@@ -10,6 +10,7 @@ public class TitleButton : MonoBehaviour
 {
     [SerializeField] Canvas RuleCanvas;
     [SerializeField] Button OK;
+    //[SerializeField] Button Chutorial;
     Button GameStart;
     Button Rule;
     Button Exit;
@@ -21,10 +22,11 @@ public class TitleButton : MonoBehaviour
     void Start()
     {
         // コンポーネントの取得
-        GameStart = GameObject.Find("/SelectCanvas/GameStart").GetComponent<Button>();
+        GameStart = GameObject.Find("SelectCanvas/GameStart").GetComponent<Button>();
         Rule = GameObject.Find("/SelectCanvas/Rule").GetComponent<Button>();
         Exit = GameObject.Find("/SelectCanvas/Exit").GetComponent<Button>();
         OK = OK.GetComponent<Button>();
+        //Chutorial = Chutorial.GetComponent<Button>();
 
         RuleCanvas = RuleCanvas.GetComponent<Canvas>();
         SelectCanvas = GameObject.Find("/SelectCanvas").GetComponent<Canvas>();
@@ -87,9 +89,9 @@ public class TitleButton : MonoBehaviour
 
     public void OnClickChutorial() {
         // 全てのフォーカスを解除
-        //EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(null);
 
         // ゲームシーン
-        //SceneManager.LoadScene("MainGame");
+        SceneManager.LoadScene("ChutorialScene");
     }
 }

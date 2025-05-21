@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/MainGameScene/Scene/MainGame.unity
     guid: 4115eff1f9eaf7d4f9f7f741f6457648
+  - enabled: 1
+    path: Assets/WorkSpace/Kuu/Scenes/ChutorialScene.unity
+    guid: 16bee4d38580506448df2ca0cfb3a9e8
   m_configObjects: {}
