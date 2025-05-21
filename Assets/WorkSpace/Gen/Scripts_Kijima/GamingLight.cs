@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GamingLight : MonoBehaviour{
     [SerializeField] Light dirLight; // InspectorでDirectional Lightをアタッチ
-     float colorSpeed = 1f;
+     float colorSpeed = 0.5f;
 
     void Update() {
         if (dirLight == null) return;

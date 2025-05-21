@@ -26,7 +26,7 @@ public class StanManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (stanflag = true)
+        if (stanflag == true)
         {
             //async Task UniTask.Delay(TimeSpan.FromSeconds(waitTime));
             stanflag = false;

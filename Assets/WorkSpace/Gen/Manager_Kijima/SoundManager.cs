@@ -6,10 +6,16 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour{
     public static SoundManager Instance { get; private set; }
     [SerializeField]List<AudioClip>audioClips = new List<AudioClip>();
-    AudioSource audioSource;
-    
+    [SerializeField] List<AudioClip> BGMClips = new List<AudioClip>();
+
+    [SerializeField]
+    AudioSource SESource;
+
+    [SerializeField]
+    AudioSource BGMSource;
+
     void Start() {
-        audioSource = GetComponent<AudioSource>();
+        SESource = GetComponent<AudioSource>();
        
         if (Instance == null) {
             Instance = this;
@@ -31,16 +37,29 @@ public class SoundManager : MonoBehaviour{
             Debug.LogWarning("audioClipsの" + soundIndex + "番目は存在しませんInspectorのListをご確認ください");
             return;
         }
-        audioSource.PlayOneShot(audioClips[soundIndex]);
+        SESource.PlayOneShot(audioClips[soundIndex]);
     }
 
+    /// <summary>
+    /// 効果音がかぶらないように放つ
+    /// </summary>
+    /// <param name="soundIndex"></param>
     public void PlaySoundOne(int soundIndex) {
         if (audioClips[soundIndex] == null) {
             Debug.LogWarning("audioClipsの" + soundIndex + "番目は存在しませんInspectorのListをご確認ください");
             return;
         }
-        if (!audioSource.isPlaying)
-            audioSource.PlayOneShot(audioClips[soundIndex]);
+        if (!SESource.isPlaying)
+            SESource.PlayOneShot(audioClips[soundIndex]);
     }
 
+    /// <summary>
+    /// BGM変更
+    /// </summary>
+    /// <param name="BGMIndex"></param>
+    public void ChangeBGM(int BGMIndex) {
+        if (BGMSource == null || BGMClips[BGMIndex] == null || BGMIndex > BGMClips.Count) return;
+        BGMSource.clip = BGMClips[BGMIndex];
+        BGMSource.Play();
+    }
 }

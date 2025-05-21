@@ -87,6 +87,9 @@ public class GameManager : MonoBehaviour
         {
             timeText.text = string.Format("{0}:{1:00}", minutes, seconds);
         }
+
+        //BGM‚ğƒQ[ƒ€’†—p‚Ì•¨‚Éİ’è
+        SoundManager.Instance.ChangeBGM(1);
     }
 
     // Update is called once per frame
@@ -437,6 +440,5 @@ public class GameManager : MonoBehaviour
        
 
         Time.timeScale = 0;
-        //setReplay = true;
     }
 }

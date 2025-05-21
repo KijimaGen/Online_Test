@@ -35,6 +35,9 @@ public class TitleButton : MonoBehaviour
         RuleCanvas.transform.gameObject.SetActive(false);
         //button = button.GetComponent<Button>();
         //button.Select();
+
+        //BGMをタイトル用の物に設定
+        SoundManager.Instance.ChangeBGM(0);
     }
 
     // Update is called once per frame

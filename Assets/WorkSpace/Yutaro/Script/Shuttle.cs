@@ -131,11 +131,13 @@ public class Shuttle : MonoBehaviour
                 {
                     other.transform.parent.GetComponent<Player>().save++;
                 }
-                //効果音(カキーン)
-                if (player.Smash)
-                    SoundManager.Instance.PlaySound(8);
-                else
-                    SoundManager.Instance.PlaySound(3);
+                if (GameManager.instance.state != GameManager.gameState.repaly) {
+                    //効果音(カキーン)
+                    if (player.Smash)
+                        SoundManager.Instance.PlaySound(8);
+                    else
+                        SoundManager.Instance.PlaySound(3);
+                }
             }
         }
     }
