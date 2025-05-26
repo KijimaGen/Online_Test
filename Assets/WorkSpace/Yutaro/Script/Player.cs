@@ -1,5 +1,7 @@
 using DG.Tweening;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using TMPro;
 using Unity.VisualScripting;
@@ -16,6 +18,8 @@ public class Player : MonoBehaviour
     [SerializeField] public Image chargeSlider;
     [SerializeField] private Text nameText;
     [SerializeField] private GameObject scoreBoard;
+    [SerializeField] private Image[] stampPrefab;
+    [SerializeField] private List<GameObject> fashionList;
 
     public bool attack;
 
@@ -26,58 +30,118 @@ public class Player : MonoBehaviour
     Animator animator;
     bool animPlay;
 
-    public bool Smash { get; private set; }
+    bool Smash;
     bool right;
     bool left;
     bool jump;
 
     public int score;
+    int scoreTmp;
     public int goal;
     public int save;
     public int punch;
     public int counter;
 
     public bool replayCancel;
+    public bool ready;
+
+    bool stampPlay;
+    float stampTime;
+
+    [SerializeField]Text replaySkipText;
+    GameObject textObj;
+
+    bool fall;
+
+    int fashionCount;
+    bool onButton;
+
+    int roundSetCount;
+    int colorSetCount;
+
+    [SerializeField] private List<Material> playerMaterial;
+
+
 
     void Start()
     {
         animator = GetComponent<Animator>();
 
-
         index = GameManager.instance.playerIndex;
+
         rb = GetComponent<Rigidbody>();
 
         // chargeSlider.fillAmount = 0f;
         playerName = GameManager.instance.playerList.Count;
+        SkinnedMeshRenderer[] skinnedRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+        foreach (SkinnedMeshRenderer renderer in skinnedRenderers)
+        {
+            if(renderer.gameObject.name == "球") { renderer.material = renderer.material; }
+            if(renderer.gameObject.name == "球.001") { renderer.material = renderer.material; }
+            else { renderer.material = playerMaterial[playerName - 1]; }
+        }
     }
 
     private void FixedUpdate()
     {
-
         if (ReplayRecorder.instance.isReplaying)
         {
+            replaySkipText.text = playerName.ToString() + "P";
+            if (textObj == null && !replayCancel)
+            {
+                textObj = Instantiate(replaySkipText.gameObject, GameObject.Find("ReplayCamera").transform.Find("Canvas/スキップタグ").transform);
+            }
+            
+
             if (Input.GetKey("joystick " + index + " button 0"))
             {
                 replayCancel = true;
+                Destroy(textObj);
             }
+        }
+        if (GameManager.instance.state == GameManager.gameState.standBy)
+        {
+            Text readyText = transform.Find("PlayerUI/準備完了").GetComponent<Text>();
+            if (Input.GetKey("joystick " + index + " button 7"))
+            {
+                ready = true;
+                readyText.text = "Ready";
+                readyText.color = Color.yellow;
+            }
+            if (Input.GetKey("joystick " + index + " button 6"))
+            {
+                ready = false;
+                readyText.text = "UnReady";
+                readyText.color = new Color32(90,90,90,255);
+            }
+        }
+        else
+        {
+            Text readyText = transform.Find("PlayerUI/準備完了").GetComponent<Text>();
+            readyText.enabled = false;
         }
         if (GetComponent<ReplayRecorder>().isReplaying) return;
         if (GameManager.instance.roundStart) { rb.isKinematic = true; }
         if (!GameManager.instance.roundStart) { rb.isKinematic = false; }
-
+        if (fall)
+        {
+            if(transform.tag == "RedTeam") {transform.position = new Vector3(-5, 10, 2.5f); }
+            if(transform.tag == "WhiteTeam") { transform.position = new Vector3(5, 10, 2.5f); }
+            rb.velocity = Vector3.zero;
+            
+            fall = false;
+          // return;
+        }
         //ScoreBoard();
         nameText.text = playerName.ToString() + "P";
-        //nameText.rectTransform.LookAt(Camera.main.transform);
-        //nameText.rectTransform.Rotate(0, 180f, 0);
-        if (Input.GetKey(KeyCode.R))
-        {
-            GetComponent<ReplayRecorder>().StartReplay();
-            //chargeSlider.fillAmount += 0.0005f;
-        }
+        if(gameObject.tag == "RedTeam") { nameText.color = Color.red; }
+        if(gameObject.tag == "WhiteTeam") { nameText.color = Color.white; }
+
 
         OnMove();
         WhichDir();
-        if (Input.GetKey("joystick " + index + " button 0")){
+        if (Input.GetKey("joystick " + index + " button 0"))
+        {
             if (gameObject.transform.tag == "RedTeam")
                 transform.DOLocalRotate(Vector3.zero, 0.5f);
             else
@@ -199,6 +263,13 @@ public class Player : MonoBehaviour
         {
             hitPoint.transform.SetParent(transform.Find("尻尾"));
         }
+
+        if(transform.position.y <= -10)
+        {
+            fall = true;
+        }
+
+        
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -220,19 +291,77 @@ public class Player : MonoBehaviour
         }
     }
 
-    //private void OnTriggerStay(Collider other)
-    //{
-    //    if (other.gameObject.tag == "Shuttle")
-    //    {
-    //        var norm = (other.transform.position - transform.position).normalized;
-    //        //var magnitude = (other.transform.position.z - transform.position.z);
-    //        if (norm.z < -0.3f)
-    //        { right = true; }
-    //        if (norm.z > 0.3f) { left = true; }
+    private void OnTriggerStay(Collider other)
+    {
+        if (GameManager.instance.state != GameManager.gameState.standBy) return;
 
-            
-    //    }
-    //}
+        if (other.gameObject.tag == "Fashion")
+        {
+            if (Input.GetKey("joystick " + index + " button 4") && !onButton)
+            {
+                GameObject fashion = transform.Find("アーマチュア/ボーン.001/衣装").gameObject;
+                if (fashion.transform.childCount == 1)
+                {
+                    Destroy(fashion.transform.GetChild(0).gameObject);
+                }
+               
+                if(fashionCount >= fashionList.Count) 
+                {
+                    fashionCount = 0;
+                    Destroy(fashion.transform.GetChild(0).gameObject);
+                }
+                else
+                {
+                    Instantiate(fashionList[fashionCount], fashion.transform);
+                    fashionCount++;
+                }
+               
+                onButton = true;
+            }
+            if (!Input.GetKey("joystick " + index + " button 4"))
+            {
+                onButton = false;
+            }
+        }
+
+        if (other.gameObject.tag == "Time")
+        {
+            if (Input.GetKey("joystick " + index + " button 4") && !onButton)
+            {
+                roundSetCount++;
+                if(roundSetCount == 1) { GameManager.instance.roundTime = 30; }
+                if(roundSetCount == 2) { GameManager.instance.roundTime = 120; }
+                if(roundSetCount == 3) { GameManager.instance.roundTime = 60; roundSetCount = 0; }
+
+                onButton = true;
+            }
+            if (!Input.GetKey("joystick " + index + " button 4"))
+            {
+                onButton = false;
+            }
+        }
+
+        if (other.gameObject.tag == "Color")
+        {
+            if (Input.GetKey("joystick " + index + " button 4") && !onButton)
+            {
+                colorSetCount++;
+                if (colorSetCount == 1) { playerMaterial[playerName-1].color = Color.red; }
+                if (colorSetCount == 2) { playerMaterial[playerName-1].color = new Color32(250,250,250,1); }
+                if (colorSetCount == 3) { playerMaterial[playerName - 1].color = new Color32(50, 50, 50,1); }
+                if (colorSetCount == 4) { playerMaterial[playerName-1].color = new Color32(180,100,200,1); }
+                if (colorSetCount == 5) { playerMaterial[playerName-1].color = new Color32(100,100,255,1);}
+                if (colorSetCount == 6) { playerMaterial[playerName-1].color = new Color32(160,240,255,1);}
+                if (colorSetCount == 7) { playerMaterial[playerName-1].color = new Color32(255,255,100,1); colorSetCount = 0; }
+
+                onButton = true;
+            }
+            if (!Input.GetKey("joystick " + index + " button 4"))
+            {
+                onButton = false;
+            }
+        }
+    }
     private void WhichDir()
     {
         GameObject[] shuttle = GameObject.FindGameObjectsWithTag("Shuttle");
@@ -273,33 +402,67 @@ public class Player : MonoBehaviour
 
         string horizontalCrossAxisL = "HorizontalCross_P" + index + "_L";
         string verticalCrossAxisL = "VerticalCross_P" + index + "_L";
-        if (Input.GetAxis(horizontalCrossAxisL) > 0)
+
+        if (!stampPlay)
         {
-            Debug.Log("aaaaaa");
+            if (Input.GetAxis(horizontalCrossAxisL) > 0)
+            {
+                var stampObj = Instantiate(stampPrefab[0], transform.Find("PlayerUI/スタンプ"));
+                stampObj.transform.LookAt(Camera.main.transform.position);
+                stampPlay = true;
+            }
+            if (Input.GetAxis(horizontalCrossAxisL) < 0)
+            {
+                //ここはエモートにしようかな？
+            }
+
+            if (Input.GetAxis(verticalCrossAxisL) > 0)
+            {
+                var stampObj = Instantiate(stampPrefab[2], transform.Find("PlayerUI/スタンプ"));
+                stampObj.transform.LookAt(Camera.main.transform.position);
+                stampPlay = true;
+            }
+            if (Input.GetAxis(verticalCrossAxisL) < 0)
+            {
+                var stampObj = Instantiate(stampPrefab[1], transform.Find("PlayerUI/スタンプ"));
+                stampObj.transform.LookAt(Camera.main.transform.position);
+                stampPlay = true;
+            }
         }
-        //string horizontalAxisR = "Horizontal_P" + index + "_R";
-        //string verticalAxisR = "Vertical_P" + index + "_R";
+        if (stampPlay)
+        {
+            stampTime += Time.deltaTime;
+            if(stampTime > 2f)
+            {
+                stampTime = 0;
+                stampPlay = false;
+                Destroy(transform.Find("PlayerUI/スタンプ").GetChild(0).gameObject);
+            }
+        }
 
-        //float rotationX = Input.GetAxisRaw(horizontalAxisR);
-        //float rotationY = Input.GetAxisRaw(verticalAxisR);
+            //string horizontalAxisR = "Horizontal_P" + index + "_R";
+            //string verticalAxisR = "Vertical_P" + index + "_R";
 
-        //Vector2 rotationNorm = new Vector3(rotationX, rotationY).normalized;
+            //float rotationX = Input.GetAxisRaw(horizontalAxisR);
+            //float rotationY = Input.GetAxisRaw(verticalAxisR);
 
-        //float angle = Mathf.Atan2(rotationNorm.x, rotationNorm.y) * Mathf.Rad2Deg;
-        //transform.rotation = Quaternion.Euler(0f, angle, 0f);
-        //transform.rotation = Quaternion.AngleAxis(0, rotationNorm);
+            //Vector2 rotationNorm = new Vector3(rotationX, rotationY).normalized;
 
-        //float moveKeyX = Input.GetAxisRaw("Hosrizontal");
-        //float moveKeyY = Input.GetAxisRaw("Vertical");
+            //float angle = Mathf.Atan2(rotationNorm.x, rotationNorm.y) * Mathf.Rad2Deg;
+            //transform.rotation = Quaternion.Euler(0f, angle, 0f);
+            //transform.rotation = Quaternion.AngleAxis(0, rotationNorm);
 
-        //Vector3 moveKeyDir = new Vector3(moveKeyX, 0, moveKeyY);
+            //float moveKeyX = Input.GetAxisRaw("Hosrizontal");
+            //float moveKeyY = Input.GetAxisRaw("Vertical");
 
-        //Vector3 keyVelocity = rb.velocity;
-        //keyVelocity.x = moveKeyDir.x * Speed;
-        //keyVelocity.z = moveKeyDir.z * Speed;
-        //rb.velocity = keyVelocity;
+            //Vector3 moveKeyDir = new Vector3(moveKeyX, 0, moveKeyY);
 
-        rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
+            //Vector3 keyVelocity = rb.velocity;
+            //keyVelocity.x = moveKeyDir.x * Speed;
+            //keyVelocity.z = moveKeyDir.z * Speed;
+            //rb.velocity = keyVelocity;
+
+            rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
     }
 
     public bool AnimEnd()
@@ -330,8 +493,11 @@ public class Player : MonoBehaviour
         if (GameManager.instance.state != GameManager.gameState.result)
         {
             scoreBoard.SetActive(false);
+            scoreTmp = score;
             return;
         }
+
+        score = scoreTmp + (goal * 200) + (save * 100) + (punch * 20) + (counter * 150);
 
         scoreBoard.SetActive(true);
         Text scoreText = scoreBoard.transform.Find("スコア").GetComponent<Text>();

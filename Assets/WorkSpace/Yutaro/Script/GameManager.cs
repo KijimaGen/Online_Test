@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] Text timeText;
 
-    float roundTime;
+    public float roundTime;
     bool inGame;
 
     [SerializeField] GameObject resultTitle;
@@ -63,6 +63,8 @@ public class GameManager : MonoBehaviour
     int whiteCount = 0;
 
     public int serveTeam = 0;
+
+    bool playerReady;
     // Start is called before the first frame update
     void Start()
     {
@@ -74,46 +76,24 @@ public class GameManager : MonoBehaviour
 
         countDownTitle.SetActive(false);
         roundTime = 60;
-        int minutes = Mathf.FloorToInt(roundTime / 60);
-        int seconds = Mathf.FloorToInt(roundTime % 60);
 
-        if (roundTime <= 0)
-        {
-            state = gameState.result;
-            roundTime = 0.0f;
-            timeText.text = "0:00";
-        }
-        else
-        {
-            timeText.text = string.Format("{0}:{1:00}", minutes, seconds);
-        }
-
-        //BGMをゲーム中用の物に設定
-        SoundManager.Instance.ChangeBGM(1);
+        serveTeam = Random.Range(0,2);
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        if (Input.GetKeyUp(KeyCode.V)|| Input.GetKeyUp("joystick 1 button 5"))
-        {
-            ShuttleInstantiate(new Vector3(playerList[0].transform.position.x, 8, playerList[0].transform.position.z));
-        }
-
         switch (state)
         {
             case gameState.standBy:
                 Time.timeScale = 1;
                 replayCamera.gameObject.SetActive(false);
                 AddPlayer();
-                if (Input.GetKeyUp(KeyCode.P))
-                {
-                    state = gameState.start;
-                    roundSetting = true;
-                }
+                Ready();
+                int minutes = Mathf.FloorToInt(roundTime / 60);
+                int seconds = Mathf.FloorToInt(roundTime % 60);
+                timeText.text = string.Format("{0}:{1:00}", minutes, seconds);
 
-                
                 ScoreManager.instance.redScore = 0;
                 ScoreManager.instance.whiteScore = 0;
                 resultTitle.SetActive(false);
@@ -156,9 +136,12 @@ public class GameManager : MonoBehaviour
                 inGame = true;
                 startCount = 0;
             }
-            Debug.Log(startCount);
-            SoundManager.Instance.PlaySoundOne(5);
         }
+
+        
+
+
+
     }
 
 
@@ -219,6 +202,22 @@ public class GameManager : MonoBehaviour
     {
         shuttle.transform.position = pos;
         shuttle.GetComponent<Shuttle>().Initialize();
+    }
+
+    private void Ready()
+    {
+        for (int i = 0; i < playerList.Count; i++)
+        {
+            if (!playerList[i].ready) playerReady = false; 
+            if (playerList[i].ready) playerReady = true; 
+        }
+
+        if (playerReady)
+        {
+            state = gameState.start;
+            roundSetting = true;
+        }
+           
     }
 
     private void RoundStart()
@@ -288,10 +287,10 @@ public class GameManager : MonoBehaviour
         mainCamera.transform.DOKill();
         mainCamera.transform.DOMove(new Vector3(0, 14, -9), 2);
 
-        if(serveTeam == 0)
+        if(serveTeam == 1)
             ShuttleInstantiate(new Vector3(-4,3,3.5f));
 
-        if (serveTeam == 1)
+        if (serveTeam == 0)
             ShuttleInstantiate(new Vector3(4, 3, 3.5f));
 
         // タイマー開始
@@ -327,10 +326,16 @@ public class GameManager : MonoBehaviour
                 {
                     timeText.text = string.Format("{0}:{1:00}", minutes, seconds);
                 }
-                
-            }
 
-            
+            }
+            for (int i = 0; i < playerList.Count; i++)
+            {
+                if (playerList[i].replayCancel)
+                {
+                    playerList[i].replayCancel=false;
+
+                }
+            }
         }
     }
 
@@ -345,6 +350,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < playerList.Count; i++)
         {
             playerList[i].GetComponent<ReplayRecorder>().StartReplay();
+
         }
         shuttle.GetComponent<ReplayRecorder>().StartReplay();
         shuttle.GetComponent<Shuttle>().initialize = false;
@@ -358,17 +364,16 @@ public class GameManager : MonoBehaviour
 
     private void ReplayCancel()
     {
-        for (int i = 0;i < playerList.Count;i++)
+        for (int i = 0; i < playerList.Count; i++)
         {
             if (!playerList[i].replayCancel) return;
-            playerList[i].replayCancel = false;
-        }
 
-        ReplayRecorder[] replayObj = FindObjectsOfType<ReplayRecorder>();
-        foreach(ReplayRecorder rec in replayObj)
-        {
-            rec.StopReplayAndReset();
-        }
+            ReplayRecorder[] replayObj = FindObjectsOfType<ReplayRecorder>();
+            foreach (ReplayRecorder rec in replayObj)
+            {
+                rec.StopReplayAndReset();
+            }
+        }  
     }
 
     private void Result()
@@ -384,6 +389,17 @@ public class GameManager : MonoBehaviour
         {    
             playerList[i].GetComponent<Rigidbody>().isKinematic = true;
             playerList[i].transform.localScale = new Vector3(8, 8, 8);
+            foreach (var player in playerList)
+            {
+                if (player.tag == "RedTeam")
+                {
+                    redCount++;
+                }
+                else if (player.tag == "WhiteTeam")
+                {
+                    whiteCount++;
+                }
+            }
             if (playerList[i].gameObject.tag == "RedTeam")
             {
                 if(redCount == 1)
@@ -401,12 +417,26 @@ public class GameManager : MonoBehaviour
                 
             }
 
+            redCount = 0;
+
             if (playerList[i].gameObject.tag == "WhiteTeam")
             {
-                playerList[i].transform.parent = resultTitle.transform.Find("Canvas/white壁").transform;
-                playerList[i].transform.localPosition = new Vector3(18, 0, 0);
-                playerList[i].transform.localRotation = Quaternion.Euler(0, 180, 0);
+                if (whiteCount == 1)
+                {
+                    playerList[i].transform.parent = resultTitle.transform.Find("Canvas/white壁").transform;
+                    playerList[i].transform.localPosition = new Vector3(18, 0, 0);
+                    playerList[i].transform.localRotation = Quaternion.Euler(0, 180, 0);
+                }
+                else
+                {
+                    playerList[i].transform.parent = resultTitle.transform.Find("Canvas/white壁").transform;
+                    playerList[i].transform.localPosition = new Vector3(18, 70 - (i * 140), 0);
+                    playerList[i].transform.localRotation = Quaternion.Euler(0, 180, 0);
+                }
             }
+
+            whiteCount = 0;
+
 
             if (playerList[i].score >= tempScore)
             {
@@ -440,5 +470,6 @@ public class GameManager : MonoBehaviour
        
 
         Time.timeScale = 0;
+        //setReplay = true;
     }
 }

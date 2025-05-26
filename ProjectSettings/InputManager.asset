@@ -313,8 +313,8 @@ InputManager:
     m_Name: HorizontalCross_P1_L
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: 6
-    positiveButton: 6
+    negativeButton: 
+    positiveButton: 
     altNegativeButton: 
     altPositiveButton: joystick 1 button 1
     gravity: 0
@@ -355,7 +355,7 @@ InputManager:
     snap: 0
     invert: 0
     type: 2
-    axis: 0
+    axis: 5
     joyNum: 1
   - serializedVersion: 3
     m_Name: Horizontal_P2_L
@@ -387,7 +387,7 @@ InputManager:
     snap: 0
     invert: 0
     type: 2
-    axis: 1
+    axis: 6
     joyNum: 2
   - serializedVersion: 3
     m_Name: Vertical_P2_L
@@ -419,7 +419,7 @@ InputManager:
     snap: 0
     invert: 0
     type: 2
-    axis: 0
+    axis: 5
     joyNum: 2
   - serializedVersion: 3
     m_Name: Horizontal_P3_L
@@ -451,7 +451,7 @@ InputManager:
     snap: 0
     invert: 0
     type: 2
-    axis: 1
+    axis: 6
     joyNum: 3
   - serializedVersion: 3
     m_Name: Vertical_P3_L
@@ -483,7 +483,7 @@ InputManager:
     snap: 0
     invert: 0
     type: 2
-    axis: 0
+    axis: 5
     joyNum: 3
   - serializedVersion: 3
     m_Name: Horizontal_P4_L
@@ -515,7 +515,7 @@ InputManager:
     snap: 0
     invert: 0
     type: 2
-    axis: 1
+    axis: 6
     joyNum: 4
   - serializedVersion: 3
     m_Name: Vertical_P4_L
@@ -547,7 +547,7 @@ InputManager:
     snap: 0
     invert: 0
     type: 2
-    axis: 0
+    axis: 5
     joyNum: 4
   - serializedVersion: 3
     m_Name: Horizontal_P1_R
