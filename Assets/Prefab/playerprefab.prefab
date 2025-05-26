@@ -4091,6 +4091,7 @@ MonoBehaviour:
   - {fileID: 2088115692589953466, guid: cfd277fdf79a66a49a2cf7ae52be2a0e, type: 3}
   - {fileID: 431287223783580908, guid: 939b9284ffd1674419e8149e7dae56b7, type: 3}
   - {fileID: 2561269057089973319, guid: 4a5bbbb29b3f62940a99697ed3375cb7, type: 3}
+  - {fileID: 5694604481715649501, guid: e3ebf27379c2d3d49bab16986c05a6af, type: 3}
   attack: 0
   playerName: 0
   score: 0
