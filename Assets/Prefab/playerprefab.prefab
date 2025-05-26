@@ -4099,7 +4099,7 @@ MonoBehaviour:
   punch: 0
   counter: 0
   replayCancel: 0
-  muchReady: 0
+  ready: 0
   replaySkipText: {fileID: 6559757118280075753, guid: 44fd16b1c8109284d82c38361404569f, type: 3}
   playerMaterial:
   - {fileID: 2100000, guid: 45eb59a9f9c7266439bf5068193a1b23, type: 2}

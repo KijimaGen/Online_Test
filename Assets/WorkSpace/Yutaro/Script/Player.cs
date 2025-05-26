@@ -115,6 +115,11 @@ public class Player : MonoBehaviour
                 readyText.color = new Color32(90,90,90,255);
             }
         }
+        else
+        {
+            Text readyText = transform.Find("PlayerUI/€”õŠ®—¹").GetComponent<Text>();
+            readyText.enabled = false;
+        }
         if (GetComponent<ReplayRecorder>().isReplaying) return;
         if (GameManager.instance.roundStart) { rb.isKinematic = true; }
         if (!GameManager.instance.roundStart) { rb.isKinematic = false; }
