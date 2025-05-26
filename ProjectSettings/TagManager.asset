@@ -12,6 +12,9 @@ TagManager:
   - Right
   - Left
   - Out
+  - Fashion
+  - Time
+  - Color
   layers:
   - Default
   - TransparentFX

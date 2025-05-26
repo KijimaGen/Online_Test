@@ -1,5 +1,7 @@
 using DG.Tweening;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using TMPro;
 using Unity.VisualScripting;
@@ -17,6 +19,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Text nameText;
     [SerializeField] private GameObject scoreBoard;
     [SerializeField] private Image[] stampPrefab;
+    [SerializeField] private List<GameObject> fashionList;
 
     public bool attack;
 
@@ -40,6 +43,7 @@ public class Player : MonoBehaviour
     public int counter;
 
     public bool replayCancel;
+    public bool ready;
 
     bool stampPlay;
     float stampTime;
@@ -49,16 +53,33 @@ public class Player : MonoBehaviour
 
     bool fall;
 
+    int fashionCount;
+    bool onButton;
+
+    int roundSetCount;
+    int colorSetCount;
+
+    [SerializeField] private List<Material> playerMaterial;
+
+
+
     void Start()
     {
         animator = GetComponent<Animator>();
 
         index = GameManager.instance.playerIndex;
-       
+
         rb = GetComponent<Rigidbody>();
 
         // chargeSlider.fillAmount = 0f;
         playerName = GameManager.instance.playerList.Count;
+        SkinnedMeshRenderer[] skinnedRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+        foreach (SkinnedMeshRenderer renderer in skinnedRenderers)
+        {
+            if(renderer.gameObject.name == "球") { renderer.material = renderer.material; }
+            if(renderer.gameObject.name == "球.001") { renderer.material = renderer.material; }
+            else { renderer.material = playerMaterial[playerName - 1]; }
+        }
     }
 
     private void FixedUpdate()
@@ -78,6 +99,22 @@ public class Player : MonoBehaviour
                 Destroy(textObj);
             }
         }
+        if (GameManager.instance.state == GameManager.gameState.standBy)
+        {
+            Text readyText = transform.Find("PlayerUI/準備完了").GetComponent<Text>();
+            if (Input.GetKey("joystick " + index + " button 7"))
+            {
+                ready = true;
+                readyText.text = "Ready";
+                readyText.color = Color.yellow;
+            }
+            if (Input.GetKey("joystick " + index + " button 6"))
+            {
+                ready = false;
+                readyText.text = "UnReady";
+                readyText.color = new Color32(90,90,90,255);
+            }
+        }
         if (GetComponent<ReplayRecorder>().isReplaying) return;
         if (GameManager.instance.roundStart) { rb.isKinematic = true; }
         if (!GameManager.instance.roundStart) { rb.isKinematic = false; }
@@ -92,8 +129,9 @@ public class Player : MonoBehaviour
         }
         //ScoreBoard();
         nameText.text = playerName.ToString() + "P";
-        //nameText.rectTransform.LookAt(Camera.main.transform);
-        //nameText.rectTransform.Rotate(0, 180f, 0);
+        if(gameObject.tag == "RedTeam") { nameText.color = Color.red; }
+        if(gameObject.tag == "WhiteTeam") { nameText.color = Color.white; }
+
 
         OnMove();
         WhichDir();
@@ -226,6 +264,7 @@ public class Player : MonoBehaviour
             fall = true;
         }
 
+        
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -247,19 +286,77 @@ public class Player : MonoBehaviour
         }
     }
 
-    //private void OnTriggerStay(Collider other)
-    //{
-    //    if (other.gameObject.tag == "Shuttle")
-    //    {
-    //        var norm = (other.transform.position - transform.position).normalized;
-    //        //var magnitude = (other.transform.position.z - transform.position.z);
-    //        if (norm.z < -0.3f)
-    //        { right = true; }
-    //        if (norm.z > 0.3f) { left = true; }
+    private void OnTriggerStay(Collider other)
+    {
+        if (GameManager.instance.state != GameManager.gameState.standBy) return;
 
-            
-    //    }
-    //}
+        if (other.gameObject.tag == "Fashion")
+        {
+            if (Input.GetKey("joystick " + index + " button 4") && !onButton)
+            {
+                GameObject fashion = transform.Find("アーマチュア/ボーン.001/衣装").gameObject;
+                if (fashion.transform.childCount == 1)
+                {
+                    Destroy(fashion.transform.GetChild(0).gameObject);
+                }
+               
+                if(fashionCount >= fashionList.Count) 
+                {
+                    fashionCount = 0;
+                    Destroy(fashion.transform.GetChild(0).gameObject);
+                }
+                else
+                {
+                    Instantiate(fashionList[fashionCount], fashion.transform);
+                    fashionCount++;
+                }
+               
+                onButton = true;
+            }
+            if (!Input.GetKey("joystick " + index + " button 4"))
+            {
+                onButton = false;
+            }
+        }
+
+        if (other.gameObject.tag == "Time")
+        {
+            if (Input.GetKey("joystick " + index + " button 4") && !onButton)
+            {
+                roundSetCount++;
+                if(roundSetCount == 1) { GameManager.instance.roundTime = 30; }
+                if(roundSetCount == 2) { GameManager.instance.roundTime = 120; }
+                if(roundSetCount == 3) { GameManager.instance.roundTime = 60; roundSetCount = 0; }
+
+                onButton = true;
+            }
+            if (!Input.GetKey("joystick " + index + " button 4"))
+            {
+                onButton = false;
+            }
+        }
+
+        if (other.gameObject.tag == "Color")
+        {
+            if (Input.GetKey("joystick " + index + " button 4") && !onButton)
+            {
+                colorSetCount++;
+                if (colorSetCount == 1) { playerMaterial[playerName-1].color = Color.red; }
+                if (colorSetCount == 2) { playerMaterial[playerName-1].color = new Color32(250,250,250,1); }
+                if (colorSetCount == 3) { playerMaterial[playerName - 1].color = new Color32(50, 50, 50,1); }
+                if (colorSetCount == 4) { playerMaterial[playerName-1].color = new Color32(180,100,200,1); }
+                if (colorSetCount == 5) { playerMaterial[playerName-1].color = new Color32(100,100,255,1);}
+                if (colorSetCount == 6) { playerMaterial[playerName-1].color = new Color32(160,240,255,1);}
+                if (colorSetCount == 7) { playerMaterial[playerName-1].color = new Color32(255,255,100,1); colorSetCount = 0; }
+
+                onButton = true;
+            }
+            if (!Input.GetKey("joystick " + index + " button 4"))
+            {
+                onButton = false;
+            }
+        }
+    }
     private void WhichDir()
     {
         GameObject[] shuttle = GameObject.FindGameObjectsWithTag("Shuttle");

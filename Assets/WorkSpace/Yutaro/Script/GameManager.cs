@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] Text timeText;
 
-    float roundTime;
+    public float roundTime;
     bool inGame;
 
     [SerializeField] GameObject resultTitle;
@@ -63,6 +63,8 @@ public class GameManager : MonoBehaviour
     int whiteCount = 0;
 
     public int serveTeam = 0;
+
+    bool playerReady;
     // Start is called before the first frame update
     void Start()
     {
@@ -74,42 +76,24 @@ public class GameManager : MonoBehaviour
 
         countDownTitle.SetActive(false);
         roundTime = 60;
-        int minutes = Mathf.FloorToInt(roundTime / 60);
-        int seconds = Mathf.FloorToInt(roundTime % 60);
 
-        if (roundTime <= 0)
-        {
-            state = gameState.result;
-            roundTime = 0.0f;
-            timeText.text = "0:00";
-        }
-        else
-        {
-            timeText.text = string.Format("{0}:{1:00}", minutes, seconds);
-        }
+        serveTeam = Random.Range(0,2);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.V)|| Input.GetKeyUp("joystick 1 button 5"))
-        {
-            ShuttleInstantiate(new Vector3(playerList[0].transform.position.x, 8, playerList[0].transform.position.z));
-        }
-
         switch (state)
         {
             case gameState.standBy:
                 Time.timeScale = 1;
                 replayCamera.gameObject.SetActive(false);
                 AddPlayer();
-                if (Input.GetKeyUp(KeyCode.P))
-                {
-                    state = gameState.start;
-                    roundSetting = true;
-                }
+                Ready();
+                int minutes = Mathf.FloorToInt(roundTime / 60);
+                int seconds = Mathf.FloorToInt(roundTime % 60);
+                timeText.text = string.Format("{0}:{1:00}", minutes, seconds);
 
-                
                 ScoreManager.instance.redScore = 0;
                 ScoreManager.instance.whiteScore = 0;
                 resultTitle.SetActive(false);
@@ -153,6 +137,11 @@ public class GameManager : MonoBehaviour
                 startCount = 0;
             }
         }
+
+        
+
+
+
     }
 
 
@@ -213,6 +202,22 @@ public class GameManager : MonoBehaviour
     {
         shuttle.transform.position = pos;
         shuttle.GetComponent<Shuttle>().Initialize();
+    }
+
+    private void Ready()
+    {
+        for (int i = 0; i < playerList.Count; i++)
+        {
+            if (!playerList[i].ready) playerReady = false; 
+            if (playerList[i].ready) playerReady = true; 
+        }
+
+        if (playerReady)
+        {
+            state = gameState.start;
+            roundSetting = true;
+        }
+           
     }
 
     private void RoundStart()
@@ -368,9 +373,7 @@ public class GameManager : MonoBehaviour
             {
                 rec.StopReplayAndReset();
             }
-        }
-
-        
+        }  
     }
 
     private void Result()
