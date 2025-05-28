@@ -37,9 +37,9 @@ public class ItemManager : MonoBehaviour {
 
     private async UniTask CreateItem() {
         while (true) {
-            await UniTask.Delay(Random.Range(500, 5000));  //ここで乱数で待ち時間を取ることでランダム化を図る
+            await UniTask.Delay(Random.Range(500, 2500));  //ここで乱数で待ち時間を取ることでランダム化を図る
             if (!isStopped) {
-                                                               //await UniTask.Delay(100);
+                                                               
                 canSpawn = Random.Range(0, 10); //乱数を生成
                 if (canSpawn < 5) {
                     Instantiate(items[Random.Range(0, items.Count)], transform.position, Quaternion.identity); //アイテムの生成
