@@ -311,22 +311,22 @@ public class GameManager : MonoBehaviour
         {
             if (!shuttle.GetComponent<Rigidbody>().isKinematic)
             {
-                roundTime -= Time.deltaTime;
+                // チュートリアルだったらカウントしない
+                if (!TutorialRule.tutorial) {
+                    roundTime -= Time.deltaTime;
 
-                int minutes = Mathf.FloorToInt(roundTime / 60);
-                int seconds = Mathf.FloorToInt(roundTime % 60);
+                    int minutes = Mathf.FloorToInt(roundTime / 60);
+                    int seconds = Mathf.FloorToInt(roundTime % 60);
 
-                if (roundTime <= 0)
-                {
-                    state = gameState.result;
-                    roundTime = 0.0f;
-                    timeText.text = "0:00";
+                    if (roundTime <= 0) {
+                        state = gameState.result;
+                        roundTime = 0.0f;
+                        timeText.text = "0:00";
+                    }
+                    else {
+                        timeText.text = string.Format("{0}:{1:00}", minutes, seconds);
+                    }
                 }
-                else
-                {
-                    timeText.text = string.Format("{0}:{1:00}", minutes, seconds);
-                }
-
             }
             for (int i = 0; i < playerList.Count; i++)
             {

@@ -75,11 +75,5 @@ public class ChutrialText : MonoBehaviour
         } else if (textCount == 8) {
             text.text = "STARTボタンで試合開始です";
         }
-
-        // BACKボタンでタイトルへ戻る
-        if (Input.GetKeyDown(KeyCode.JoystickButton6)) {
-            // タイトルへ
-            SceneManager.LoadScene("Title");
-        }
     }
 }
