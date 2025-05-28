@@ -33,7 +33,6 @@ public class Player : MonoBehaviour
     bool Smash;
     bool right;
     bool left;
-    bool jump;
 
     public int score;
     int scoreTmp;
@@ -61,8 +60,16 @@ public class Player : MonoBehaviour
 
     [SerializeField] private List<Material> playerMaterial;
 
+    bool enemyCamp;
 
-
+    float skillGaugeAmount;
+    float skillGaugeAmountMax = 100;
+    Image skillGauge;
+    float duration = 0.2f;
+    float currentRate = 0.0f;
+    float skillTime;
+    public bool useSkill;
+    [SerializeField] ParticleSystem skillEffect;
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -76,9 +83,9 @@ public class Player : MonoBehaviour
         SkinnedMeshRenderer[] skinnedRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
         foreach (SkinnedMeshRenderer renderer in skinnedRenderers)
         {
-            if(renderer.gameObject.name == "ãÖ") { renderer.material = renderer.material; }
-            if(renderer.gameObject.name == "ãÖ.001") { renderer.material = renderer.material; }
-            else { renderer.material = playerMaterial[playerName - 1]; }
+            renderer.material = playerMaterial[playerName - 1];
+            if(renderer.gameObject.name == "ãÖ") { renderer.material = playerMaterial[4]; }
+            if(renderer.gameObject.name == "ãÖ.001") { renderer.material = playerMaterial[4]; }
         }
     }
 
@@ -101,18 +108,28 @@ public class Player : MonoBehaviour
         }
         if (GameManager.instance.state == GameManager.gameState.standBy)
         {
+            GameObject card = GameObject.Find("Card" + playerName).gameObject;
             Text readyText = transform.Find("PlayerUI/èÄîıäÆóπ").GetComponent<Text>();
-            if (Input.GetKey("joystick " + index + " button 7"))
+            if (transform.tag != "Player")
             {
-                ready = true;
-                readyText.text = "Ready";
-                readyText.color = Color.yellow;
+
+                if (Input.GetKey("joystick " + index + " button 7"))
+                {
+                    ready = true;
+                    readyText.text = "Ready";
+                    readyText.color = Color.yellow;
+                }
+                if (Input.GetKey("joystick " + index + " button 6"))
+                {
+                    ready = false;
+                    readyText.text = "UnReady";
+                    readyText.color = new Color32(90, 90, 90, 255);
+                }
+                card.transform.Find("NotTeam").GetComponent<Text>().enabled = false;
             }
-            if (Input.GetKey("joystick " + index + " button 6"))
+            else
             {
-                ready = false;
-                readyText.text = "UnReady";
-                readyText.color = new Color32(90,90,90,255);
+                card.transform.Find("NotTeam").GetComponent<Text>().enabled = true;
             }
         }
         else
@@ -136,7 +153,6 @@ public class Player : MonoBehaviour
         nameText.text = playerName.ToString() + "P";
         if(gameObject.tag == "RedTeam") { nameText.color = Color.red; }
         if(gameObject.tag == "WhiteTeam") { nameText.color = Color.white; }
-
 
         OnMove();
         WhichDir();
@@ -162,11 +178,6 @@ public class Player : MonoBehaviour
             if (Smash)
             {
                 animator.SetBool("Smash", true);
-                if (!jump)
-                {
-                    //rb.AddForce(transform.up * 5f,ForceMode.Impulse);
-                    jump = true;
-                }
             }
             if (right) { animator.SetBool("Right", true); }
             if (left) { animator.SetBool("Left", true); }
@@ -195,24 +206,36 @@ public class Player : MonoBehaviour
         if (transform.tag == "WhiteTeam")
         {
             nameText.transform.localRotation = Quaternion.Euler(0, 180, 0);
-            chargeSlider.transform.localRotation = Quaternion.Euler(90,0, 162);
-            scoreBoard.transform.localRotation = Quaternion.Euler(0,180, 0);
-            if (chargeSlider.fillAmount >= 0.4f)
+            chargeSlider.transform.localRotation = Quaternion.Euler(90, 0, 162);
+            scoreBoard.transform.localRotation = Quaternion.Euler(0, 180, 0);
+            if (transform.position.x <= -1)
             {
-                Smash = true;
-                jump = false;
-                chargeSlider.fillAmount = 0.4f;
-                hitPoint.transform.position = new Vector3(rb.velocity.x * -dirX * 0.05f, 4f + dirX * 0.1f, transform.position.z + velocityZ / 2);
-                boxCollider.center = new Vector3(boxCollider.center.x, 10, boxCollider.center.z);
-                boxCollider.size = new Vector3(boxCollider.size.x, 10, boxCollider.size.z);
+                hitPoint.transform.localPosition = new Vector3(transform.position.x - 2, 1, transform.position.z);
+                Debug.Log("ìGêw");
+                enemyCamp = true;
             }
             else
             {
-                hitPoint.transform.position = new Vector3(rb.velocity.x * -dirX * 0.05f, 8 - chargeSlider.fillAmount * 10 - dirX / 3, transform.position.z + velocityZ / 2);
-                boxCollider.center = new Vector3(boxCollider.center.x, 1.18f, boxCollider.center.z);
-                boxCollider.size = new Vector3(boxCollider.size.x, 5.37f, boxCollider.size.z);
+                enemyCamp = false;
             }
+            if (!enemyCamp)
+            {
+                if (chargeSlider.fillAmount >= 0.4f)
+                {
+                    Smash = true;
+                    chargeSlider.fillAmount = 0.4f;
+                    hitPoint.transform.position = new Vector3(rb.velocity.x * -dirX * 0.05f, 4f + dirX * 0.1f, transform.position.z + velocityZ / 2);
+                    boxCollider.center = new Vector3(boxCollider.center.x, 10, boxCollider.center.z);
+                    boxCollider.size = new Vector3(boxCollider.size.x, 10, boxCollider.size.z);
+                }
+                else
+                {
+                    hitPoint.transform.position = new Vector3(rb.velocity.x * -dirX * 0.05f, 8 - chargeSlider.fillAmount * 10 - dirX / 3, transform.position.z + velocityZ / 2);
+                    boxCollider.center = new Vector3(boxCollider.center.x, 1.18f, boxCollider.center.z);
+                    boxCollider.size = new Vector3(boxCollider.size.x, 5.37f, boxCollider.size.z);
+                }
 
+            }
         }
 
         if (transform.tag == "RedTeam")
@@ -220,21 +243,39 @@ public class Player : MonoBehaviour
             nameText.transform.localRotation = Quaternion.Euler(0, 0, 0);
             chargeSlider.transform.localRotation = Quaternion.Euler(-90, 0, 162);
             scoreBoard.transform.localRotation = Quaternion.Euler(0, 0, 0);
-            if (chargeSlider.fillAmount >= 0.4f)
+            if(transform.position.x >= -1)
             {
-                Smash = true;
-                jump = false;
-                chargeSlider.fillAmount = 0.4f;
-                hitPoint.transform.position = new Vector3(rb.velocity.x * dirX * 0.05f, 4f + dirX * 0.1f, transform.position.z + velocityZ / 2 );
-                boxCollider.center = new Vector3(boxCollider.center.x, 10, boxCollider.center.z);
-                boxCollider.size = new Vector3(boxCollider.size.x, 10, boxCollider.size.z);
+                hitPoint.transform.localPosition = new Vector3(transform.position.x - 2, 1, transform.position.z);
+                Debug.Log("ìGêw");
+                enemyCamp = true;
             }
             else
             {
-                hitPoint.transform.position = new Vector3(rb.velocity.x * dirX * 0.05f, 8 - chargeSlider.fillAmount * 10 + dirX / 3, transform.position.z + velocityZ /2);
-                boxCollider.center = new Vector3(boxCollider.center.x, 1.18f, boxCollider.center.z);
-                boxCollider.size = new Vector3(boxCollider.size.x, 5.37f, boxCollider.size.z);
+                enemyCamp = false;
             }
+            if (!enemyCamp)
+            {
+                if (useSkill)
+                {
+                    hitPoint.transform.position = new Vector3(rb.velocity.x * dirX * 0.05f, 4f + dirX * 0.1f, transform.position.z + velocityZ / 2);
+                }
+                else if (chargeSlider.fillAmount >= 0.4f)
+                {
+                    Smash = true;
+                    chargeSlider.fillAmount = 0.4f;
+                    hitPoint.transform.position = new Vector3(rb.velocity.x * dirX * 0.05f, 4f + dirX * 0.1f, transform.position.z + velocityZ / 2);
+                    boxCollider.center = new Vector3(boxCollider.center.x, 10, boxCollider.center.z);
+                    boxCollider.size = new Vector3(boxCollider.size.x, 10, boxCollider.size.z);
+                }
+
+                else
+                {
+                    hitPoint.transform.position = new Vector3(rb.velocity.x * dirX * 0.05f, 8 - chargeSlider.fillAmount * 10 + dirX / 3, transform.position.z + velocityZ / 2);
+                    boxCollider.center = new Vector3(boxCollider.center.x, 1.18f, boxCollider.center.z);
+                    boxCollider.size = new Vector3(boxCollider.size.x, 5.37f, boxCollider.size.z);
+                }
+            }
+
 
         }
 
@@ -274,6 +315,7 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (GameManager.instance.state != GameManager.gameState.standBy) return;
         if (collision.gameObject.name == "RedSetTeam")
         {
             gameObject.tag = "RedTeam";
@@ -346,13 +388,13 @@ public class Player : MonoBehaviour
             if (Input.GetKey("joystick " + index + " button 4") && !onButton)
             {
                 colorSetCount++;
-                if (colorSetCount == 1) { playerMaterial[playerName-1].color = Color.red; }
-                if (colorSetCount == 2) { playerMaterial[playerName-1].color = new Color32(250,250,250,1); }
-                if (colorSetCount == 3) { playerMaterial[playerName - 1].color = new Color32(50, 50, 50,1); }
-                if (colorSetCount == 4) { playerMaterial[playerName-1].color = new Color32(180,100,200,1); }
-                if (colorSetCount == 5) { playerMaterial[playerName-1].color = new Color32(100,100,255,1);}
-                if (colorSetCount == 6) { playerMaterial[playerName-1].color = new Color32(160,240,255,1);}
-                if (colorSetCount == 7) { playerMaterial[playerName-1].color = new Color32(255,255,100,1); colorSetCount = 0; }
+                if (colorSetCount == 1) { playerMaterial[playerName - 1].color = Color.red; }
+                if (colorSetCount == 2) { playerMaterial[playerName - 1].color = new Color32(250, 250, 250, 255); }
+                if (colorSetCount == 3) { playerMaterial[playerName - 1].color = new Color32(50, 50, 50, 255); }
+                if (colorSetCount == 4) { playerMaterial[playerName - 1].color = new Color32(180, 100, 200, 255); }
+                if (colorSetCount == 5) { playerMaterial[playerName - 1].color = new Color32(100, 100, 255, 255); }
+                if (colorSetCount == 6) { playerMaterial[playerName - 1].color = new Color32(160, 240, 255, 255); }
+                if (colorSetCount == 7) { playerMaterial[playerName - 1].color = new Color32(255, 255, 100, 255); colorSetCount = 0; }
 
                 onButton = true;
             }
@@ -379,7 +421,20 @@ public class Player : MonoBehaviour
 
     private void OnMove()
     {
-        float Speed = 8;
+        float Speed;
+        if (useSkill)
+        {
+            skillEffect.gameObject.SetActive(true);
+            var main = skillEffect.main;
+            main.startColor = playerMaterial[playerName - 1].color;
+            Speed = 10;
+        }
+        else
+        {
+            skillEffect.gameObject.SetActive(false);
+            Speed = 8;
+        }
+
         if (rb.isKinematic) return;
         // InputManager Ç≈ê›íËÇµÇΩñºëOÇìÆìIÇ…çÏÇÈ
         string horizontalAxisL = "Horizontal_P" + index + "_L";
@@ -518,5 +573,44 @@ public class Player : MonoBehaviour
     private void Update()
     {
         ScoreBoard();
+        SkillGauge();
+    }
+
+    public void SkillGauge()
+    {
+        if (GameManager.instance.state != GameManager.gameState.start || rb.isKinematic) return;
+
+        skillGauge = GameObject.Find("Card" + playerName).transform.Find("SkillGauge").GetComponent<Image>();
+        if (!useSkill)
+        {
+            float targetRate = currentRate + 1f / skillGaugeAmountMax;
+            skillGauge.DOFillAmount(targetRate, duration);
+            currentRate = targetRate;
+        }
+       
+        if (currentRate >= 1)
+        {
+            currentRate = 1;
+            if (Input.GetKey("joystick " + index + " button 3"))
+            {
+                currentRate = 0;
+                skillGauge.DOFillAmount(currentRate, duration);
+                useSkill = true;
+            }
+        }
+        if (currentRate <= 0)
+        {
+            currentRate = 0;
+        }
+
+        if(useSkill)
+        {
+            skillTime += Time.deltaTime;
+            if(skillTime > 10)
+            {
+                skillTime = 0;
+                useSkill = false;
+            }
+        }
     }
 }
