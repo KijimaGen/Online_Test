@@ -364,6 +364,7 @@ GameObject:
   - component: {fileID: 74003727}
   - component: {fileID: 74003728}
   - component: {fileID: 74003729}
+  - component: {fileID: 74003730}
   m_Layer: 0
   m_Name: Shuttle
   m_TagString: Shuttle
@@ -612,6 +613,18 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!114 &74003730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 74003721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07fa733fbb5f13b4291a6eeb49e38e2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &99940315
 GameObject:
   m_ObjectHideFlags: 0
@@ -718,6 +731,11 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &170737594 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8951113436408929386, guid: c0f2f8293d6dba94e80c9628710c69e8, type: 3}
+  m_PrefabInstance: {fileID: 609427697}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &180908118
 GameObject:
   m_ObjectHideFlags: 0
@@ -2342,7 +2360,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8415751657397898215, guid: c0f2f8293d6dba94e80c9628710c69e8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1436461878}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8951113436408929386, guid: c0f2f8293d6dba94e80c9628710c69e8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1967712266}
   m_SourcePrefab: {fileID: 100100000, guid: c0f2f8293d6dba94e80c9628710c69e8, type: 3}
 --- !u!1 &629643416
 GameObject:
@@ -2571,7 +2592,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &754658832
 Transform:
   m_ObjectHideFlags: 0
@@ -3226,7 +3247,7 @@ GameObject:
   - component: {fileID: 1436461880}
   m_Layer: 0
   m_Name: outCourt
-  m_TagString: Out
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3558,7 +3579,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
-  playerPrefab: {fileID: 6558246480615012065, guid: bfde4a0eccbed8f4aaa907e7fe1e1248, type: 3}
+  playerPrefab: {fileID: 6558246480615012065, guid: 08c0af7225df9f740a9a3bf16c7eaa23, type: 3}
   playerList: []
   shuttle: {fileID: 74003721}
   roundSetting: 0
@@ -3568,7 +3589,7 @@ MonoBehaviour:
   mainCamera: {fileID: 2088799820}
   replayCamera: {fileID: 23878708}
   timeText: {fileID: 50767938}
-  roundTime: 0
+  roundTime: 1000
   resultTitle: {fileID: 754658830}
   crown: {fileID: 5570997492311701393, guid: adc0e0e1a18f47f4b8a8c8c20123f715, type: 3}
   winnerTeamText: {fileID: 1767637977}
@@ -4582,6 +4603,27 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8415751657397898215, guid: c0f2f8293d6dba94e80c9628710c69e8, type: 3}
   m_PrefabInstance: {fileID: 609427697}
   m_PrefabAsset: {fileID: 0}
+--- !u!65 &1967712266
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170737594}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 16, y: 1, z: 15}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1992782245
 PrefabInstance:
   m_ObjectHideFlags: 0
