@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 
 public class Shuttle : MonoBehaviour
@@ -11,6 +12,7 @@ public class Shuttle : MonoBehaviour
     int touchTeam;
     int lastTouch;
     public bool initialize;
+    [SerializeField] Image fallPoint;
 
     private void Start()
     {
@@ -28,6 +30,25 @@ public class Shuttle : MonoBehaviour
         
         Quaternion toRotation = Quaternion.LookRotation(rb.velocity);
         transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, Time.deltaTime * 10f);
+
+        fallPoint.transform.position = new Vector3(transform.position.x,0.4f,transform.position.z);
+        fallPoint.transform.rotation = Quaternion.Euler(90, 0, 0);
+
+        float dir = transform.position.y - fallPoint.transform.position.y;
+        fallPoint.transform.localScale = new Vector3(dir / 4 + 1, dir / 4 + 1, dir / 4 + 1);
+        if (dir > 4)
+        {
+            fallPoint.color = Color.white;
+        }
+        if (dir <= 4)
+        {
+            fallPoint.color = Color.yellow;
+        }
+        if (dir <= 2)
+        {
+            fallPoint.color = Color.red;
+        }
+        Debug.Log(dir);
     }
 
 
@@ -128,8 +149,15 @@ public class Shuttle : MonoBehaviour
 
                 var dirX = Vector3.zero.x - player.transform.position.x;
                 if(dirX < 10f) { dirX = 10; }
-                rb.AddForce((point.position - transform.position).normalized * player.chargeSlider.fillAmount* 12 * dirX, ForceMode.Impulse);
-
+                if (player.useSkill)
+                {
+                    rb.AddForce((point.position - transform.position).normalized * 6 * dirX, ForceMode.Impulse);
+                }
+               
+                else
+                {
+                    rb.AddForce((point.position - transform.position).normalized * player.chargeSlider.fillAmount * 12 * dirX, ForceMode.Impulse);
+                }
                 if(other.transform.parent.tag == "WhiteTeam") { touchTeam = 0; }
                 if(other.transform.parent.tag == "RedTeam") { touchTeam = 1; }
 
