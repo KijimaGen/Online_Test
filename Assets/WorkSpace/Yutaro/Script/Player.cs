@@ -596,6 +596,7 @@ public class Player : MonoBehaviour
                 currentRate = 0;
                 skillGauge.DOFillAmount(currentRate, duration);
                 useSkill = true;
+                SoundManager.Instance.PlaySound(9);
             }
         }
         if (currentRate <= 0)

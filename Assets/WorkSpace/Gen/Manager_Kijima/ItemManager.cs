@@ -50,9 +50,6 @@ public class ItemManager : MonoBehaviour {
     }
 
     private async UniTask CalcPosition() {
-        
-
-        
             time += Time.deltaTime;
 
             // Šp“x‚ðŽžŠÔ‚Å•Ï‰»‚³‚¹‚é
