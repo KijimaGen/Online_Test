@@ -54,7 +54,7 @@ public class TitleButton : MonoBehaviour
         SoundManager.Instance.PlaySound(4);
 
         // ƒQ[ƒ€ƒV[ƒ“
-        SceneManager.LoadScene("MainGame");
+        SceneManager.LoadScene("Game");
     }
 
     public void OnClickRule() {
