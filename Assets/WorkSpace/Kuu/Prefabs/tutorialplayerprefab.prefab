@@ -4107,6 +4107,10 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 6ddf89d0d7a9d384e972a12d894c04d1, type: 2}
   - {fileID: 2100000, guid: 4c1f6a86bdd0a4b4b9e13603a5b8dc3a, type: 2}
   - {fileID: 2100000, guid: ee2321c5ef3cc084d95d7e1434e1a0d5, type: 2}
+  - {fileID: -8725624188449797229, guid: db7ac19342c66aa41b9522c03bcf4b92, type: 3}
+  useSkill: 0
+  skillType: 0
+  Speed: 0
 --- !u!114 &7669867472230880275
 MonoBehaviour:
   m_ObjectHideFlags: 0
