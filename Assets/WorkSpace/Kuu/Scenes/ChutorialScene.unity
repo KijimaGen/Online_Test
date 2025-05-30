@@ -1050,7 +1050,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &254570660
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1579,7 +1579,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u30D6\u30C3\u98DB\u3070\u3057\u7121\u52B9"
+  m_Text: "\u5439\u3063\u98DB\u3070\u3057\u7121\u52B9"
 --- !u!222 &344381051
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2138,7 +2138,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Y\u6B21\u3078,X\u623B\u308B"
+  m_Text: "RB\u6B21\u3078,X\u623B\u308B"
 --- !u!222 &481070086
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2315,7 +2315,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8415751657397898215, guid: c0f2f8293d6dba94e80c9628710c69e8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8415751657397898215, guid: c0f2f8293d6dba94e80c9628710c69e8, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4622,7 +4622,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 16, y: 1, z: 15}
+  m_Size: {x: 16, y: 0.3, z: 15}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1992782245
 PrefabInstance:

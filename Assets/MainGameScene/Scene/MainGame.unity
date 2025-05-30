@@ -2601,6 +2601,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 359065886939180135, guid: e829adae8b5dbaf41b04dd3c7b4207e9, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.8888893
+      objectReference: {fileID: 0}
     - target: {fileID: 851582193128135044, guid: e829adae8b5dbaf41b04dd3c7b4207e9, type: 3}
       propertyPath: m_Name
       value: Shuttle
