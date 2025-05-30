@@ -27,11 +27,9 @@ public class TutorialRule : MonoBehaviour
                 pos.y = 3.37f;
                 pos.z = 2.19f;
             } else if (gameObject.tag == "RedTeam") {
-                //pos.x = -3;
-                pos.x = -13;
+                pos.x = -3;
                 pos.y = 10;
-                //pos.z = 3f;
-                pos.z = 13;
+                pos.z = 3f;
             } else if (gameObject.tag == "WhiteTeam") {
                 pos.x = 3;
                 pos.y = 10;
