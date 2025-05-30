@@ -62,14 +62,25 @@ public class Player : MonoBehaviour
 
     bool enemyCamp;
 
-    float skillGaugeAmount;
     float skillGaugeAmountMax = 100;
     Image skillGauge;
     float duration = 0.2f;
     float currentRate = 0.0f;
     float skillTime;
     public bool useSkill;
-    [SerializeField] ParticleSystem skillEffect;
+    public enum SkillType
+    {
+        Normal,
+        Pirate,
+        Demon,
+        Winter,
+
+        Max
+    }
+    SkillType skillType;
+    ParticleSystem skillEffect;
+
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -421,17 +432,27 @@ public class Player : MonoBehaviour
 
     private void OnMove()
     {
-        float Speed;
+        float Speed = 0;
         if (useSkill)
         {
+            skillEffect = transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).transform.Find("SkillEffect").GetComponent<ParticleSystem>();
             skillEffect.gameObject.SetActive(true);
-            var main = skillEffect.main;
-            main.startColor = playerMaterial[playerName - 1].color;
-            Speed = 10;
+            if (skillType == SkillType.Normal)
+            {
+                var main = skillEffect.main;
+                main.startColor = playerMaterial[playerName - 1].color;
+                Speed = 10;
+            }
+
+            if (skillType == SkillType.Pirate)
+            {
+                Speed = 10;
+            }
+
         }
         else
         {
-            skillEffect.gameObject.SetActive(false);
+            skillEffect?.gameObject?.SetActive(false);
             Speed = 8;
         }
 
@@ -596,6 +617,22 @@ public class Player : MonoBehaviour
                 currentRate = 0;
                 skillGauge.DOFillAmount(currentRate, duration);
                 useSkill = true;
+                if(transform.Find("アーマチュア/ボーン.001/衣装").childCount == 0)
+                {
+                    skillType = SkillType.Normal;
+                }
+                else if(transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装海賊")
+                {
+                    skillType = SkillType.Pirate;
+                }
+                else if (transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装悪魔")
+                {
+                    skillType = SkillType.Demon;
+                }
+                else if (transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装冬")
+                {
+                    skillType = SkillType.Winter;
+                }
             }
         }
         if (currentRate <= 0)
