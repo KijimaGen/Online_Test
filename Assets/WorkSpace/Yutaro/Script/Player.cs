@@ -130,7 +130,7 @@ public class Player : MonoBehaviour
                     readyText.text = "Ready";
                     readyText.color = Color.yellow;
                 }
-                if (Input.GetKey("joystick " + index + " button 6"))
+                if (Input.GetKey("joystick " + index + " button 6")|| !ready)
                 {
                     ready = false;
                     readyText.text = "UnReady";
@@ -142,6 +142,15 @@ public class Player : MonoBehaviour
             {
                 card.transform.Find("NotTeam").GetComponent<Text>().enabled = true;
             }
+
+            useSkill = false;
+            score = 0;
+            goal = 0;
+            save = 0;
+            punch = 0;
+            counter = 0;
+            readyText.enabled = true;
+            currentRate = 0;
         }
         else
         {
@@ -149,7 +158,7 @@ public class Player : MonoBehaviour
             readyText.enabled = false;
         }
         if (GetComponent<ReplayRecorder>().isReplaying) return;
-        if (GameManager.instance.roundStart) { rb.isKinematic = true; }
+        if (GameManager.instance.roundStart) { rb.isKinematic = true; ready = false; }
         if (!GameManager.instance.roundStart) { rb.isKinematic = false; }
         if (fall)
         {
@@ -170,9 +179,9 @@ public class Player : MonoBehaviour
         if (Input.GetKey("joystick " + index + " button 0"))
         {
             if (gameObject.transform.tag == "RedTeam")
-                transform.DOLocalRotate(Vector3.zero, 0.5f);
+                transform.DORotate(Vector3.zero, 0.5f);
             else
-                transform.DOLocalRotate(Vector3.zero + new Vector3(0, 180, 0), 0.5f);
+                transform.DORotate(Vector3.zero + new Vector3(0, 180, 0), 0.5f);
         }
         if (Input.GetKey("joystick " + index + " button 1") && !animPlay && transform.tag != "Player" || 
             Input.GetKey(KeyCode.Space)  && !animPlay && transform.tag != "Player" )
@@ -459,7 +468,7 @@ public class Player : MonoBehaviour
                     if (hit.GetComponent<Player>() != null)
                     {
                         Rigidbody rb = hit.GetComponent<Rigidbody>();
-                        if (!hit.GetComponent<Player>().useSkill)
+                        if (!hit.GetComponent<Player>().useSkill && hit.GetComponent<Player>().skillType != SkillType.Normal)
                         {
                             // ˆÚ“®‘¬“x‚ð’x‚­‚·‚é
                             rb.velocity *= 0.7f;
@@ -637,7 +646,7 @@ public class Player : MonoBehaviour
         if (!useSkill)
         {
             float targetRate = currentRate + 1f / skillGaugeAmountMax;
-            skillGauge.DOFillAmount(targetRate, duration);
+            skillGauge.fillAmount = targetRate;
             currentRate = targetRate;
         }
        

@@ -4,7 +4,6 @@ using UnityEngine;
 using DG.Tweening;
 using TMPro;
 using UnityEngine.UI;
-using SuperBlur;
 
 public class GameManager : MonoBehaviour
 {
@@ -45,6 +44,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Text timeText;
 
     public float roundTime;
+    float tempRoundTime;
     bool inGame;
 
     [SerializeField] GameObject resultTitle;
@@ -65,6 +65,8 @@ public class GameManager : MonoBehaviour
     public int serveTeam = 0;
 
     bool playerReady;
+
+    bool resetGame;
     // Start is called before the first frame update
     void Start()
     {
@@ -72,11 +74,11 @@ public class GameManager : MonoBehaviour
 
         //最初のゲームステートは待機状態
         state = gameState.standBy;
-        mainCamera.transform.position = new Vector3 (0,14,-17);
+        
 
         countDownTitle.SetActive(false);
-        roundTime = 60;
-
+        roundTime = 2;
+        tempRoundTime = roundTime;
         serveTeam = Random.Range(0,2);
     }
 
@@ -86,7 +88,8 @@ public class GameManager : MonoBehaviour
         switch (state)
         {
             case gameState.standBy:
-                Time.timeScale = 1;
+
+                ResetGame();
                 replayCamera.gameObject.SetActive(false);
                 AddPlayer();
                 Ready();
@@ -115,10 +118,9 @@ public class GameManager : MonoBehaviour
             case gameState.result:
                 Result();
                 replayCamera.gameObject.SetActive(false);
-                if (Input.GetKeyUp(KeyCode.P))
+                if (Input.GetKey("joystick button 1"))
                 {
                     state = gameState.standBy;
-                    roundSetting = true;
                 }
                 break;
         }
@@ -217,6 +219,11 @@ public class GameManager : MonoBehaviour
         {
             state = gameState.start;
             roundSetting = true;
+            for (int i = 0; i < playerList.Count; i++)
+            {
+                playerList[i].ready = false;
+            }
+            playerReady = false;
         }
            
     }
@@ -226,7 +233,7 @@ public class GameManager : MonoBehaviour
         if (!roundSetting) return;
 
         roundSetting = false;
-
+        tempRoundTime = roundTime;
         //if (playerList.Count != 2)
         //{
         //    Debug.Log("開始できません");
@@ -380,16 +387,15 @@ public class GameManager : MonoBehaviour
     private void Result()
     {
         if(setResult) return;
-        Camera.main.GetComponent<SuperBlurBase>().interpolation = 1;
-        Camera.main.GetComponent<SuperBlurBase>().downsample = 1;
         
         resultTitle.SetActive(true);
         resultTitle.GetComponent<Animator>().SetBool("result",true);
 
         for (int i = 0; i < playerList.Count; i++)
-        {    
+        {
+            
             playerList[i].GetComponent<Rigidbody>().isKinematic = true;
-            playerList[i].transform.localScale = new Vector3(8, 8, 8);
+            playerList[i].transform.DOKill();
             foreach (var player in playerList)
             {
                 if (player.tag == "RedTeam")
@@ -403,19 +409,18 @@ public class GameManager : MonoBehaviour
             }
             if (playerList[i].gameObject.tag == "RedTeam")
             {
-                if(redCount == 1)
+                if (redCount == 1)
                 {
                     playerList[i].transform.parent = resultTitle.transform.Find("Canvas/red壁").transform;
                     playerList[i].transform.localPosition = new Vector3(-18, 0, 0);
-                    playerList[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
                 }
                 else
                 {
                     playerList[i].transform.parent = resultTitle.transform.Find("Canvas/red壁").transform;
                     playerList[i].transform.localPosition = new Vector3(-18, 70 - (i * 140), 0);
-                    playerList[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
                 }
-                
+               
+                playerList[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
             }
 
             redCount = 0;
@@ -426,37 +431,38 @@ public class GameManager : MonoBehaviour
                 {
                     playerList[i].transform.parent = resultTitle.transform.Find("Canvas/white壁").transform;
                     playerList[i].transform.localPosition = new Vector3(18, 0, 0);
-                    playerList[i].transform.localRotation = Quaternion.Euler(0, 180, 0);
                 }
                 else
                 {
                     playerList[i].transform.parent = resultTitle.transform.Find("Canvas/white壁").transform;
                     playerList[i].transform.localPosition = new Vector3(18, 70 - (i * 140), 0);
-                    playerList[i].transform.localRotation = Quaternion.Euler(0, 180, 0);
                 }
+
+                playerList[i].transform.localRotation = Quaternion.Euler(0, 180, 0);
             }
 
             whiteCount = 0;
-
 
             if (playerList[i].score >= tempScore)
             {
                 tempScore = playerList[i].score;
                 crownPlayer = playerList[i].gameObject;
             }
-            else
+
+            if (playerList[i].transform.Find("王冠(Clone)") != null)
             {
-                if(playerList[i].transform.Find("王冠") != null)
-                {
-                    Destroy(playerList[i].transform.Find("王冠").gameObject);
-                }
+                Destroy(playerList[i].transform.Find("王冠(Clone)").gameObject);
             }
+
+            //Debug.Log(playerList[i].transform.localEulerAngles);
+            playerList[i].transform.localScale = new Vector3(8, 8, 8);
+            setResult = true;
         }
 
         GameObject crownPrefab = Instantiate(crown, crownPlayer.transform);
         crownPrefab.transform.localPosition= new Vector3(3,2,0);
 
-        if(ScoreManager.instance.redScore > ScoreManager.instance.whiteScore)
+        if(ScoreManager.instance.redScore > ScoreManager.instance.whiteScore) 
         {
             winnerTeamText.text = "Red";
         }
@@ -472,5 +478,29 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 0;
         //setReplay = true;
+
+        resetGame = false;
+    }
+
+    private void ResetGame()
+    {
+        if (resetGame) return;
+        resetGame = true;
+
+        mainCamera.transform.DOMove(new Vector3(0, 14, -17), 2);
+        Time.timeScale = 1;
+
+        roundTime = tempRoundTime;
+
+        serveTeam = Random.Range(0, 2);
+        setResult = false;
+
+        for (int i = 0; i < playerList.Count; i++)
+        {
+            playerList[i].transform.parent = null;
+            playerList[i].GetComponent<Rigidbody>().isKinematic = false;
+            playerList[i].transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+            playerList[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
+        }
     }
 }
