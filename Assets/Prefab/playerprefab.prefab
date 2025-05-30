@@ -4110,6 +4110,8 @@ MonoBehaviour:
   - {fileID: 2100000, guid: ee2321c5ef3cc084d95d7e1434e1a0d5, type: 2}
   - {fileID: 3511325375820423461, guid: 18ef0b20b94eac64e80b43cdc0212a3d, type: 3}
   useSkill: 0
+  skillType: 0
+  Speed: 0
 --- !u!114 &7669867472230880275
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5327,7 +5329,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2561269057089973319, guid: 97f91a0b9445ab9489218374a25483d3, type: 3}
       propertyPath: m_Name
-      value: "\u8863\u88C5\u901A\u5E38"
+      value: "\u8863\u88C5\u901A\u5E38{Clone}"
       objectReference: {fileID: 0}
     - target: {fileID: 8073205245667035503, guid: 97f91a0b9445ab9489218374a25483d3, type: 3}
       propertyPath: m_LocalPosition.x
