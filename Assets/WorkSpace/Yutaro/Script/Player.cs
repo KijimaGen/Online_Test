@@ -357,6 +357,8 @@ public class Player : MonoBehaviour
                 {
                     fashionCount = 0;
                     Destroy(fashion.transform.GetChild(0).gameObject);
+                    Instantiate(fashionList[fashionCount], fashion.transform);
+                    fashionCount++;
                 }
                 else
                 {
@@ -371,6 +373,7 @@ public class Player : MonoBehaviour
             {
                 onButton = false;
             }
+            Debug.Log(fashionCount);
         }
 
         if (other.gameObject.tag == "Time")
@@ -453,18 +456,13 @@ public class Player : MonoBehaviour
                 foreach (Collider hit in colliders)
                 {
                     if (ReplayRecorder.instance.isReplaying) return;
-                    //if (hit == transform) return;
                     if (hit.GetComponent<Player>() != null)
                     {
-                        Debug.Log($"[移動速度] {hit.name} に力を適用しました");
-
-
+                        Rigidbody rb = hit.GetComponent<Rigidbody>();
                         if (!hit.GetComponent<Player>().useSkill)
                         {
-
                             // 移動速度を遅くする
-                            hit.GetComponent<Player>().Speed = 0;
-
+                            rb.velocity *= 0.7f;
                         }
                     }
                 }

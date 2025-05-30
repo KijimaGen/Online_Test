@@ -208,8 +208,9 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < playerList.Count; i++)
         {
-            if (!playerList[i].ready) playerReady = false; 
-            if (playerList[i].ready) playerReady = true; 
+            if (!playerList[i].ready) return;
+
+            playerReady = true;
         }
 
         if (playerReady)
