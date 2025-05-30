@@ -77,9 +77,9 @@ public class Player : MonoBehaviour
 
         Max
     }
-    SkillType skillType;
-    ParticleSystem skillEffect;
-
+    public SkillType skillType;
+    GameObject skillEffect;
+    public float Speed = 0;
 
     void Start()
     {
@@ -352,12 +352,7 @@ public class Player : MonoBehaviour
         {
             if (Input.GetKey("joystick " + index + " button 4") && !onButton)
             {
-                GameObject fashion = transform.Find("アーマチュア/ボーン.001/衣装").gameObject;
-                if (fashion.transform.childCount == 1)
-                {
-                    Destroy(fashion.transform.GetChild(0).gameObject);
-                }
-               
+                GameObject fashion = transform.Find("アーマチュア/ボーン.001/衣装").gameObject;               
                 if(fashionCount >= fashionList.Count) 
                 {
                     fashionCount = 0;
@@ -365,6 +360,7 @@ public class Player : MonoBehaviour
                 }
                 else
                 {
+                    Destroy(fashion.transform.GetChild(0).gameObject);
                     Instantiate(fashionList[fashionCount], fashion.transform);
                     fashionCount++;
                 }
@@ -432,14 +428,16 @@ public class Player : MonoBehaviour
 
     private void OnMove()
     {
-        float Speed = 0;
+
+        //skillEffect = transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).GetChild(0).GetChild(0).GetComponent<ParticleSystem>();
+        skillEffect = transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).transform.Find("SkillEffect").GetChild(0).gameObject;
+        
         if (useSkill)
         {
-            skillEffect = transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).transform.Find("SkillEffect").GetComponent<ParticleSystem>();
-            skillEffect.gameObject.SetActive(true);
+            SetLayerRecursively(skillEffect, 10);
             if (skillType == SkillType.Normal)
             {
-                var main = skillEffect.main;
+                var main = skillEffect.transform.GetComponent<ParticleSystem>().main;
                 main.startColor = playerMaterial[playerName - 1].color;
                 Speed = 10;
             }
@@ -449,10 +447,34 @@ public class Player : MonoBehaviour
                 Speed = 10;
             }
 
+            if (skillType == SkillType.Winter)
+            {
+                Collider[] colliders = Physics.OverlapSphere(transform.position, 20);
+                foreach (Collider hit in colliders)
+                {
+                    if (ReplayRecorder.instance.isReplaying) return;
+                    //if (hit == transform) return;
+                    if (hit.GetComponent<Player>() != null)
+                    {
+                        Debug.Log($"[移動速度] {hit.name} に力を適用しました");
+
+
+                        if (!hit.GetComponent<Player>().useSkill)
+                        {
+
+                            // 移動速度を遅くする
+                            hit.GetComponent<Player>().Speed = 0;
+
+                        }
+                    }
+                }
+                Speed = 10;
+            }
+
         }
         else
         {
-            skillEffect?.gameObject?.SetActive(false);
+            SetLayerRecursively(skillEffect, 11);
             Speed = 8;
         }
 
@@ -541,6 +563,18 @@ public class Player : MonoBehaviour
             rb.AddForce(Vector3.down * 9.81f, ForceMode.Acceleration);
     }
 
+    void SetLayerRecursively(GameObject obj, int layer)
+    {
+        if (obj == null) return;
+
+        obj.layer = layer;
+
+        foreach (Transform child in obj.transform)
+        {
+            SetLayerRecursively(child.gameObject, layer);
+        }
+    }
+
     public bool AnimEnd()
     {
         animator.SetBool("Front", false);
@@ -617,19 +651,19 @@ public class Player : MonoBehaviour
                 currentRate = 0;
                 skillGauge.DOFillAmount(currentRate, duration);
                 useSkill = true;
-                if(transform.Find("アーマチュア/ボーン.001/衣装").childCount == 0)
+                if(transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装通常(Clone)")
                 {
                     skillType = SkillType.Normal;
                 }
-                else if(transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装海賊")
+                else if(transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装海賊(Clone)")
                 {
                     skillType = SkillType.Pirate;
                 }
-                else if (transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装悪魔")
+                else if (transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装悪魔(Clone)")
                 {
                     skillType = SkillType.Demon;
                 }
-                else if (transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装冬")
+                else if (transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装冬(Clone)")
                 {
                     skillType = SkillType.Winter;
                 }

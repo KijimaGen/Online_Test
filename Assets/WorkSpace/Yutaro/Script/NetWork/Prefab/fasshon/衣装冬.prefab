@@ -42,6 +42,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4672101070178000285}
+  - component: {fileID: 543328610742784692}
   m_Layer: 8
   m_Name: SkillEffect
   m_TagString: Untagged
@@ -65,6 +66,14 @@ Transform:
   - {fileID: 3591946618515296402}
   m_Father: {fileID: 8073205245667035503}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!222 &543328610742784692
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4163204058030764769}
+  m_CullTransparentMesh: 1
 --- !u!1001 &1893782252196547618
 PrefabInstance:
   m_ObjectHideFlags: 0
