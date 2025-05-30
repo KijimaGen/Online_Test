@@ -48,7 +48,6 @@ public class Shuttle : MonoBehaviour
         {
             fallPoint.color = Color.red;
         }
-        Debug.Log(dir);
     }
 
 
