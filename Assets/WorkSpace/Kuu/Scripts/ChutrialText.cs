@@ -10,6 +10,8 @@ public class ChutrialText : MonoBehaviour
     public TextMesh text;
     // テキストを変えるためのカウント
     int textCount = 0;
+    // テキストの最大数
+    int TEXT_MAX = 11;
     // テキストが戻ったことがあるかのフラグ
     bool textJoin = false;
     // Start is called before the first frame update
@@ -22,16 +24,16 @@ public class ChutrialText : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // 下降制限0
+        // 下降制限
         if (textCount < 0) {
             textCount = 0;
         }
-        // 上昇制限8
-        if (textCount > 8) {
-            textCount = 8;
+        // 上昇制限
+        if (textCount > TEXT_MAX) {
+            textCount = TEXT_MAX;
         }
-        // Aを押したらテキストを進める
-        if (Input.GetKeyDown(KeyCode.JoystickButton3) == true || Input.GetMouseButtonDown(0)) {
+        // RBを押したらテキストを進める
+        if (Input.GetKeyDown(KeyCode.JoystickButton5) == true || Input.GetMouseButtonDown(0)) {
             // 参加していなかったら進まない
             if (!(textCount == 1) && !textJoin) {
                 textCount++;
@@ -71,8 +73,14 @@ public class ChutrialText : MonoBehaviour
         } else if (textCount == 6) {
             text.text = "Bで相手プレイヤーを攻撃すると吹っ飛びます";
         } else if (textCount == 7) {
-            text.text = "倒れてしまった時はAを押せば戻ります";
+            text.text = "スペシャルゲージがMAXの時にYを押すとスペシャルが使えます";
         } else if (textCount == 8) {
+            text.text = "スペシャル発動中はスピードと打つ力が上がります";
+        } else if (textCount == 9) {
+            text.text = "スペシャルゲージは時間経過で増えます";
+        } else if (textCount == 10) {
+            text.text = "倒れてしまった時はAを押せば戻ります";
+        } else if (textCount == TEXT_MAX) {
             text.text = "STARTボタンで試合開始です";
         }
     }
