@@ -9,7 +9,7 @@ public class ItemManager : MonoBehaviour {
 
     [SerializeField]List<GameObject> items = new List<GameObject>(4);
     [SerializeField]int canSpawn;
-    [SerializeField] private bool isStopped;
+    public static bool isStopped;
     Vector3 center;
     float radius = 7;
     [SerializeField]float speed = 1;

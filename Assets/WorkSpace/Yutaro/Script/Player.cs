@@ -98,6 +98,8 @@ public class Player : MonoBehaviour
             if(renderer.gameObject.name == "球") { renderer.material = playerMaterial[4]; }
             if(renderer.gameObject.name == "球.001") { renderer.material = playerMaterial[4]; }
         }
+        
+        skillGauge?.transform?.DOKill();
     }
 
     private void FixedUpdate()
@@ -222,7 +224,7 @@ public class Player : MonoBehaviour
             if (transform.position.x <= -1)
             {
                 hitPoint.transform.localPosition = new Vector3(transform.position.x - 2, 1, transform.position.z);
-                Debug.Log("敵陣");
+                
                 enemyCamp = true;
             }
             else
@@ -637,7 +639,7 @@ public class Player : MonoBehaviour
         if (!useSkill)
         {
             float targetRate = currentRate + 1f / skillGaugeAmountMax;
-            skillGauge.DOFillAmount(targetRate, duration);
+            skillGauge.fillAmount = targetRate;
             currentRate = targetRate;
         }
        
@@ -647,7 +649,7 @@ public class Player : MonoBehaviour
             if (Input.GetKey("joystick " + index + " button 3"))
             {
                 currentRate = 0;
-                skillGauge.DOFillAmount(currentRate, duration);
+                skillGauge?.DOFillAmount(currentRate, duration);
                 useSkill = true;
                 if(transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装通常(Clone)")
                 {

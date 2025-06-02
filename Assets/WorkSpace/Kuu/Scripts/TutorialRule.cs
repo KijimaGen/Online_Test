@@ -43,6 +43,7 @@ public class TutorialRule : MonoBehaviour
         }
         // BACKボタンでタイトルへ戻る
         if (Input.GetKeyDown(KeyCode.JoystickButton6)) {
+            ItemManager.isStopped = true;
             // チュートリアル終了
             tutorial = false;
             // タイトルへ

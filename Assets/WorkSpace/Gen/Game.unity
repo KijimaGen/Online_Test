@@ -369,7 +369,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10308, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 123ac6dc79004e54b8b352a7e64acdca, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -390,7 +390,7 @@ ParticleSystemRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_MeshDistribution: 0
   m_SortMode: 0
   m_MinParticleSize: 0
@@ -5462,6 +5462,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 6f2ffa3c740358342a6511d63458570b, type: 3}
   - {fileID: 0}
   - {fileID: 0}
+  BGMClips: []
+  SESource: {fileID: 0}
+  BGMSource: {fileID: 0}
 --- !u!82 &635060356
 AudioSource:
   m_ObjectHideFlags: 0
@@ -7238,6 +7241,7 @@ MonoBehaviour:
   - {fileID: 7185347295719555895, guid: d63e3e606e68fe64995975dc558276d9, type: 3}
   - {fileID: 7128986650356631936, guid: 1dfd4233cbb784e4cb7b4ad7316f1bde, type: 3}
   canSpawn: 0
+  isStopped: 0
   speed: 1
 --- !u!4 &1708505793
 Transform:
