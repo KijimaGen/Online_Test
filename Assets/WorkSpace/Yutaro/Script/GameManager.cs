@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
         
 
         countDownTitle.SetActive(false);
-        roundTime = 2;
+        roundTime = 20;
         tempRoundTime = roundTime;
         serveTeam = Random.Range(0,2);
     }
