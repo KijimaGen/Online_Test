@@ -128,7 +128,8 @@ public class GameManager : MonoBehaviour
             startCount += Time.deltaTime;
             countDownTitle.SetActive(true);
             countDownTitle.GetComponent<TextMeshProUGUI>().text = (3f - startCount).ToString("f0");
-            if (startCount > 3f)
+            // チュートリアルだったら最初のカウントしない
+            if (startCount > 3f || TutorialRule.tutorial)
             {
                 roundStart = false;
                 countDownTitle.SetActive(false);
