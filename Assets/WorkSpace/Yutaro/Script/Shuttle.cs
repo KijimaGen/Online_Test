@@ -61,68 +61,66 @@ public class Shuttle : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!transform.GetChild(0).GetComponent<MeshRenderer>().enabled) return;
-        if (GameManager.instance.state==GameManager.gameState.standBy) return;
-        if (collision.gameObject.name == "赤床")
-        {
-            transform.GetComponent<Collider>().enabled = false;
-            transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
-            Invoke("SetGameReplay", 3);
-            rb.isKinematic = true;
-            TriggerShockwave();
+        // チュートリアルじゃなかったら実行
+        if (!TutorialRule.tutorial) {
+            if (!transform.GetChild(0).GetComponent<MeshRenderer>().enabled) return;
+            if (GameManager.instance.state == GameManager.gameState.standBy) return;
+            if (collision.gameObject.name == "赤床") {
+                transform.GetComponent<Collider>().enabled = false;
+                transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+                Invoke("SetGameReplay", 3);
+                rb.isKinematic = true;
+                TriggerShockwave();
 
-            if (ReplayRecorder.instance.isReplaying) return;
-            ScoreManager.instance.whiteScore++;
-            if(touchTeam == 1)
-            GameManager.instance.serveTeam = 0;
+                if (ReplayRecorder.instance.isReplaying) return;
+                ScoreManager.instance.whiteScore++;
+                if (touchTeam == 1)
+                    GameManager.instance.serveTeam = 0;
 
-            if (touchTeam == 0)
-                GameManager.instance.serveTeam = 0;
-            for (int i = 0; i < GameManager.instance.playerList.Count; i++)
-            {
-                if(lastTouch == i + 1) { GameManager.instance.playerList[i].goal++; }
+                if (touchTeam == 0)
+                    GameManager.instance.serveTeam = 0;
+                for (int i = 0; i < GameManager.instance.playerList.Count; i++) {
+                    if (lastTouch == i + 1) { GameManager.instance.playerList[i].goal++; }
+                }
+                //効果音(爆発(得点))
+                SoundManager.Instance.PlaySound(1);
             }
-            //効果音(爆発(得点))
-            SoundManager.Instance.PlaySound(1);
-        }
 
-        if (collision.gameObject.name == "白床")
-        {
-            transform.GetComponent<Collider>().enabled = false;
-            transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
-            Invoke("SetGameReplay", 2);
-            rb.isKinematic = true;
-            TriggerShockwave();
+            if (collision.gameObject.name == "白床") {
+                transform.GetComponent<Collider>().enabled = false;
+                transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+                Invoke("SetGameReplay", 2);
+                rb.isKinematic = true;
+                TriggerShockwave();
 
-            if (ReplayRecorder.instance.isReplaying) return;
-            ScoreManager.instance.redScore++;
-            if (touchTeam == 0)
-                GameManager.instance.serveTeam = 1;
+                if (ReplayRecorder.instance.isReplaying) return;
+                ScoreManager.instance.redScore++;
+                if (touchTeam == 0)
+                    GameManager.instance.serveTeam = 1;
 
-            if (touchTeam == 1)
-                GameManager.instance.serveTeam = 1;
-            for (int i = 0; i < GameManager.instance.playerList.Count; i++)
-            {
-                if (lastTouch == i + 1) { GameManager.instance.playerList[i].goal++; }
-                //Debug.Log("ゴール"+ GameManager.instance.playerList[i].goal);
+                if (touchTeam == 1)
+                    GameManager.instance.serveTeam = 1;
+                for (int i = 0; i < GameManager.instance.playerList.Count; i++) {
+                    if (lastTouch == i + 1) { GameManager.instance.playerList[i].goal++; }
+                    //Debug.Log("ゴール"+ GameManager.instance.playerList[i].goal);
+                }
+                //効果音(爆発(得点))
+                SoundManager.Instance.PlaySound(1);
             }
-            //効果音(爆発(得点))
-            SoundManager.Instance.PlaySound(1);
-        }
 
-        if (collision.gameObject.tag == "Out")
-        {
-            transform.GetComponent<Collider>().enabled = false;
-            transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
-            Invoke("SetGameReplay", 2);
-            rb.isKinematic = true;
+            if (collision.gameObject.tag == "Out") {
+                transform.GetComponent<Collider>().enabled = false;
+                transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+                Invoke("SetGameReplay", 2);
+                rb.isKinematic = true;
 
-            if (ReplayRecorder.instance.isReplaying) return;
-            if(touchTeam == 0) { ScoreManager.instance.redScore++; GameManager.instance.serveTeam = 1; }
-            if(touchTeam == 1) { ScoreManager.instance.whiteScore++; GameManager.instance.serveTeam = 0; }
-            //ScoreManager.instance.redScore++;
-            //効果音(爆発(失点))
-            SoundManager.Instance.PlaySound(2);
+                if (ReplayRecorder.instance.isReplaying) return;
+                if (touchTeam == 0) { ScoreManager.instance.redScore++; GameManager.instance.serveTeam = 1; }
+                if (touchTeam == 1) { ScoreManager.instance.whiteScore++; GameManager.instance.serveTeam = 0; }
+                //ScoreManager.instance.redScore++;
+                //効果音(爆発(失点))
+                SoundManager.Instance.PlaySound(2);
+            }
         }
     }
 
