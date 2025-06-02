@@ -181,9 +181,9 @@ public class Player : MonoBehaviour
         if (Input.GetKey("joystick " + index + " button 0"))
         {
             if (gameObject.transform.tag == "RedTeam")
-                transform.DORotate(Vector3.zero, 0.5f);
+                transform.DORotate(Vector3.zero, 0.5f).SetLink(this.gameObject);
             else
-                transform.DORotate(Vector3.zero + new Vector3(0, 180, 0), 0.5f);
+                transform.DORotate(Vector3.zero + new Vector3(0, 180, 0), 0.5f).SetLink(this.gameObject);
         }
         if (Input.GetKey("joystick " + index + " button 1") && !animPlay && transform.tag != "Player" || 
             Input.GetKey(KeyCode.Space)  && !animPlay && transform.tag != "Player" )
@@ -658,7 +658,7 @@ public class Player : MonoBehaviour
             if (Input.GetKey("joystick " + index + " button 3"))
             {
                 currentRate = 0;
-                skillGauge?.DOFillAmount(currentRate, duration);
+                skillGauge?.DOFillAmount(currentRate, duration).SetLink(this.gameObject);
                 useSkill = true;
                 if(transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装通常(Clone)")
                 {

@@ -55,11 +55,12 @@ public abstract class Item : MonoBehaviour{
 
         await UniTask.Delay(10000);
 
-        while (t < 1f) {
-            if (this == null)
-                break;
+        if (!this || !gameObject) return;
 
-                t += Time.deltaTime / time;
+        while (t < 1f) {
+            if (!this || !gameObject) return;
+
+            t += Time.deltaTime / time;
             foreach (var mat in materials) {
                 Color color = mat.color;
                 color.a = Mathf.Lerp(1f, 0f, t);
@@ -67,7 +68,7 @@ public abstract class Item : MonoBehaviour{
             }
             await UniTask.Yield();
         }
-        if (this != null)
+        if (this.gameObject != null)
             Destroy(gameObject);
     }
     public abstract void Initialize();
