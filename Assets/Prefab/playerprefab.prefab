@@ -4095,6 +4095,7 @@ MonoBehaviour:
   - {fileID: 3783500124456644250, guid: 916495d17c911664db60e0b9285623ef, type: 3}
   - {fileID: 2561269057089973319, guid: 97f91a0b9445ab9489218374a25483d3, type: 3}
   demonSowrd: {fileID: 8413490214916927165, guid: e6ff3fb3eefe84d43b1243c1a8e6f269, type: 3}
+  pirateCannon: {fileID: 2429467811493995007, guid: 6eae79c55a8376046908470eecc6696d, type: 3}
   attack: 0
   playerName: 0
   score: 0

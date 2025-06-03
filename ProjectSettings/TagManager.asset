@@ -16,6 +16,7 @@ TagManager:
   - Time
   - Color
   - SlowChage
+  - Warp
   layers:
   - Default
   - TransparentFX

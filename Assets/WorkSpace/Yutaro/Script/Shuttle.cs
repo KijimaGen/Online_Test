@@ -145,6 +145,7 @@ public class Shuttle : MonoBehaviour
                 {
                     player.chargeSlider.fillAmount = 0.2f;
                 }
+                player.currentRate += 0.05f;
 
                 var dirX = Vector3.zero.x - player.transform.position.x;
                 if(dirX < 10f) { dirX = 10; }

@@ -1,5 +1,4 @@
 using DG.Tweening;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -23,6 +22,7 @@ public class Player : MonoBehaviour
     [SerializeField] private List<GameObject> fashionList;
 
     [SerializeField] private GameObject demonSowrd;
+    [SerializeField] private GameObject pirateCannon;
 
     public bool attack;
 
@@ -69,8 +69,9 @@ public class Player : MonoBehaviour
     float skillGaugeAmountMax = 100;
     Image skillGauge;
     float duration = 0.2f;
-    float currentRate = 0.0f;
+    public float currentRate = 0.0f;
     float skillTime;
+    float skillMaxTime;
     public bool useSkill;
     public enum SkillType
     {
@@ -375,9 +376,44 @@ public class Player : MonoBehaviour
     {
         if (other.gameObject.tag == "SlowChage")
         {
-            chargeSlider.fillAmount -= 0.001f;
+            if (skillType != SkillType.Normal)
+            {
+                chargeSlider.fillAmount -= 0.001f;
+            }
+
+            if (skillType == SkillType.Normal)
+            {
+                if (!useSkill)
+                {
+                    chargeSlider.fillAmount -= 0.001f;
+                }
+            }
         }
 
+        if (other.gameObject.tag == "Warp")
+        {
+            if (skillType != SkillType.Normal)
+            {
+                float posX = Random.Range(-10, 10);
+                float posZ = Random.Range(-2.5f, 8);
+
+                transform.position = new Vector3(posX, 2, posZ);
+
+            }
+
+            if(skillType == SkillType.Normal)
+            {
+                if (!useSkill)
+                {
+                    float posX = Random.Range(-10, 10);
+                    float posZ = Random.Range(-2.5f, 8);
+
+                    transform.position = new Vector3(posX, 2, posZ);
+                }
+            }
+
+            Destroy(other.gameObject);
+        }
 
         if (GameManager.instance.state != GameManager.gameState.standBy) return;
 
@@ -480,13 +516,32 @@ public class Player : MonoBehaviour
                 Speed = 10;
             }
 
+            if (skillType == SkillType.Pirate)
+            {
+                if (!onSkillItem)
+                {
+                    if (transform.tag == "WhiteTeam")
+                    {
+                        GameObject cannon = Instantiate(pirateCannon, new Vector3(12.8f, 30, 3.36f), Quaternion.Euler(0, 0, 0));
+                        skillObject.Add(cannon);
+                    }
+                    if (transform.tag == "RedTeam")
+                    {
+                        GameObject cannon = Instantiate(pirateCannon, new Vector3(-12.8f, 30, 3.36f), Quaternion.Euler(0, 180, 0));
+                        skillObject.Add(cannon);
+                    }
+                    onSkillItem = true;
+                }
+                Speed = 10;
+            }
+
             if (skillType == SkillType.Demon)
             {
                 if (!onSkillItem)
                 {
                     if (transform.tag == "WhiteTeam")
                     {
-                        GameObject sword = Instantiate(demonSowrd, new Vector3(-5, 56, 3.36f), Quaternion.Euler(180,0,0));
+                        GameObject sword = Instantiate(demonSowrd, new Vector3(-5, 70, 3.36f), Quaternion.Euler(180,0,0));
                         skillObject.Add(sword);
                     }
                     if (transform.tag == "RedTeam")
@@ -511,11 +566,19 @@ public class Player : MonoBehaviour
                     if (hit.GetComponent<Player>() != null)
                     {
                         Rigidbody rb = hit.GetComponent<Rigidbody>();
-                        if (!hit.GetComponent<Player>().useSkill && hit.GetComponent<Player>().skillType != SkillType.Normal)
+                        if (hit.GetComponent<Player>().skillType != SkillType.Normal)
                         {
-                            // 移動速度を遅くする
                             rb.velocity *= 0.5f;
                         }
+
+                        if (hit.GetComponent<Player>().skillType == SkillType.Normal || hit.GetComponent<Player>().skillType == SkillType.Winter)
+                        {
+                            if (!hit.GetComponent<Player>().useSkill)
+                            {
+                                rb.velocity *= 0.5f;
+                            }
+                        }
+
                     }
                 }
                 Speed = 10;
@@ -527,7 +590,7 @@ public class Player : MonoBehaviour
             onSkillItem = false;
             for (int i = 0; i < skillObject.Count; i++)
             {
-                Destroy(skillObject[i]);
+               Destroy(skillObject[i]);
             }
             SetLayerRecursively(skillEffect, 11);
             Speed = 8;
@@ -727,18 +790,22 @@ public class Player : MonoBehaviour
                 if(transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装通常(Clone)")
                 {
                     skillType = SkillType.Normal;
+                    skillMaxTime = 10;
                 }
                 else if(transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装海賊(Clone)")
                 {
                     skillType = SkillType.Pirate;
+                    skillMaxTime = 20;
                 }
                 else if (transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装悪魔(Clone)")
                 {
                     skillType = SkillType.Demon;
+                    skillMaxTime = 10;
                 }
                 else if (transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装冬(Clone)")
                 {
                     skillType = SkillType.Winter;
+                    skillMaxTime = 10;
                 }
             }
         }
@@ -749,8 +816,9 @@ public class Player : MonoBehaviour
 
         if(useSkill)
         {
+            currentRate = 0;
             skillTime += Time.deltaTime;
-            if(skillTime > 10)
+            if(skillTime > skillMaxTime)
             {
                 skillTime = 0;
                 useSkill = false;
