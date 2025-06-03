@@ -3,9 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using static GameManager;
-using static UnityEngine.GraphicsBuffer;
 
 public class ItemManager : MonoBehaviour {
 
@@ -35,20 +33,15 @@ public class ItemManager : MonoBehaviour {
             await CalcPosition();
             
         }
-
-        if(SceneManager.GetActiveScene().name == "ChutorialScene" && Input.GetKeyDown(KeyCode.JoystickButton6)) { //ゲームシーンがチュートリアルで尚且つBackボタンでアイテムをケス
-            Destroy(this.gameObject);
-        }
     }
 
     private async UniTask CreateItem() {
         while (true) {
-            await UniTask.Delay(Random.Range(500, 2500));  //ここで乱数で待ち時間を取ることでランダム化を図る
-            if (!this || !gameObject) return;
+            await UniTask.Delay(Random.Range(1000, 3000));  //ここで乱数で待ち時間を取ることでランダム化を図る
             if (!isStopped) {
+                                                               
                 canSpawn = Random.Range(0, 10); //乱数を生成
                 if (canSpawn < 5) {
-                    if (!this || !gameObject) return;
                     Instantiate(items[Random.Range(0, items.Count)], transform.position, Quaternion.identity); //アイテムの生成
                     SoundManager.Instance.PlaySound(0);
                 }

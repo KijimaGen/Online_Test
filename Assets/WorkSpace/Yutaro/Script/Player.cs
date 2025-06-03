@@ -1,5 +1,4 @@
 using DG.Tweening;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -10,6 +9,7 @@ using UnityEngine.Assertions.Must;
 using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
+    public List<GameObject> skillObject;
     bool redTeam;
     bool whiteTeam;
     bool independentTeam;
@@ -20,6 +20,9 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject scoreBoard;
     [SerializeField] private Image[] stampPrefab;
     [SerializeField] private List<GameObject> fashionList;
+
+    [SerializeField] private GameObject demonSowrd;
+    [SerializeField] private GameObject pirateCannon;
 
     public bool attack;
 
@@ -43,6 +46,7 @@ public class Player : MonoBehaviour
 
     public bool replayCancel;
     public bool ready;
+    public bool nextGame;
 
     bool stampPlay;
     float stampTime;
@@ -65,8 +69,9 @@ public class Player : MonoBehaviour
     float skillGaugeAmountMax = 100;
     Image skillGauge;
     float duration = 0.2f;
-    float currentRate = 0.0f;
+    public float currentRate = 0.0f;
     float skillTime;
+    float skillMaxTime = 10;
     public bool useSkill;
     public enum SkillType
     {
@@ -80,6 +85,8 @@ public class Player : MonoBehaviour
     public SkillType skillType;
     GameObject skillEffect;
     public float Speed = 0;
+
+    bool onSkillItem;
 
     void Start()
     {
@@ -119,6 +126,7 @@ public class Player : MonoBehaviour
                 Destroy(textObj);
             }
         }
+        
         if (GameManager.instance.state == GameManager.gameState.standBy)
         {
             GameObject card = GameObject.Find("Card" + playerName).gameObject;
@@ -132,7 +140,7 @@ public class Player : MonoBehaviour
                     readyText.text = "Ready";
                     readyText.color = Color.yellow;
                 }
-                if (Input.GetKey("joystick " + index + " button 6")|| !ready)
+                if (Input.GetKey("joystick " + index + " button 6") || !ready)
                 {
                     ready = false;
                     readyText.text = "UnReady";
@@ -172,9 +180,7 @@ public class Player : MonoBehaviour
           // return;
         }
         //ScoreBoard();
-        nameText.text = playerName.ToString() + "P";
-        if(gameObject.tag == "RedTeam") { nameText.color = Color.red; }
-        if(gameObject.tag == "WhiteTeam") { nameText.color = Color.white; }
+        
 
         OnMove();
         WhichDir();
@@ -207,6 +213,12 @@ public class Player : MonoBehaviour
             if (!right && !left && !Smash)
             { animator.SetBool("Front", true); }
         }
+
+        if(chargeSlider.fillAmount < 0)
+        {
+            chargeSlider.fillAmount = 0;
+        }
+
         if(!animPlay)
         {
             
@@ -242,6 +254,7 @@ public class Player : MonoBehaviour
             }
             if (!enemyCamp)
             {
+                
                 if (chargeSlider.fillAmount >= 0.4f)
                 {
                     Smash = true;
@@ -255,6 +268,10 @@ public class Player : MonoBehaviour
                     hitPoint.transform.position = new Vector3(rb.velocity.x * -dirX * 0.05f, 8 - chargeSlider.fillAmount * 10 - dirX / 3, transform.position.z + velocityZ / 2);
                     boxCollider.center = new Vector3(boxCollider.center.x, 1.18f, boxCollider.center.z);
                     boxCollider.size = new Vector3(boxCollider.size.x, 5.37f, boxCollider.size.z);
+                    if (useSkill)
+                    {
+                        hitPoint.transform.position = new Vector3(rb.velocity.x * -dirX * 0.05f, 4f + dirX * 0.1f, transform.position.z + velocityZ / 2);
+                    }
                 }
 
             }
@@ -267,8 +284,7 @@ public class Player : MonoBehaviour
             scoreBoard.transform.localRotation = Quaternion.Euler(0, 0, 0);
             if(transform.position.x >= -1)
             {
-                hitPoint.transform.localPosition = new Vector3(transform.position.x - 2, 1, transform.position.z);
-                Debug.Log("敵陣");
+                hitPoint.transform.localPosition = new Vector3(transform.position.x + 2, 1, transform.position.z);
                 enemyCamp = true;
             }
             else
@@ -277,11 +293,8 @@ public class Player : MonoBehaviour
             }
             if (!enemyCamp)
             {
-                if (useSkill)
-                {
-                    hitPoint.transform.position = new Vector3(rb.velocity.x * dirX * 0.05f, 4f + dirX * 0.1f, transform.position.z + velocityZ / 2);
-                }
-                else if (chargeSlider.fillAmount >= 0.4f)
+                
+                if (chargeSlider.fillAmount >= 0.4f)
                 {
                     Smash = true;
                     chargeSlider.fillAmount = 0.4f;
@@ -295,6 +308,10 @@ public class Player : MonoBehaviour
                     hitPoint.transform.position = new Vector3(rb.velocity.x * dirX * 0.05f, 8 - chargeSlider.fillAmount * 10 + dirX / 3, transform.position.z + velocityZ / 2);
                     boxCollider.center = new Vector3(boxCollider.center.x, 1.18f, boxCollider.center.z);
                     boxCollider.size = new Vector3(boxCollider.size.x, 5.37f, boxCollider.size.z);
+                    if (useSkill)
+                    {
+                        hitPoint.transform.position = new Vector3(rb.velocity.x * dirX * 0.05f, 4f + dirX * 0.1f, transform.position.z + velocityZ / 2);
+                    }
                 }
             }
 
@@ -357,6 +374,47 @@ public class Player : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        if (other.gameObject.tag == "SlowChage")
+        {
+            if (skillType != SkillType.Normal)
+            {
+                chargeSlider.fillAmount -= 0.001f;
+            }
+
+            if (skillType == SkillType.Normal)
+            {
+                if (!useSkill)
+                {
+                    chargeSlider.fillAmount -= 0.001f;
+                }
+            }
+        }
+
+        if (other.gameObject.tag == "Warp")
+        {
+            if (skillType != SkillType.Normal)
+            {
+                float posX = Random.Range(-10, 10);
+                float posZ = Random.Range(-2.5f, 8);
+
+                transform.position = new Vector3(posX, 2, posZ);
+
+            }
+
+            if(skillType == SkillType.Normal)
+            {
+                if (!useSkill)
+                {
+                    float posX = Random.Range(-10, 10);
+                    float posZ = Random.Range(-2.5f, 8);
+
+                    transform.position = new Vector3(posX, 2, posZ);
+                }
+            }
+
+            Destroy(other.gameObject);
+        }
+
         if (GameManager.instance.state != GameManager.gameState.standBy) return;
 
         if (other.gameObject.tag == "Fashion")
@@ -449,6 +507,8 @@ public class Player : MonoBehaviour
         if (useSkill)
         {
             SetLayerRecursively(skillEffect, 10);
+            
+
             if (skillType == SkillType.Normal)
             {
                 var main = skillEffect.transform.GetComponent<ParticleSystem>().main;
@@ -458,6 +518,42 @@ public class Player : MonoBehaviour
 
             if (skillType == SkillType.Pirate)
             {
+                if (!onSkillItem)
+                {
+                    if (transform.tag == "WhiteTeam")
+                    {
+                        GameObject cannon = Instantiate(pirateCannon, new Vector3(12.8f, 30, 3.36f), Quaternion.Euler(0, 0, 0));
+                        skillObject.Add(cannon);
+                    }
+                    if (transform.tag == "RedTeam")
+                    {
+                        GameObject cannon = Instantiate(pirateCannon, new Vector3(-12.8f, 30, 3.36f), Quaternion.Euler(0, 180, 0));
+                        skillObject.Add(cannon);
+                    }
+                    onSkillItem = true;
+                }
+                Speed = 10;
+            }
+
+            if (skillType == SkillType.Demon)
+            {
+                if (!onSkillItem)
+                {
+                    if (transform.tag == "WhiteTeam")
+                    {
+                        GameObject sword = Instantiate(demonSowrd, new Vector3(-5, 70, 3.36f), Quaternion.Euler(180,0,0));
+                        skillObject.Add(sword);
+                    }
+                    if (transform.tag == "RedTeam")
+                    {
+                        GameObject sword = Instantiate(demonSowrd, new Vector3(5, 56, 3.36f), Quaternion.Euler(180, 0, 0));
+                        skillObject.Add(sword);
+                    }
+                    onSkillItem = true;
+                }
+                
+
+
                 Speed = 10;
             }
 
@@ -470,11 +566,19 @@ public class Player : MonoBehaviour
                     if (hit.GetComponent<Player>() != null)
                     {
                         Rigidbody rb = hit.GetComponent<Rigidbody>();
-                        if (!hit.GetComponent<Player>().useSkill && hit.GetComponent<Player>().skillType != SkillType.Normal)
+                        if (hit.GetComponent<Player>().skillType != SkillType.Normal)
                         {
-                            // 移動速度を遅くする
-                            rb.velocity *= 0.7f;
+                            rb.velocity *= 0.5f;
                         }
+
+                        if (hit.GetComponent<Player>().skillType == SkillType.Normal || hit.GetComponent<Player>().skillType == SkillType.Winter)
+                        {
+                            if (!hit.GetComponent<Player>().useSkill)
+                            {
+                                rb.velocity *= 0.5f;
+                            }
+                        }
+
                     }
                 }
                 Speed = 10;
@@ -483,6 +587,11 @@ public class Player : MonoBehaviour
         }
         else
         {
+            onSkillItem = false;
+            for (int i = 0; i < skillObject.Count; i++)
+            {
+               Destroy(skillObject[i]);
+            }
             SetLayerRecursively(skillEffect, 11);
             Speed = 8;
         }
@@ -636,6 +745,24 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.instance.state == GameManager.gameState.result)
+        {
+            nameText.transform.localPosition = new Vector3(1.86f,10f,0);
+            nameText.color = Color.black;
+            if (Input.GetKey("joystick " + index + " button 1"))
+            {
+                nextGame = true;
+                nameText.text = "READY FOR THE NEXT GAME";
+            }
+        }
+        else
+        {
+            nameText.transform.localPosition = new Vector3(1.86f, 6.66f, 0);
+            nameText.text = playerName.ToString() + "P";
+            if (gameObject.tag == "RedTeam") { nameText.color = Color.red; }
+            if (gameObject.tag == "WhiteTeam") { nameText.color = Color.white; }
+        }
+
         ScoreBoard();
         SkillGauge();
     }
@@ -663,18 +790,22 @@ public class Player : MonoBehaviour
                 if(transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装通常(Clone)")
                 {
                     skillType = SkillType.Normal;
+                    skillMaxTime = 10;
                 }
                 else if(transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装海賊(Clone)")
                 {
                     skillType = SkillType.Pirate;
+                    skillMaxTime = 20;
                 }
                 else if (transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装悪魔(Clone)")
                 {
                     skillType = SkillType.Demon;
+                    skillMaxTime = 10;
                 }
                 else if (transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装冬(Clone)")
                 {
                     skillType = SkillType.Winter;
+                    skillMaxTime = 10;
                 }
             }
         }
@@ -685,8 +816,9 @@ public class Player : MonoBehaviour
 
         if(useSkill)
         {
+            currentRate = 0;
             skillTime += Time.deltaTime;
-            if(skillTime > 10)
+            if(skillTime > skillMaxTime)
             {
                 skillTime = 0;
                 useSkill = false;

@@ -4079,6 +4079,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8af0bf429c97d234ea8ea242d0e1805d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillObject: []
   hitPoint: {fileID: 2277623346519860082}
   chargeSlider: {fileID: 8422244102951589345}
   nameText: {fileID: 994466701449033434}
@@ -4093,6 +4094,8 @@ MonoBehaviour:
   - {fileID: 2561269057089973319, guid: 4a5bbbb29b3f62940a99697ed3375cb7, type: 3}
   - {fileID: 3783500124456644250, guid: 916495d17c911664db60e0b9285623ef, type: 3}
   - {fileID: 2561269057089973319, guid: 97f91a0b9445ab9489218374a25483d3, type: 3}
+  demonSowrd: {fileID: 8413490214916927165, guid: e6ff3fb3eefe84d43b1243c1a8e6f269, type: 3}
+  pirateCannon: {fileID: 2429467811493995007, guid: 6eae79c55a8376046908470eecc6696d, type: 3}
   attack: 0
   playerName: 0
   score: 0
@@ -4102,6 +4105,7 @@ MonoBehaviour:
   counter: 0
   replayCancel: 0
   ready: 0
+  nextGame: 0
   replaySkipText: {fileID: 6559757118280075753, guid: 44fd16b1c8109284d82c38361404569f, type: 3}
   playerMaterial:
   - {fileID: 2100000, guid: 45eb59a9f9c7266439bf5068193a1b23, type: 2}
@@ -4383,7 +4387,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.86, y: 6.66}
+  m_AnchoredPosition: {x: 1.86, y: 9.95}
   m_SizeDelta: {x: 250.3, y: 93.05}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8439675162797318930
@@ -4427,7 +4431,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: P
 --- !u!1 &6830088096444014711
 GameObject:
   m_ObjectHideFlags: 0
