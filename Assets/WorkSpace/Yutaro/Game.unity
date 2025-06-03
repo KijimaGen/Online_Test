@@ -5907,7 +5907,6 @@ MonoBehaviour:
   - {fileID: 7185347295719555895, guid: d63e3e606e68fe64995975dc558276d9, type: 3}
   - {fileID: 7128986650356631936, guid: 1dfd4233cbb784e4cb7b4ad7316f1bde, type: 3}
   canSpawn: 0
-  isStopped: 0
   speed: 1
 --- !u!4 &1672552131
 Transform:
@@ -7555,6 +7554,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 359065886939180135, guid: e829adae8b5dbaf41b04dd3c7b4207e9, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.8732395
+      objectReference: {fileID: 0}
     - target: {fileID: 851582193128135044, guid: e829adae8b5dbaf41b04dd3c7b4207e9, type: 3}
       propertyPath: m_Name
       value: Shuttle

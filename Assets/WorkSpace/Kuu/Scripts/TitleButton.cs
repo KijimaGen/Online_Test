@@ -45,12 +45,12 @@ public class TitleButton : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     public void OnClickStart() {
         // 全てのフォーカスを解除
-        EventSystem.current.SetSelectedGameObject(null);
+        //EventSystem.current.SetSelectedGameObject(null);
         SoundManager.Instance.PlaySound(4);
 
         // ゲームシーン
@@ -59,7 +59,7 @@ public class TitleButton : MonoBehaviour
 
     public void OnClickRule() {
         // 全てのフォーカスを解除
-        EventSystem.current.SetSelectedGameObject(null);
+        //EventSystem.current.SetSelectedGameObject(null);
 
         // RuleCanvasを表示
         RuleCanvas.transform.gameObject.SetActive(true);
@@ -72,7 +72,7 @@ public class TitleButton : MonoBehaviour
 
     public void OnClickExit() {
         // 全てのフォーカスを解除
-        EventSystem.current.SetSelectedGameObject(null);
+        //EventSystem.current.SetSelectedGameObject(null);
 
         // ゲームを終了する
         // UnityEditorはビルドでは使えないので別の方法で落とす必要がある
@@ -83,7 +83,7 @@ public class TitleButton : MonoBehaviour
 
     public void OnClickOk() {
         // 全てのフォーカスを解除
-        EventSystem.current.SetSelectedGameObject(null);
+        //EventSystem.current.SetSelectedGameObject(null);
 
         // SelectCanvasを表示
         SelectCanvas.transform.gameObject.SetActive(true);
@@ -96,7 +96,7 @@ public class TitleButton : MonoBehaviour
 
     public void OnClickChutorial() {
         // 全てのフォーカスを解除
-        EventSystem.current.SetSelectedGameObject(null);
+        //EventSystem.current.SetSelectedGameObject(null);
 
         // ゲームシーン
         SceneManager.LoadScene("ChutorialScene");
