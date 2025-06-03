@@ -14,7 +14,7 @@ public class SoundManager : MonoBehaviour{
     [SerializeField]
     AudioSource BGMSource;
 
-    void Start() {
+    void Awake() {
         SESource = GetComponent<AudioSource>();
        
         if (Instance == null) {
