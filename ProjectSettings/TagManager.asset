@@ -15,6 +15,7 @@ TagManager:
   - Fashion
   - Time
   - Color
+  - SlowChage
   layers:
   - Default
   - TransparentFX

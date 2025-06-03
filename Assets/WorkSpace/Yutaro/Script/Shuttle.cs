@@ -141,9 +141,9 @@ public class Shuttle : MonoBehaviour
                 player.score += 10;
                 Transform point = player.hitPoint.transform;
 
-                if(player.chargeSlider.fillAmount <= 0.2)
+                if(player.chargeSlider.fillAmount <= 0.1)
                 {
-                    player.chargeSlider.fillAmount = 0.3f;
+                    player.chargeSlider.fillAmount = 0.2f;
                 }
 
                 var dirX = Vector3.zero.x - player.transform.position.x;
@@ -155,7 +155,7 @@ public class Shuttle : MonoBehaviour
                
                 else
                 {
-                    rb.AddForce((point.position - transform.position).normalized * player.chargeSlider.fillAmount * 12 * dirX, ForceMode.Impulse);
+                    rb.AddForce((point.position - transform.position).normalized * player.chargeSlider.fillAmount * 16 * dirX, ForceMode.Impulse);
                 }
                 if(other.transform.parent.tag == "WhiteTeam") { touchTeam = 0; }
                 if(other.transform.parent.tag == "RedTeam") { touchTeam = 1; }

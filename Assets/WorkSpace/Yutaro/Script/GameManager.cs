@@ -65,6 +65,7 @@ public class GameManager : MonoBehaviour
     public int serveTeam = 0;
 
     bool playerReady;
+    bool playerNextGame;
 
     bool resetGame;
     // Start is called before the first frame update
@@ -77,7 +78,7 @@ public class GameManager : MonoBehaviour
         
 
         countDownTitle.SetActive(false);
-        roundTime = 20;
+        roundTime = 60;
         tempRoundTime = roundTime;
         serveTeam = Random.Range(0,2);
     }
@@ -117,11 +118,8 @@ public class GameManager : MonoBehaviour
                 break;
             case gameState.result:
                 Result();
+                NextGame();
                 replayCamera.gameObject.SetActive(false);
-                if (Input.GetKey("joystick button 1"))
-                {
-                    state = gameState.standBy;
-                }
                 break;
         }
 
@@ -460,8 +458,9 @@ public class GameManager : MonoBehaviour
             setResult = true;
         }
 
-        GameObject crownPrefab = Instantiate(crown, crownPlayer.transform);
-        crownPrefab.transform.localPosition= new Vector3(3,2,0);
+        GameObject crownPrefab = Instantiate(crown, crownPlayer.transform.Find("アーマチュア/ボーン.025").GetChild(0).GetChild(0).GetChild(0));
+        crownPrefab.transform.localPosition= new Vector3(0,0,0);
+        crownPrefab.transform.localScale= new Vector3(0.008f, 0.008f, 0.008f);
 
         if(ScoreManager.instance.redScore > ScoreManager.instance.whiteScore) 
         {
@@ -481,6 +480,26 @@ public class GameManager : MonoBehaviour
         //setReplay = true;
 
         resetGame = false;
+    }
+
+    private void NextGame()
+    {
+        for (int i = 0; i < playerList.Count; i++)
+        {
+            if (!playerList[i].nextGame) return;
+
+            playerNextGame = true;
+        }
+
+        if (playerNextGame)
+        {
+            state = gameState.standBy;
+            for (int i = 0; i < playerList.Count; i++)
+            {
+                playerList[i].nextGame = false;
+            }
+            playerNextGame = false;
+        }
     }
 
     private void ResetGame()

@@ -37,7 +37,7 @@ public class ItemManager : MonoBehaviour {
 
     private async UniTask CreateItem() {
         while (true) {
-            await UniTask.Delay(Random.Range(500, 2500));  //‚±‚±‚Å—”‚Å‘Ò‚¿ŠÔ‚ğæ‚é‚±‚Æ‚Åƒ‰ƒ“ƒ_ƒ€‰»‚ğ}‚é
+            await UniTask.Delay(Random.Range(1000, 3000));  //‚±‚±‚Å—”‚Å‘Ò‚¿ŠÔ‚ğæ‚é‚±‚Æ‚Åƒ‰ƒ“ƒ_ƒ€‰»‚ğ}‚é
             if (!isStopped) {
                                                                
                 canSpawn = Random.Range(0, 10); //—”‚ğ¶¬
