@@ -71,7 +71,7 @@ public class Player : MonoBehaviour
     float duration = 0.2f;
     public float currentRate = 0.0f;
     float skillTime;
-    float skillMaxTime;
+    float skillMaxTime = 10;
     public bool useSkill;
     public enum SkillType
     {
