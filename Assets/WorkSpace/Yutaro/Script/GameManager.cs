@@ -80,6 +80,7 @@ public class GameManager : MonoBehaviour
         roundTime = 20;
         tempRoundTime = roundTime;
         serveTeam = Random.Range(0,2);
+        SoundManager.Instance.ChangeBGM(1);
     }
 
     // Update is called once per frame
