@@ -180,8 +180,9 @@ public class Player : MonoBehaviour
             fall = false;
           // return;
         }
-        //ScoreBoard();
         
+        //ScoreBoard();
+
 
         OnMove();
         WhichDir();
@@ -354,7 +355,7 @@ public class Player : MonoBehaviour
             hitPoint.transform.SetParent(transform.Find("尻尾"));
         }
 
-        if(transform.position.y <= -10)
+        if(transform.position.y <= -10 || transform.position.y >= 50)
         {
             fall = true;
         }
@@ -558,7 +559,7 @@ public class Player : MonoBehaviour
                     }
                     if (transform.tag == "RedTeam")
                     {
-                        GameObject sword = Instantiate(demonSowrd, new Vector3(5, 56, 3.36f), Quaternion.Euler(180, 0, 0));
+                        GameObject sword = Instantiate(demonSowrd, new Vector3(5, 70, 3.36f), Quaternion.Euler(180, 0, 0));
                         skillObject.Add(sword);
                     }
                     onSkillItem = true;
@@ -612,8 +613,9 @@ public class Player : MonoBehaviour
 
                     if (transform.tag == "RedTeam")
                     {
-                        GameObject bullet = Instantiate(sukonbuBullet, new Vector3(transform.position.x + 3, transform.position.y + 2, transform.position.z), transform.rotation,transform);
-                        bullet.transform.localScale = new Vector3(2, 2, 2);
+                        GameObject bullet1 = Instantiate(sukonbuBullet, new Vector3(transform.position.x + 3, transform.position.y + 4, transform.position.z), transform.rotation,transform);
+                        bullet1.transform.localScale = new Vector3(2, 2, 2);
+                        skillObject.Add(bullet1);
                         onSkillItem = true;
                     }
 
@@ -812,7 +814,7 @@ public class Player : MonoBehaviour
         skillGauge = GameObject.Find("Card" + playerName).transform.Find("SkillGauge").GetComponent<Image>();
         if (!useSkill)
         {
-            float targetRate = currentRate + 1f / skillGaugeAmountMax;
+            float targetRate = currentRate + 0.03f * skillUPSpeed / skillGaugeAmountMax;
             skillGauge.fillAmount = targetRate;
             currentRate = targetRate;
         }
@@ -848,7 +850,7 @@ public class Player : MonoBehaviour
                 else if (transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "狐耳 1(Clone)")
                 {
                     skillType = SkillType.Sukonbu;
-                    skillMaxTime = 10;
+                    skillMaxTime = 30;
                 }
             }
         }
@@ -860,7 +862,7 @@ public class Player : MonoBehaviour
         if(useSkill)
         {
             currentRate = 0;
-            skillTime += Time.deltaTime * skillUPSpeed;
+            skillTime += Time.deltaTime;
             if(skillTime > skillMaxTime)
             {
                 skillTime = 0;
