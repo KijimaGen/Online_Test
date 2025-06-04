@@ -33,11 +33,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack"
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Attack"
+      name: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Dance (1)"
+      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|Dance"
       internalID: 6396828155121186910
       firstFrame: 0
-      lastFrame: 30
+      lastFrame: 24
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

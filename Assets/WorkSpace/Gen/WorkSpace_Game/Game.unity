@@ -353,6 +353,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialize: 0
+  fallPoint: {fileID: 0}
 --- !u!135 &74003724
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2209,9 +2210,12 @@ MonoBehaviour:
   mainCamera: {fileID: 2088799820}
   replayCamera: {fileID: 798124726}
   timeText: {fileID: 50767938}
+  roundTime: 0
   resultTitle: {fileID: 754658830}
   crown: {fileID: 5570997492311701393, guid: adc0e0e1a18f47f4b8a8c8c20123f715, type: 3}
   winnerTeamText: {fileID: 1767637977}
+  wall: {fileID: 0}
+  serveTeam: 0
 --- !u!1 &1566527868
 GameObject:
   m_ObjectHideFlags: 0
