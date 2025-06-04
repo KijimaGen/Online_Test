@@ -1291,7 +1291,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 245787339}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 3321e264e06a1cd4899e5b895ce70f65, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1312,7 +1312,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 245787339}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 3321e264e06a1cd4899e5b895ce70f65, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1333,7 +1333,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 245787339}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 3321e264e06a1cd4899e5b895ce70f65, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1354,7 +1354,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 245787339}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 3321e264e06a1cd4899e5b895ce70f65, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4944,7 +4944,7 @@ TextMesh:
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   m_Color:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4278190080
 --- !u!23 &1292937477
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5696,7 +5696,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
-  playerPrefab: {fileID: 6558246480615012065, guid: 08c0af7225df9f740a9a3bf16c7eaa23, type: 3}
+  playerPrefab: {fileID: 6558246480615012065, guid: 07c04ac987402cd4bb20f2b6e394b42d, type: 3}
   playerList: []
   shuttle: {fileID: 74003721}
   roundSetting: 0
