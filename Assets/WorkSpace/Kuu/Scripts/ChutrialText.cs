@@ -11,7 +11,7 @@ public class ChutrialText : MonoBehaviour
     // テキストを変えるためのカウント
     int textCount = 0;
     // テキストの最大数
-    int TEXT_MAX = 11;
+    int TEXT_MAX = 12;
     // テキストが戻ったことがあるかのフラグ
     bool textJoin = false;
     // Start is called before the first frame update
@@ -73,13 +73,15 @@ public class ChutrialText : MonoBehaviour
         } else if (textCount == 6) {
             text.text = "Bで相手プレイヤーを攻撃すると吹っ飛びます";
         } else if (textCount == 7) {
-            text.text = "スペシャルゲージがMAXの時にYを押すとスペシャルが使えます";
-        } else if (textCount == 8) {
-            text.text = "スペシャルはコスチュームによって効果が変わります";
-        } else if (textCount == 9) {
-            text.text = "スペシャルゲージは時間経過で増えます";
-        } else if (textCount == 10) {
             text.text = "倒れてしまった時はAを押せば戻ります";
+        } else if (textCount == 8) {
+            text.text = "スペシャルゲージがMAXの時にYを押すとスペシャルが使えます";
+        } else if (textCount == 9) {
+            text.text = "スペシャルゲージは時間経過とシャトルを打つことで増えます";
+        } else if (textCount == 10) {
+            text.text = "スペシャルはコスチュームによって効果が変わります";
+        }　else if (textCount == 11) {
+            text.text = "イメチェンなどは対応する床を踏みながらLBで変わります";
         } else if (textCount == TEXT_MAX) {
             text.text = "STARTボタンで試合開始です";
         }
