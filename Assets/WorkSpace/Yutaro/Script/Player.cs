@@ -523,7 +523,6 @@ public class Player : MonoBehaviour
             {
                 var main = skillEffect.transform.GetComponent<ParticleSystem>().main;
                 main.startColor = playerMaterial[playerName - 1].color;
-                skillUPSpeed = 1;
                 Speed = 10;
             }
 
@@ -543,7 +542,6 @@ public class Player : MonoBehaviour
                     }
                     onSkillItem = true;
                 }
-                skillUPSpeed = 1;
                 Speed = 10;
             }
 
@@ -558,14 +556,12 @@ public class Player : MonoBehaviour
                     }
                     if (transform.tag == "RedTeam")
                     {
-                        GameObject sword = Instantiate(demonSowrd, new Vector3(5, 56, 3.36f), Quaternion.Euler(180, 0, 0));
+                        GameObject sword = Instantiate(demonSowrd, new Vector3(5, 70, 3.36f), Quaternion.Euler(180, 0, 0));
                         skillObject.Add(sword);
                     }
                     onSkillItem = true;
                 }
 
-
-                skillUPSpeed = 1;
                 Speed = 10;
             }
 
@@ -593,7 +589,6 @@ public class Player : MonoBehaviour
 
                     }
                 }
-                skillUPSpeed = 1;
                 Speed = 10;
             }
 
@@ -612,13 +607,13 @@ public class Player : MonoBehaviour
 
                     if (transform.tag == "RedTeam")
                     {
-                        GameObject bullet = Instantiate(sukonbuBullet, new Vector3(transform.position.x + 3, transform.position.y + 2, transform.position.z), transform.rotation,transform);
+                        GameObject bullet = Instantiate(sukonbuBullet, new Vector3(transform.position.x + 3, transform.position.y + 4, transform.position.z), transform.rotation,transform);
                         bullet.transform.localScale = new Vector3(2, 2, 2);
                         onSkillItem = true;
                     }
 
                 }
-                skillUPSpeed = 2;
+                
                 Speed = 10;
             }
 
@@ -810,9 +805,40 @@ public class Player : MonoBehaviour
         if (GameManager.instance.state != GameManager.gameState.start || rb.isKinematic) return;
 
         skillGauge = GameObject.Find("Card" + playerName).transform.Find("SkillGauge").GetComponent<Image>();
+        if (transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装通常(Clone)")
+        {
+            skillType = SkillType.Normal;
+            skillMaxTime = 10;
+            skillUPSpeed = 2;
+        }
+        else if (transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装海賊(Clone)")
+        {
+            skillType = SkillType.Pirate;
+            skillMaxTime = 20;
+            skillUPSpeed = 1;
+        }
+        else if (transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装悪魔(Clone)")
+        {
+            skillType = SkillType.Demon;
+            skillMaxTime = 10;
+            skillUPSpeed = 2;
+        }
+        else if (transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装冬(Clone)")
+        {
+            skillType = SkillType.Winter;
+            skillMaxTime = 10;
+            skillUPSpeed = 1;
+        }
+        else if (transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "狐耳 1(Clone)")
+        {
+            skillType = SkillType.Sukonbu;
+            skillMaxTime = 10;
+            skillUPSpeed = 3;
+        }
+
         if (!useSkill)
         {
-            float targetRate = currentRate + 1f / skillGaugeAmountMax;
+            float targetRate = currentRate + skillUPSpeed * 0.01f / skillGaugeAmountMax;
             skillGauge.fillAmount = targetRate;
             currentRate = targetRate;
         }
@@ -825,31 +851,7 @@ public class Player : MonoBehaviour
                 currentRate = 0;
                 skillGauge?.DOFillAmount(currentRate, duration).SetLink(this.gameObject);
                 useSkill = true;
-                if(transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装通常(Clone)")
-                {
-                    skillType = SkillType.Normal;
-                    skillMaxTime = 10;
-                }
-                else if(transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装海賊(Clone)")
-                {
-                    skillType = SkillType.Pirate;
-                    skillMaxTime = 20;
-                }
-                else if (transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装悪魔(Clone)")
-                {
-                    skillType = SkillType.Demon;
-                    skillMaxTime = 10;
-                }
-                else if (transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "衣装冬(Clone)")
-                {
-                    skillType = SkillType.Winter;
-                    skillMaxTime = 10;
-                }
-                else if (transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "狐耳 1(Clone)")
-                {
-                    skillType = SkillType.Sukonbu;
-                    skillMaxTime = 10;
-                }
+                
             }
         }
         if (currentRate <= 0)
@@ -860,7 +862,7 @@ public class Player : MonoBehaviour
         if(useSkill)
         {
             currentRate = 0;
-            skillTime += Time.deltaTime * skillUPSpeed;
+            skillTime += Time.deltaTime;
             if(skillTime > skillMaxTime)
             {
                 skillTime = 0;

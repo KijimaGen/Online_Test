@@ -241,7 +241,8 @@ public class GameManager : MonoBehaviour
         //    state = gameState.standBy;
         //    return;
         //}
-
+        int setRedPlayer = 0;
+        int setWhitePlayer = 0;
 
         foreach (var player in playerList)
         {
@@ -266,8 +267,9 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    playerList[i].transform.position = new Vector3(-5, 0, 5 - (i * 5f));
+                    playerList[i].transform.position = new Vector3(-5, 0, 5 - (setRedPlayer * 5f));
                     playerList[i].transform.rotation = Quaternion.Euler(0, 0, 0);
+                    setRedPlayer++;
                 }
             }
 
@@ -280,13 +282,15 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    playerList[i].transform.position = new Vector3(5, 0, 5f - (i * 5));
+                    playerList[i].transform.position = new Vector3(5, 0, 5f - (setWhitePlayer * 5));
                     playerList[i].transform.rotation = Quaternion.Euler(0, 180, 0);
+                    setWhitePlayer++;
                 }
             }
         }
 
-
+        setRedPlayer = 0;
+        setWhitePlayer = 0;
         redCount = 0;
         whiteCount = 0;
         mainCamera.targetDisplay = 0;
@@ -388,7 +392,9 @@ public class GameManager : MonoBehaviour
     private void Result()
     {
         if(setResult) return;
-        
+
+        int setRedPlayer = 0;
+        int setWhitePlayer = 0;
         resultTitle.SetActive(true);
         resultTitle.GetComponent<Animator>().SetBool("result",true);
 
@@ -413,12 +419,13 @@ public class GameManager : MonoBehaviour
                 if (redCount == 1)
                 {
                     playerList[i].transform.parent = resultTitle.transform.Find("Canvas/red•Ç").transform;
-                    playerList[i].transform.localPosition = new Vector3(-18, 0, 0);
+                    playerList[i].transform.localPosition = new Vector3(-15, 0, 0);
                 }
                 else
                 {
                     playerList[i].transform.parent = resultTitle.transform.Find("Canvas/red•Ç").transform;
-                    playerList[i].transform.localPosition = new Vector3(-18, 70 - (i * 140), 0);
+                    playerList[i].transform.localPosition = new Vector3(-15, 70 - (setRedPlayer * 140), 0);
+                    setRedPlayer++;
                 }
                
                 playerList[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
@@ -436,7 +443,8 @@ public class GameManager : MonoBehaviour
                 else
                 {
                     playerList[i].transform.parent = resultTitle.transform.Find("Canvas/white•Ç").transform;
-                    playerList[i].transform.localPosition = new Vector3(18, 70 - (i * 140), 0);
+                    playerList[i].transform.localPosition = new Vector3(18, 70 - (setWhitePlayer * 140), 0);
+                    setWhitePlayer++;
                 }
 
                 playerList[i].transform.localRotation = Quaternion.Euler(0, 180, 0);
@@ -482,6 +490,8 @@ public class GameManager : MonoBehaviour
         //setReplay = true;
 
         resetGame = false;
+        setRedPlayer = 0;
+        setWhitePlayer = 0;
     }
 
     private void NextGame()
