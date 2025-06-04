@@ -14432,6 +14432,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: crown mass
       objectReference: {fileID: 0}
+    - target: {fileID: 1024889161094787551, guid: d5f2d1e2dbf5cac4d8aed7dd1a205148, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: -3500960491710661920, guid: 7b32894c94c6bb54eb52705fcff1a74d, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

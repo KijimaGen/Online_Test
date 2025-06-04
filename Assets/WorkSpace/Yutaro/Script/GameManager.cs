@@ -140,8 +140,9 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        if (Input.GetKey(KeyCode.Escape)) 
+            Application.Quit();//ゲームプレイ終了
         
-
 
 
     }

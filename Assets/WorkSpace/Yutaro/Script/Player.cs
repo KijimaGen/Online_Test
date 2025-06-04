@@ -255,8 +255,7 @@ public class Player : MonoBehaviour
             }
             if (!enemyCamp)
             {
-                
-                if (chargeSlider.fillAmount >= 0.4f)
+                if(chargeSlider.fillAmount >= 0.4f)
                 {
                     Smash = true;
                     chargeSlider.fillAmount = 0.4f;
@@ -319,7 +318,9 @@ public class Player : MonoBehaviour
 
         }
 
-        
+        if (chargeSlider.fillAmount >= 0.4f)
+            chargeSlider.fillAmount = 0.4f;
+
         var distance = (hitPoint.transform.position - center).normalized;
 
         if(distance.z <= -0.4f) 
