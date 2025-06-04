@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 917505043164192417}
   - component: {fileID: 3462273764713597895}
   - component: {fileID: 8470517502875894156}
-  - component: {fileID: 1533308145597767806}
+  - component: {fileID: -3714618540590651002}
   m_Layer: 0
   m_Name: "\u5927\u7832\u306E\u7389"
   m_TagString: Untagged
@@ -135,7 +135,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1533308145597767806
+--- !u!114 &-3714618540590651002
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,11 +144,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7891569386145431023}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42331aab827d06a4c8ad5af74a6b0135, type: 3}
+  m_Script: {fileID: 11500000, guid: 6683128d52e574d4caa2e0c48fff9706, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  areaParticle: {fileID: 2043908201318602999, guid: 54fd23e556c2aa14dbc9e92456910be8, type: 3}
-  expParticle: {fileID: 3351311322559949018, guid: fdfb55d25d60f6b47a2a4536027b08a7, type: 3}
 --- !u!1001 &1382665918571660576
 PrefabInstance:
   m_ObjectHideFlags: 0
