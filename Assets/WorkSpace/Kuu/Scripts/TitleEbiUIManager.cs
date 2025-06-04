@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static GameManager;
 
 public class TitleEbiUIManager : MonoBehaviour
 {
@@ -13,6 +15,7 @@ public class TitleEbiUIManager : MonoBehaviour
     [SerializeField] Image exitEbi;
     [SerializeField] Image okEbi;
     [SerializeField] Image tutorialEbi;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,7 +33,7 @@ public class TitleEbiUIManager : MonoBehaviour
             startEbi.transform.gameObject.SetActive(true);
         }
         else {
-            startEbi.transform.gameObject.SetActive(false);
+            startEbi.transform.gameObject.SetActive(false); 
         }
         if (eventSystem.currentSelectedGameObject.gameObject.name == "Rule") {
             ruleEbi.transform.gameObject.SetActive(true);
@@ -56,5 +59,6 @@ public class TitleEbiUIManager : MonoBehaviour
         else {
             tutorialEbi.transform.gameObject.SetActive(false);
         }
+        
     }
 }
