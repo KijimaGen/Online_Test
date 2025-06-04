@@ -7,6 +7,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
@@ -426,7 +427,7 @@ public class Player : MonoBehaviour
             Destroy(other.gameObject);
         }
 
-        if (GameManager.instance.state != GameManager.gameState.standBy) return;
+        if (GameManager.instance.state != GameManager.gameState.standBy && SceneManager.GetActiveScene().name != "ChutorialScene") return;
 
         if (other.gameObject.tag == "Fashion")
         {
@@ -815,10 +816,20 @@ public class Player : MonoBehaviour
         if (!useSkill)
         {
             float targetRate = currentRate + 0.03f * skillUPSpeed / skillGaugeAmountMax;
+            if(SceneManager.GetActiveScene().name == "ChutorialScene") {
+
+                targetRate = 1000;
+            }
             skillGauge.fillAmount = targetRate;
+
+            
+
             currentRate = targetRate;
         }
-       
+        
+        
+
+
         if (currentRate >= 1)
         {
             currentRate = 1;
