@@ -248,6 +248,10 @@ public class Player : MonoBehaviour
                 hitPoint.transform.localPosition = new Vector3(transform.position.x - 2, 1, transform.position.z);
                 
                 enemyCamp = true;
+                if (chargeSlider.fillAmount >= 0.4f)
+                {
+                    chargeSlider.fillAmount = 0.4f;
+                }
             }
             else
             {
@@ -286,6 +290,10 @@ public class Player : MonoBehaviour
             {
                 hitPoint.transform.localPosition = new Vector3(transform.position.x + 2, 1, transform.position.z);
                 enemyCamp = true;
+                if (chargeSlider.fillAmount >= 0.4f)
+                {
+                    chargeSlider.fillAmount = 0.4f;
+                }
             }
             else
             {
@@ -610,7 +618,7 @@ public class Player : MonoBehaviour
                     }
 
                 }
-                skillUPSpeed = 1;
+                skillUPSpeed = 2;
                 Speed = 10;
             }
 
