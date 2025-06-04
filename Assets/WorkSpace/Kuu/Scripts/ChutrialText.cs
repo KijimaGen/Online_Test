@@ -75,7 +75,7 @@ public class ChutrialText : MonoBehaviour
         } else if (textCount == 7) {
             text.text = "スペシャルゲージがMAXの時にYを押すとスペシャルが使えます";
         } else if (textCount == 8) {
-            text.text = "スペシャル発動中はスピードと打つ力が上がります";
+            text.text = "スペシャルはコスチュームによって効果が変わります";
         } else if (textCount == 9) {
             text.text = "スペシャルゲージは時間経過で増えます";
         } else if (textCount == 10) {
