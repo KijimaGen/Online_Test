@@ -4096,6 +4096,7 @@ MonoBehaviour:
   - {fileID: 2561269057089973319, guid: 97f91a0b9445ab9489218374a25483d3, type: 3}
   demonSowrd: {fileID: 8413490214916927165, guid: e6ff3fb3eefe84d43b1243c1a8e6f269, type: 3}
   pirateCannon: {fileID: 2429467811493995007, guid: 6eae79c55a8376046908470eecc6696d, type: 3}
+  sukonbuBullet: {fileID: 7891569386145431023, guid: af13a39e0b4a8e84396f19047bd7a28f, type: 3}
   attack: 0
   playerName: 0
   score: 0
@@ -4113,6 +4114,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 4c1f6a86bdd0a4b4b9e13603a5b8dc3a, type: 2}
   - {fileID: 2100000, guid: ee2321c5ef3cc084d95d7e1434e1a0d5, type: 2}
   - {fileID: 3511325375820423461, guid: 18ef0b20b94eac64e80b43cdc0212a3d, type: 3}
+  currentRate: 0
   useSkill: 0
   skillType: 0
   Speed: 0

@@ -7,6 +7,7 @@ public class Cannon : MonoBehaviour
 {
     [SerializeField] GameObject bullet;
     [SerializeField] Transform shotPoint;
+    [SerializeField] ParticleSystem shotEffect;
 
     float interval;
 

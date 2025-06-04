@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks.Triggers;
 using DG.Tweening;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,6 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     public List<GameObject> skillObject;
-    bool redTeam;
-    bool whiteTeam;
-    bool independentTeam;
 
     [SerializeField] public GameObject hitPoint;
     [SerializeField] public Image chargeSlider;
@@ -23,12 +21,13 @@ public class Player : MonoBehaviour
 
     [SerializeField] private GameObject demonSowrd;
     [SerializeField] private GameObject pirateCannon;
+    [SerializeField] private GameObject sukonbuBullet;
 
     public bool attack;
 
     public int playerName;
 
-    int index;
+    public int index;
     Rigidbody rb;
     Animator animator;
     bool animPlay;
@@ -71,6 +70,7 @@ public class Player : MonoBehaviour
     float duration = 0.2f;
     public float currentRate = 0.0f;
     float skillTime;
+    float skillUPSpeed = 1;
     float skillMaxTime = 10;
     public bool useSkill;
     public enum SkillType
@@ -79,6 +79,7 @@ public class Player : MonoBehaviour
         Pirate,
         Demon,
         Winter,
+        Sukonbu,
 
         Max
     }
@@ -513,6 +514,7 @@ public class Player : MonoBehaviour
             {
                 var main = skillEffect.transform.GetComponent<ParticleSystem>().main;
                 main.startColor = playerMaterial[playerName - 1].color;
+                skillUPSpeed = 1;
                 Speed = 10;
             }
 
@@ -532,6 +534,7 @@ public class Player : MonoBehaviour
                     }
                     onSkillItem = true;
                 }
+                skillUPSpeed = 1;
                 Speed = 10;
             }
 
@@ -551,9 +554,9 @@ public class Player : MonoBehaviour
                     }
                     onSkillItem = true;
                 }
-                
 
 
+                skillUPSpeed = 1;
                 Speed = 10;
             }
 
@@ -581,6 +584,32 @@ public class Player : MonoBehaviour
 
                     }
                 }
+                skillUPSpeed = 1;
+                Speed = 10;
+            }
+
+            if (skillType == SkillType.Sukonbu)
+            {
+                if (!onSkillItem)
+                {
+                    if (transform.tag == "WhiteTeam")
+                    {
+                        GameObject bullet1 = Instantiate(sukonbuBullet, new Vector3(transform.position.x - 3, transform.position.y + 4, transform.position.z), transform.rotation, transform);
+
+                        bullet1.transform.localScale = new Vector3(2, 2, 2);
+                        skillObject.Add(bullet1);
+                        onSkillItem = true;
+                    }
+
+                    if (transform.tag == "RedTeam")
+                    {
+                        GameObject bullet = Instantiate(sukonbuBullet, new Vector3(transform.position.x + 3, transform.position.y + 2, transform.position.z), transform.rotation,transform);
+                        bullet.transform.localScale = new Vector3(2, 2, 2);
+                        onSkillItem = true;
+                    }
+
+                }
+                skillUPSpeed = 1;
                 Speed = 10;
             }
 
@@ -807,6 +836,11 @@ public class Player : MonoBehaviour
                     skillType = SkillType.Winter;
                     skillMaxTime = 10;
                 }
+                else if (transform.Find("アーマチュア/ボーン.001/衣装").GetChild(0).name == "狐耳 1(Clone)")
+                {
+                    skillType = SkillType.Sukonbu;
+                    skillMaxTime = 10;
+                }
             }
         }
         if (currentRate <= 0)
@@ -817,7 +851,7 @@ public class Player : MonoBehaviour
         if(useSkill)
         {
             currentRate = 0;
-            skillTime += Time.deltaTime;
+            skillTime += Time.deltaTime * skillUPSpeed;
             if(skillTime > skillMaxTime)
             {
                 skillTime = 0;
