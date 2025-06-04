@@ -18,6 +18,8 @@ public class TitleButton : MonoBehaviour
     //Canvas RuleCanvas;
     Canvas SelectCanvas;
 
+    EventSystem eventSystem;
+
     // Start is called before the first frame update
     void Start()
     {
