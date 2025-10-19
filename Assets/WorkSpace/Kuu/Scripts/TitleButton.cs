@@ -10,12 +10,9 @@ public class TitleButton : MonoBehaviour
 {
     [SerializeField] Canvas RuleCanvas;
     [SerializeField] Button OK;
-    //[SerializeField] Button Chutorial;
     Button GameStart;
     Button Rule;
     Button Exit;
-    //Button OK;
-    //Canvas RuleCanvas;
     Canvas SelectCanvas;
 
     EventSystem eventSystem;
@@ -28,7 +25,6 @@ public class TitleButton : MonoBehaviour
         Rule = GameObject.Find("/SelectCanvas/Rule").GetComponent<Button>();
         Exit = GameObject.Find("/SelectCanvas/Exit").GetComponent<Button>();
         OK = OK.GetComponent<Button>();
-        //Chutorial = Chutorial.GetComponent<Button>();
 
         RuleCanvas = RuleCanvas.GetComponent<Canvas>();
         SelectCanvas = GameObject.Find("/SelectCanvas").GetComponent<Canvas>();
@@ -37,22 +33,13 @@ public class TitleButton : MonoBehaviour
 
         // RuleCanvasを非表示
         RuleCanvas.transform.gameObject.SetActive(false);
-        //button = button.GetComponent<Button>();
-        //button.Select();
 
         //BGMをタイトル用の物に設定
         SoundManager.Instance.ChangeBGM(0);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void OnClickStart() {
         // 全てのフォーカスを解除
-        //EventSystem.current.SetSelectedGameObject(null);
         SoundManager.Instance.PlaySound(4);
 
         // ゲームシーン
@@ -60,9 +47,6 @@ public class TitleButton : MonoBehaviour
     }
 
     public void OnClickRule() {
-        // 全てのフォーカスを解除
-        //EventSystem.current.SetSelectedGameObject(null);
-
         // RuleCanvasを表示
         RuleCanvas.transform.gameObject.SetActive(true);
         // OKにフォーカスする
@@ -73,20 +57,12 @@ public class TitleButton : MonoBehaviour
     }
 
     public void OnClickExit() {
-        // 全てのフォーカスを解除
-        //EventSystem.current.SetSelectedGameObject(null);
-
         // ゲームを終了する
-        // UnityEditorはビルドでは使えないので別の方法で落とす必要がある
-        //UnityEditor.EditorApplication.isPlaying = false;
         SoundManager.Instance.PlaySound(7);
         Application.Quit();
     }
 
     public void OnClickOk() {
-        // 全てのフォーカスを解除
-        //EventSystem.current.SetSelectedGameObject(null);
-
         // SelectCanvasを表示
         SelectCanvas.transform.gameObject.SetActive(true);
         // GameStartにフォーカスする
@@ -97,9 +73,6 @@ public class TitleButton : MonoBehaviour
     }
 
     public void OnClickChutorial() {
-        // 全てのフォーカスを解除
-        //EventSystem.current.SetSelectedGameObject(null);
-
         // ゲームシーン
         SceneManager.LoadScene("ChutorialScene");
     }
