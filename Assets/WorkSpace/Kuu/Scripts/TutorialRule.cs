@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 public class TutorialRule : MonoBehaviour
 {
-    // チュートリアルモード
+    // チュートリアルモードフラグ
     public static bool tutorial = false;
     // Start is called before the first frame update
     void Start()
