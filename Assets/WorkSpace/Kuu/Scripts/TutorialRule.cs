@@ -21,7 +21,6 @@ public class TutorialRule : MonoBehaviour
         Transform myTransform = this.transform;
         Vector3 pos = myTransform.position;
         if (pos.y <= -10) {
-            Debug.Log("落ちてまーーーーーーす");
             if (gameObject.tag == "Shuttle") {
                 pos.x = 0;
                 pos.y = 3.37f;
